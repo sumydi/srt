@@ -51,13 +51,14 @@ namespace srt
 		
 		// allocate & fill mip infos
 		uint8_t * mipSurface = reinterpret_cast< uint8_t * >( m_surface );
-		m_mips = new Mip [ m_mipCount ];
+		m_mips = new PixelSurface [ m_mipCount ];
 		for( uint32_t mipIdx = 0; mipIdx < mipCount; ++mipIdx )
 		{
-			m_mips[ mipIdx ].m_width = width;
-			m_mips[ mipIdx ].m_height = height;
-			m_mips[ mipIdx ].m_surface = reinterpret_cast< void * >( mipSurface );
-			mipSurface  += ( ( width * m_bpp ) / 8 ) * height;
+			m_mips[ mipIdx ].width = (uint16_t)width;
+			m_mips[ mipIdx ].height = (uint16_t)height;
+			m_mips[ mipIdx ].pitch = ( width * m_bpp ) / 8;
+			m_mips[ mipIdx ].surface = reinterpret_cast< void * >( mipSurface );
+			mipSurface  += m_mips[ mipIdx ].pitch * height;
 			width >>= 1;
 			height >>= 1;
 		}
@@ -73,7 +74,7 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	const Image::Mip & Image::GetMip( uint32_t mipIdx ) const
+	const PixelSurface & Image::GetMip( uint32_t mipIdx ) const
 	{
 		assert( mipIdx < m_mipCount );
 		return m_mips[ mipIdx ];
