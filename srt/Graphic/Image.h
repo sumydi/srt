@@ -5,14 +5,7 @@
 
 namespace srt
 {
-	//
-	struct PixelSurface
-	{
-		uint16_t	width;
-		uint16_t	height;
-		uint32_t	pitch;
-		void *		surface;
-	};
+
 
 	//
 	class Image
@@ -27,9 +20,9 @@ namespace srt
 		PixelFormat GetPixelFormat( ) const { return m_pixelFormat; }
 		uint32_t GetBPP( ) const { return m_bpp; }
 		uint32_t GetMipCount( ) const { return m_mipCount; }
-		const PixelSurface & GetMip( uint32_t mipIdx ) const;
+		const PixelSurface::Desc & GetMipDesc( uint32_t mipIdx ) const;
+		void * GetMipSurface( uint32_t mipIdx );
 		static uint32_t GetPixelFormatBPP( PixelFormat pf );
-
 
 	protected:
 		PixelFormat		m_pixelFormat;

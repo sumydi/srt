@@ -54,11 +54,11 @@ namespace srt
 		m_mips = new PixelSurface [ m_mipCount ];
 		for( uint32_t mipIdx = 0; mipIdx < mipCount; ++mipIdx )
 		{
-			m_mips[ mipIdx ].width = (uint16_t)width;
-			m_mips[ mipIdx ].height = (uint16_t)height;
-			m_mips[ mipIdx ].pitch = ( width * m_bpp ) / 8;
+			m_mips[ mipIdx ].desc.width = (uint16_t)width;
+			m_mips[ mipIdx ].desc.height = (uint16_t)height;
+			m_mips[ mipIdx ].desc.pitch = ( width * m_bpp ) / 8;
 			m_mips[ mipIdx ].surface = reinterpret_cast< void * >( mipSurface );
-			mipSurface  += m_mips[ mipIdx ].pitch * height;
+			mipSurface  += m_mips[ mipIdx ].desc.pitch * height;
 			width >>= 1;
 			height >>= 1;
 		}
@@ -74,12 +74,20 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	const PixelSurface & Image::GetMip( uint32_t mipIdx ) const
+	const PixelSurface::Desc & Image::GetMipDesc( uint32_t mipIdx ) const
 	{
 		assert( mipIdx < m_mipCount );
-		return m_mips[ mipIdx ];
+		return m_mips[ mipIdx ].desc;
 	}
 	
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void * Image::GetMipSurface( uint32_t mipIdx )
+	{
+		assert( mipIdx < m_mipCount );
+		return m_mips[ mipIdx ].surface;
+	}
+
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	uint32_t Image::GetPixelFormatBPP( PixelFormat pf )
