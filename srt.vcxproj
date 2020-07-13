@@ -152,6 +152,7 @@
     <ClInclude Include="srt\Graphic\Image.h" />
     <ClInclude Include="srt\Graphic\Texture.h" />
     <ClInclude Include="srt\Graphic\Types.h" />
+    <ClInclude Include="srt\Math\Vector4.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

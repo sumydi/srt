@@ -22,6 +22,9 @@
     <Filter Include="srt\Graphic">
       <UniqueIdentifier>{00346cfe-c55a-4268-8a6a-b47b23da8e52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="srt\Math">
+      <UniqueIdentifier>{cecb285e-6d0e-46dc-8470-ce8c5161904c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -53,6 +56,9 @@
     </ClInclude>
     <ClInclude Include="srt\Graphic\Types.h">
       <Filter>srt\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="srt\Math\Vector4.h">
+      <Filter>srt\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
