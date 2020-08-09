@@ -33,11 +33,11 @@ namespace srt
 		m_bpp = GetPixelFormatBPP( pf );
 		size_t totalSurfaceSize = 0;
 		{
-			uint32_t mipWidth = width;
-			uint32_t mipHeight = height;
+			size_t mipWidth = width;
+			size_t mipHeight = height;
 			for( uint32_t mipIdx = 0; mipIdx < mipCount; ++mipIdx )
 			{
-				totalSurfaceSize += static_cast< size_t >( ( ( mipWidth * m_bpp ) / 8 ) * mipHeight );
+				totalSurfaceSize += ( ( mipWidth * static_cast< size_t >( m_bpp ) ) / 8 ) * mipHeight;
 				mipWidth >>= 1;
 				mipHeight >>= 1;
 			}
@@ -52,13 +52,13 @@ namespace srt
 		// allocate & fill mip infos
 		uint8_t * mipSurface = reinterpret_cast< uint8_t * >( m_surface );
 		m_mips = new PixelSurface [ m_mipCount ];
-		for( uint32_t mipIdx = 0; mipIdx < mipCount; ++mipIdx )
+		for( uint32_t mipIdx = 0; mipIdx < m_mipCount; ++mipIdx )
 		{
 			m_mips[ mipIdx ].desc.width = (uint16_t)width;
 			m_mips[ mipIdx ].desc.height = (uint16_t)height;
 			m_mips[ mipIdx ].desc.pitch = ( width * m_bpp ) / 8;
 			m_mips[ mipIdx ].surface = reinterpret_cast< void * >( mipSurface );
-			mipSurface  += m_mips[ mipIdx ].desc.pitch * height;
+			mipSurface  += (size_t)m_mips[ mipIdx ].desc.pitch * (size_t)height;
 			width >>= 1;
 			height >>= 1;
 		}
