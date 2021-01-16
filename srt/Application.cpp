@@ -87,11 +87,11 @@ namespace srt
 	// ------------------------------------------------------------------------
 	void Application::Run( )
 	{
-	#if defined (SRT_PLATFORM_WINDOWS )
 		bool canContinue = true;
 
 		while( canContinue )
 		{
+	#if defined( SRT_PLATFORM_WINDOWS )
 			MSG msg;
 			while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
 			{
@@ -102,7 +102,7 @@ namespace srt
 				TranslateMessage( &msg );
 				DispatchMessage( &msg );
 			}
-		}
 	#endif
+		}
 	}
 }
