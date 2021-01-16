@@ -30,16 +30,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>WindowsApp\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>WindowsApp\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>WindowsApp\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="srt.h">
       <Filter>WindowsApp\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="srt\Base.h">
@@ -60,16 +54,19 @@
     <ClInclude Include="srt\Math\Vector3.h">
       <Filter>srt\Math</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Application.h">
+      <Filter>srt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>WindowsApp\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="srt.cpp">
       <Filter>WindowsApp\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="srt\Graphic\Image.cpp">
       <Filter>srt\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Application.cpp">
+      <Filter>srt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
