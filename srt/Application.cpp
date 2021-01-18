@@ -1,11 +1,12 @@
 #include "Application.h"
+#include "resource.h"
 
 namespace srt
 {
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 #if defined (SRT_PLATFORM_WINDOWS )
-	LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		switch (message)
 		{
@@ -39,7 +40,9 @@ namespace srt
 	// ------------------------------------------------------------------------
 	Application::Application( const AppContext & context )
 	{
-	#if defined (SRT_PLATFORM_WINDOWS )
+	#if defined( SRT_PLATFORM_WINDOWS )
+
+		m_hInstance = context.hInstance;
 
 		// Window class
 		WNDCLASSEXW wcex{};
@@ -61,7 +64,7 @@ namespace srt
 		RegisterClassExW(&wcex);
 
 		// Compute the window size
-		DWORD wndStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_VISIBLE;
+		constexpr DWORD wndStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_VISIBLE;
 		RECT wndRect;
 		SetRect( &wndRect, 0, 0, context.width, context.height);
 		AdjustWindowRect( &wndRect, wndStyle, FALSE );

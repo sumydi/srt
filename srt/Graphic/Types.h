@@ -1,7 +1,7 @@
 #ifndef SRT_GRAPHIC_TYPES_H
 #define SRT_GRAPHIC_TYPES_H
 
-#include <stdint.h>
+#include "Base.h"
 
 namespace srt
 {

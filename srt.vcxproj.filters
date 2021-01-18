@@ -42,9 +42,6 @@
     <ClInclude Include="srt\Graphic\Texture.h">
       <Filter>srt\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="srt\Graphic\Canvas.h">
-      <Filter>srt\Graphic</Filter>
-    </ClInclude>
     <ClInclude Include="srt\Graphic\Image.h">
       <Filter>srt\Graphic</Filter>
     </ClInclude>
@@ -56,6 +53,9 @@
     </ClInclude>
     <ClInclude Include="srt\Application.h">
       <Filter>srt</Filter>
+    </ClInclude>
+    <ClInclude Include="srt\Graphic\OutputDevice.h">
+      <Filter>srt\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
