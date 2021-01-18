@@ -1,5 +1,7 @@
 #include "Application.h"
 #include "resource.h"
+#include <iostream>
+#include <chrono>
 
 #include "Graphic/Image.h"
 #include "Math/Vector3.h"
@@ -90,7 +92,7 @@ namespace srt
 
 		m_outputDev = new DIBDevice( m_hWnd );
 	#endif
-	}
+	}	
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
@@ -120,7 +122,11 @@ namespace srt
 				DispatchMessage( &msg );
 			}
 	#endif
+			auto startFrame = std::chrono::high_resolution_clock::now( );
 			Update( );
+			auto endFrame = std::chrono::high_resolution_clock::now( );
+			const float frameTime = std::chrono::duration< float, std::milli >( endFrame - startFrame ).count();
+
 		}
 	}
 

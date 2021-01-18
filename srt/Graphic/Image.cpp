@@ -82,7 +82,7 @@ namespace srt
 	
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void * Image::GetMipSurface( uint32_t mipIdx ) const
+	const void * Image::GetMipSurface( uint32_t mipIdx ) const
 	{
 		assert( mipIdx < m_mipCount );
 		return m_mips[ mipIdx ].surface;
