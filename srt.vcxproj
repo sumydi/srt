@@ -74,7 +74,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>.;$(IncludePath)</IncludePath>
+    <IncludePath>.;./srt;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -152,6 +152,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="srt\Application.h" />
     <ClInclude Include="srt\Base.h" />
+    <ClInclude Include="srt\Graphic\DIBDevice.h" />
     <ClInclude Include="srt\Graphic\OutputDevice.h" />
     <ClInclude Include="srt\Graphic\Image.h" />
     <ClInclude Include="srt\Graphic\Texture.h" />
@@ -162,6 +163,7 @@
   <ItemGroup>
     <ClCompile Include="srt.cpp" />
     <ClCompile Include="srt\Application.cpp" />
+    <ClCompile Include="srt\Graphic\DIBDevice.cpp" />
     <ClCompile Include="srt\Graphic\Image.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,12 @@
 #include "Application.h"
 #include "resource.h"
 
+#include "Graphic/Image.h"
 #include "Math/Vector3.h"
 
+#if defined (SRT_PLATFORM_WINDOWS )
+	#include "Graphic/DIBDevice.h"
+#endif
 
 namespace srt
 {
@@ -42,7 +46,12 @@ namespace srt
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	Application::Application( const AppContext & context )
+	: m_backBuffer{nullptr }
+	, m_outputDev{ nullptr }
 	{
+
+		m_backBuffer = new Image( context.width, context.height, PixelFormat::kA8R8G8B8_UInt );
+
 	#if defined( SRT_PLATFORM_WINDOWS )
 
 		m_hInstance = context.hInstance;
@@ -79,6 +88,7 @@ namespace srt
 		const int wndY = ( GetSystemMetrics( SM_CYSCREEN ) - wndHeight) / 2;
 		m_hWnd = CreateWindow( L"SRTWindowClass", L"SRT", wndStyle, wndX, wndY, wndWidth, wndHeight, NULL, NULL, GetModuleHandle( NULL ), NULL );
 
+		m_outputDev = new DIBDevice( m_hWnd );
 	#endif
 	}
 
@@ -86,7 +96,8 @@ namespace srt
 	// ------------------------------------------------------------------------
 	Application::~Application()
 	{
-
+		delete m_backBuffer;
+		delete m_outputDev;
 	}
 
 	// ------------------------------------------------------------------------
@@ -128,5 +139,6 @@ namespace srt
 
 		Vec3 vz = Cross( vxn, vyn );
 
+		m_outputDev->Present( *m_backBuffer );
 	}
 }

@@ -6,6 +6,9 @@
 namespace srt
 {
 
+class Image;
+class OutputDevice;
+
 struct AppContext
 {
 	uint32_t	width;
@@ -37,6 +40,9 @@ private:
 	HINSTANCE	m_hInstance;
 	HWND		m_hWnd;
 #endif
+
+	Image *			m_backBuffer;
+	OutputDevice *	m_outputDev;
 
 };
 

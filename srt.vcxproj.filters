@@ -57,6 +57,9 @@
     <ClInclude Include="srt\Graphic\OutputDevice.h">
       <Filter>srt\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Graphic\DIBDevice.h">
+      <Filter>srt\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -67,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="srt\Application.cpp">
       <Filter>srt</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Graphic\DIBDevice.cpp">
+      <Filter>srt\Graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
