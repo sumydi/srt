@@ -3,7 +3,7 @@
 
 #include <math.h>
 
-namespace str
+namespace srt
 {
 
 	class Vec3
@@ -31,7 +31,7 @@ namespace str
 
 		inline float Length( ) const
 		{
-			return sqrt( SqrLength( ) );
+			return sqrtf( SqrLength( ) );
 		}
 
 		float	m_v[ 3 ];

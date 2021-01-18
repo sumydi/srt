@@ -1,6 +1,9 @@
 #include "Application.h"
 #include "resource.h"
 
+#include "Math/Vector3.h"
+
+
 namespace srt
 {
 	// ------------------------------------------------------------------------
@@ -106,6 +109,24 @@ namespace srt
 				DispatchMessage( &msg );
 			}
 	#endif
+			Update( );
 		}
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Application::Update( )
+	{
+		Vec3 vx{ 10.0f, 0.0f, 0.0f };
+
+		const float len = vx.Length();
+		Vec3 vxn = Normalize( vx );
+		const float newLen = vxn.Length();
+
+		Vec3 vy{ 0.0f, 5.0f, 0.0f };
+		Vec3 vyn = Normalize( vy );
+
+		Vec3 vz = Cross( vxn, vyn );
+
 	}
 }

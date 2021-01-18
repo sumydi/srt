@@ -27,7 +27,7 @@ public:
 	~Application( );
 
 	void Run( );
-
+	void Update( );
 
 private:
 	Application( const Application & other ) = delete;
