@@ -20,13 +20,14 @@ namespace srt
 	{
 		struct Desc
 		{
-			uint16_t	width;
-			uint16_t	height;
-			uint32_t	pitch;
+			uint16_t	width{ 0 };
+			uint16_t	height{ 0 };
+			uint32_t	pitch{ 0 };
 		};
 
 		Desc		desc;
-		void *		surface;
+		uint32_t	lockCount{ 0 };
+		void *		surface{ nullptr };
 	};
 }
 
