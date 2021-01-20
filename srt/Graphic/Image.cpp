@@ -114,11 +114,11 @@ namespace srt
 		uint32_t bpp = 0;
 		switch( pf )
 		{
-			case PixelFormat::kX8R8G8B8_UInt:
+			case PixelFormat::kBGRX8_UInt:
 				bpp = 32;
 				break;
 
-			case PixelFormat::kA8R8G8B8_UInt:
+			case PixelFormat::kBGRA8_UInt:
 				bpp = 32;
 				break;
 

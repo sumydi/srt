@@ -52,7 +52,7 @@ namespace srt
 	, m_outputDev{ nullptr }
 	{
 
-		m_backBuffer = new Image( context.width, context.height, PixelFormat::kA8R8G8B8_UInt );
+		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
 	#if defined( SRT_PLATFORM_WINDOWS )
 
@@ -144,6 +144,21 @@ namespace srt
 		Vec3 vyn = Normalize( vy );
 
 		Vec3 vz = Cross( vxn, vyn );
+
+		constexpr uint32_t color = ( 255 << 16 );
+		uint32_t * surf = reinterpret_cast< uint32_t * >( m_backBuffer->LockMipSurface( 0 ) );
+
+		for( uint32_t y = 0; y < m_backBuffer->GetMipDesc( 0 ).height; ++y )
+		{
+			uint32_t *line = surf + ( y * (uint32_t)m_backBuffer->GetMipDesc( 0 ).width );
+			for( uint32_t x = 0; x < m_backBuffer->GetMipDesc( 0 ).width; ++x )
+			{
+				*line = color;
+				++line;
+			}
+		}
+
+		m_backBuffer->UnlockMipSurface( 0 );
 
 		m_outputDev->Present( *m_backBuffer );
 	}
