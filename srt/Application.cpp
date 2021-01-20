@@ -146,11 +146,11 @@ namespace srt
 		Vec3 vz = Cross( vxn, vyn );
 
 		constexpr uint32_t color = ( 255 << 16 );
-		uint32_t * surf = reinterpret_cast< uint32_t * >( m_backBuffer->LockMipSurface( 0 ) );
+		uint8_t * surf = reinterpret_cast< uint8_t * >( m_backBuffer->LockMipSurface( 0 ) );
 
 		for( uint32_t y = 0; y < m_backBuffer->GetMipDesc( 0 ).height; ++y )
 		{
-			uint32_t *line = surf + ( y * (uint32_t)m_backBuffer->GetMipDesc( 0 ).width );
+			uint32_t *line = reinterpret_cast< uint32_t * >( surf + y * m_backBuffer->GetMipDesc( 0 ).pitch );
 			for( uint32_t x = 0; x < m_backBuffer->GetMipDesc( 0 ).width; ++x )
 			{
 				*line = color;
