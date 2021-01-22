@@ -5,6 +5,7 @@
 
 #include "Graphic/Image.h"
 #include "Math/Vector3.h"
+#include "Math/Vector4.h"
 
 #if defined (SRT_PLATFORM_WINDOWS )
 	#include "Graphic/DIBDevice.h"
@@ -144,6 +145,10 @@ namespace srt
 		Vec3 vyn = Normalize( vy );
 
 		Vec3 vz = Cross( vxn, vyn );
+
+		Vec4 fcolor{ 1.0f, .0f, .0f, 1.0f };
+
+
 
 		constexpr uint32_t color = ( 255 << 16 );
 		uint8_t * surf = reinterpret_cast< uint8_t * >( m_backBuffer->LockMipSurface( 0 ) );

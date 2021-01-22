@@ -159,6 +159,7 @@
     <ClInclude Include="srt\Graphic\Types.h" />
     <ClInclude Include="srt\Math\Ray.h" />
     <ClInclude Include="srt\Math\Vector3.h" />
+    <ClInclude Include="srt\Math\Vector4.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
