@@ -10,7 +10,7 @@ namespace srt
 	{
 	public:
 		Vec3( ) : m_v{ 0.0f, 0.0f, 0.0f } {}
-		Vec3( const float x, const float y, const float z ) : m_v{ x, y, z } {}
+		explicit Vec3( const float x, const float y, const float z ) : m_v{ x, y, z } {}
 
 		inline Vec3 & operator = ( const Vec3 & other );
 

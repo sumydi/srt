@@ -60,6 +60,9 @@
     <ClInclude Include="srt\Graphic\DIBDevice.h">
       <Filter>srt\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Math\Ray.h">
+      <Filter>srt\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
