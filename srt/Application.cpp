@@ -148,6 +148,7 @@ namespace srt
 
 		Vec4 fcolor{ 1.0f, .0f, .0f, 1.0f };
 
+		// Output back buffer
 		uint8_t * surf = reinterpret_cast< uint8_t * >( m_backBuffer->LockMipSurface( 0 ) );
 
 		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
