@@ -174,7 +174,7 @@ namespace srt
 				// lerp bewteen clear blue to white
 				const Vec3 fcolor = ( 1.0f - t ) * Vec3( 0.5f, 0.7f, 1.0f ) + t * Vec3( 1.0f, 1.0f, 1.0f  );
 
-				// conert to RGB
+				// convert to RGB
 				const uint32_t r = (uint32_t)( fcolor.X() * 255.0f );
 				const uint32_t g = (uint32_t)( fcolor.Y() * 255.0f );
 				const uint32_t b = (uint32_t)( fcolor.Z() * 255.0f );
