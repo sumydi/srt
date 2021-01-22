@@ -148,16 +148,20 @@ namespace srt
 
 		Vec4 fcolor{ 1.0f, .0f, .0f, 1.0f };
 
-
-
-		constexpr uint32_t color = ( 255 << 16 );
 		uint8_t * surf = reinterpret_cast< uint8_t * >( m_backBuffer->LockMipSurface( 0 ) );
 
-		for( uint32_t y = 0; y < m_backBuffer->GetMipDesc( 0 ).height; ++y )
+		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
+		const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
+		for( uint32_t y = 0; y < bbHeight; ++y )
 		{
 			uint32_t *line = reinterpret_cast< uint32_t * >( surf + y * m_backBuffer->GetMipDesc( 0 ).pitch );
-			for( uint32_t x = 0; x < m_backBuffer->GetMipDesc( 0 ).width; ++x )
+			for( uint32_t x = 0; x < bbWidth; ++x )
 			{
+				const uint32_t r = (uint32_t)( ( (float)x / (float)bbWidth ) * 255.0f );
+				const uint32_t g = (uint32_t)( ( (float)y / (float)bbHeight ) * 255.0f );
+
+				const uint32_t color = ( r << 16 ) | ( g << 8 );
+
 				*line = color;
 				++line;
 			}
