@@ -6,6 +6,7 @@
 #include "Graphic/Image.h"
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"
+#include "Math/Ray.h"
 
 #if defined (SRT_PLATFORM_WINDOWS )
 	#include "Graphic/DIBDevice.h"
@@ -135,18 +136,20 @@ namespace srt
 	// ------------------------------------------------------------------------
 	void Application::Update( )
 	{
-		Vec3 vx{ 10.0f, 0.0f, 0.0f };
+		{
+			Vec3 vx{ 10.0f, 0.0f, 0.0f };
 
-		const float len = Length( vx );
-		Vec3 vxn = Normalize( vx );
-		const float newLen = Length( vxn );
+			const float len = Length( vx );
+			Vec3 vxn = Normalize( vx );
+			const float newLen = Length( vxn );
 
-		Vec3 vy{ 0.0f, 5.0f, 0.0f };
-		Vec3 vyn = Normalize( vy );
+			Vec3 vy{ 0.0f, 5.0f, 0.0f };
+			Vec3 vyn = Normalize( vy );
 
-		Vec3 vz = Cross( vxn, vyn );
+			Vec3 vz = Cross( vxn, vyn );
 
-		Vec4 fcolor{ 1.0f, .0f, .0f, 1.0f };
+			Vec4 fcolor{ 1.0f, .0f, .0f, 1.0f };
+		}
 
 		// Output back buffer
 		uint8_t * surf = reinterpret_cast< uint8_t * >( m_backBuffer->LockMipSurface( 0 ) );
@@ -158,10 +161,25 @@ namespace srt
 			uint32_t *line = reinterpret_cast< uint32_t * >( surf + y * m_backBuffer->GetMipDesc( 0 ).pitch );
 			for( uint32_t x = 0; x < bbWidth; ++x )
 			{
-				const uint32_t r = (uint32_t)( ( (float)x / (float)bbWidth ) * 255.0f );
-				const uint32_t g = (uint32_t)( ( (float)y / (float)bbHeight ) * 255.0f );
+				// transform coordinates to -1.0 to 1.0
+				const float nx = ( (float)x / (float)bbWidth ) * 2.0f - 1.0f;
+				const float ny = ( (float)y / (float)bbHeight ) * 2.0f - 1.0f;
 
-				const uint32_t color = ( r << 16 ) | ( g << 8 );
+				// make a vector from the origin to the current normalized pixel
+				const Vec3 dir{ nx, ny, 0.0f };
+
+				// timestep
+				const float t = 0.5f * ( dir.Y() + 1.0f );
+
+				// lerp bewteen clear blue to white
+				const Vec3 fcolor = ( 1.0f - t ) * Vec3( 0.5f, 0.7f, 1.0f ) + t * Vec3( 1.0f, 1.0f, 1.0f  );
+
+				// conert to RGB
+				const uint32_t r = (uint32_t)( fcolor.X() * 255.0f );
+				const uint32_t g = (uint32_t)( fcolor.Y() * 255.0f );
+				const uint32_t b = (uint32_t)( fcolor.Z() * 255.0f );
+
+				const uint32_t color = ( r << 16 ) | ( g << 8 ) | ( b );
 
 				*line = color;
 				++line;

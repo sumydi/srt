@@ -24,6 +24,10 @@ namespace srt
 		inline Vec3 & operator *= ( const Vec3 & other );
 		inline Vec3 & operator /= ( const Vec3 & other );
 
+		float X() const { return m_v[ 0 ]; }
+		float Y() const { return m_v[ 1 ]; }
+		float Z() const { return m_v[ 2 ]; }
+
 		float	m_v[ 3 ];
 	};
 
@@ -120,6 +124,11 @@ namespace srt
 	}
 
 	inline Vec3 operator * ( const Vec3 & v, const float f )
+	{
+		return Vec3( v.m_v[ 0 ] * f, v.m_v[ 1 ] * f, v.m_v[ 2 ] * f );
+	}
+
+	inline Vec3 operator * ( const float f, const Vec3 & v )
 	{
 		return Vec3( v.m_v[ 0 ] * f, v.m_v[ 1 ] * f, v.m_v[ 2 ] * f );
 	}

@@ -133,6 +133,11 @@ namespace srt
 		return Vec4( v.m_v[ 0 ] * f, v.m_v[ 1 ] * f, v.m_v[ 2 ] * f, v.m_v[ 3 ] * f );
 	}
 
+	inline Vec4 operator * ( const float f, const Vec4 & v )
+	{
+		return Vec4( v.m_v[ 0 ] * f, v.m_v[ 1 ] * f, v.m_v[ 2 ] * f, v.m_v[ 3 ] * f );
+	}
+
 	inline Vec4 operator / ( const Vec4 & v, const float f )
 	{
 		return Vec4( v.m_v[ 0 ] / f, v.m_v[ 1 ] / f, v.m_v[ 2 ] / f, v.m_v[ 3 ] / f );
