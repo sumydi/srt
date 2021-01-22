@@ -24,16 +24,6 @@ namespace srt
 		inline Vec3 & operator *= ( const Vec3 & other );
 		inline Vec3 & operator /= ( const Vec3 & other );
 
-		inline float SqrLength( ) const
-		{
-			return m_v[ 0 ] * m_v[ 0 ] + m_v[1 ] * m_v[ 1 ] + m_v[ 2 ] * m_v[ 2 ];
-		}
-
-		inline float Length( ) const
-		{
-			return sqrtf( SqrLength( ) );
-		}
-
 		float	m_v[ 3 ];
 	};
 
@@ -159,15 +149,20 @@ namespace srt
 		return Vec3( v1.m_v[ 0 ] / v2.m_v[ 0 ], v1.m_v[ 1 ] / v2.m_v[ 1 ], v1.m_v[ 2 ] / v2.m_v[ 2 ] );
 	}
 
-	inline Vec3 Normalize( const Vec3 & v )
-	{
-		const float rlen = 1.0f / v.Length();
-		return Vec3( v.m_v[ 0 ] * rlen, v.m_v[ 1 ] * rlen, v.m_v[ 2 ] * rlen );
-	}
-
 	inline float Dot( const Vec3 & v1, const Vec3 & v2 )
 	{
 		return v1.m_v[ 0 ] * v2.m_v[ 0 ] + v1.m_v[ 1 ] * v2.m_v[ 1 ] + v1.m_v[ 2 ] * v2.m_v[ 2 ];
+	}
+
+	inline float Length( const Vec3 & v )
+	{
+		return sqrtf( Dot( v, v ) );
+	}
+
+	inline Vec3 Normalize( const Vec3 & v )
+	{
+		const float rlen = 1.0f / Length( v );
+		return Vec3( v.m_v[ 0 ] * rlen, v.m_v[ 1 ] * rlen, v.m_v[ 2 ] * rlen );
 	}
 
 	inline Vec3 Cross( const Vec3 & v1, const Vec3 & v2 )

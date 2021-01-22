@@ -137,9 +137,9 @@ namespace srt
 	{
 		Vec3 vx{ 10.0f, 0.0f, 0.0f };
 
-		const float len = vx.Length();
+		const float len = Length( vx );
 		Vec3 vxn = Normalize( vx );
-		const float newLen = vxn.Length();
+		const float newLen = Length( vxn );
 
 		Vec3 vy{ 0.0f, 5.0f, 0.0f };
 		Vec3 vyn = Normalize( vy );
