@@ -162,17 +162,18 @@ namespace srt
 			for( uint32_t x = 0; x < bbWidth; ++x )
 			{
 				// transform coordinates to -1.0 to 1.0
+				// note: y is reverted so 1.0 is the top of the image and -1.0 is the bottom
 				const float nx = ( (float)x / (float)bbWidth ) * 2.0f - 1.0f;
-				const float ny = ( (float)y / (float)bbHeight ) * 2.0f - 1.0f;
+				const float ny = -( ( (float)y / (float)bbHeight ) * 2.0f - 1.0f );
 
 				// make a vector from the origin to the current normalized pixel
 				const Vec3 dir{ nx, ny, 0.0f };
 
-				// timestep
+				// timestep (use the current y position to have a value between 0.0 & 1.0)
 				const float t = 0.5f * ( dir.Y() + 1.0f );
 
-				// lerp bewteen clear blue to white
-				const Vec3 fcolor = ( 1.0f - t ) * Vec3( 0.5f, 0.7f, 1.0f ) + t * Vec3( 1.0f, 1.0f, 1.0f  );
+				// lerp between clear blue to white
+				const Vec3 fcolor = ( 1.0f - t ) * Vec3( 1.0f, 1.0f, 1.0f ) + t * Vec3( 0.5f, 0.7f, 1.0f );
 
 				// convert to RGB
 				const uint32_t r = (uint32_t)( fcolor.X() * 255.0f );

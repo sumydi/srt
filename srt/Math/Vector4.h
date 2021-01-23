@@ -10,10 +10,11 @@ namespace srt
 	{
 	public:
 		Vec4( ) : m_v{ 0.0f, 0.0f, 0.0f, 0.0f } {}
-		explicit Vec4( const float x, const float y, const float z, const float w  ) : m_v{ x, y, z, w } {}
+		explicit Vec4( const float x, const float y, const float z, const float w ) : m_v{ x, y, z, w } {}
 
 		inline Vec4 & operator = ( const Vec4 & other );
 
+		inline Vec4 operator - ();
 		inline Vec4 & operator += ( const float f );
 		inline Vec4 & operator -= ( const float f );
 		inline Vec4 & operator *= ( const float f );
@@ -24,6 +25,12 @@ namespace srt
 		inline Vec4 & operator *= ( const Vec4 & other );
 		inline Vec4 & operator /= ( const Vec4 & other );
 
+		float X() const { return m_v[ 0 ]; }
+		float Y() const { return m_v[ 1 ]; }
+		float Z() const { return m_v[ 2 ]; }
+		float W() const { return m_v[ 3 ]; }
+
+	private:
 		float	m_v[ 4 ];
 	};
 
@@ -36,6 +43,11 @@ namespace srt
 		m_v[ 3 ] = other.m_v[ 3 ];
 
 		return *this;
+	}
+
+	inline Vec4 Vec4::operator - ()
+	{
+		return Vec4( -m_v[ 0 ], -m_v[ 1 ], -m_v[ 2 ], -m_v[ 3 ] );
 	}
 
 	inline Vec4 & Vec4::operator += ( const float f )
@@ -120,48 +132,49 @@ namespace srt
 
 	inline Vec4 operator + ( const Vec4 & v, const float f )
 	{
-		return Vec4( v.m_v[ 0 ] + f, v.m_v[ 1 ] + f, v.m_v[ 2 ] + f, v.m_v[ 3 ] + f );
+		return Vec4( v.X() + f, v.Y() + f, v.Z() + f, v.W() + f );
 	}
 
 	inline Vec4 operator - ( const Vec4 & v, const float f )
 	{
-		return Vec4( v.m_v[ 0 ] - f, v.m_v[ 1 ] - f, v.m_v[ 2 ] - f, v.m_v[ 3 ] - f );
+		return Vec4( v.X() - f, v.Y() - f, v.Z() - f, v.W() - f );
 	}
 
 	inline Vec4 operator * ( const Vec4 & v, const float f )
 	{
-		return Vec4( v.m_v[ 0 ] * f, v.m_v[ 1 ] * f, v.m_v[ 2 ] * f, v.m_v[ 3 ] * f );
+		return Vec4( v.X() * f, v.Y() * f, v.Z() * f, v.W() * f );
 	}
 
 	inline Vec4 operator * ( const float f, const Vec4 & v )
 	{
-		return Vec4( v.m_v[ 0 ] * f, v.m_v[ 1 ] * f, v.m_v[ 2 ] * f, v.m_v[ 3 ] * f );
+		return Vec4( v.X() * f, v.Y() * f, v.Z() * f, v.W() * f );
 	}
 
 	inline Vec4 operator / ( const Vec4 & v, const float f )
 	{
-		return Vec4( v.m_v[ 0 ] / f, v.m_v[ 1 ] / f, v.m_v[ 2 ] / f, v.m_v[ 3 ] / f );
+		return Vec4( v.X() / f, v.Y() / f, v.Z() / f, v.W() / f );
 	}
 
 	inline Vec4 operator + ( const Vec4 & v1, const Vec4 & v2 )
 	{
-		return Vec4( v1.m_v[ 0 ] + v2.m_v[ 0 ], v1.m_v[ 1 ] + v2.m_v[ 1 ], v1.m_v[ 2 ] + v2.m_v[ 2 ], v1.m_v[ 3 ] + v2.m_v[ 3 ] );
+		return Vec4( v1.X() + v2.X(), v1.Y() + v2.Y(), v1.Z() + v2.Z(), v1.W() + v2.W() );
 	}
 
 	inline Vec4 operator - ( const Vec4 & v1, const Vec4 & v2 )
 	{
-		return Vec4( v1.m_v[ 0 ] - v2.m_v[ 0 ], v1.m_v[ 1 ] - v2.m_v[ 1 ], v1.m_v[ 2 ] - v2.m_v[ 2 ], v1.m_v[ 3 ] - v2.m_v[ 3 ] );
+		return Vec4( v1.X() - v2.X(), v1.Y() - v2.Y(), v1.Z() - v2.Z(), v1.W() - v2.W() );
 	}
 
 	inline Vec4 operator * ( const Vec4 & v1, const Vec4 & v2 )
 	{
-		return Vec4( v1.m_v[ 0 ] * v2.m_v[ 0 ], v1.m_v[ 1 ] * v2.m_v[ 1 ], v1.m_v[ 2 ] * v2.m_v[ 2 ], v1.m_v[ 3 ] * v2.m_v[ 3 ] );
+		return Vec4( v1.X() * v2.X(), v1.Y() * v2.Y(), v1.Z() * v2.Z(), v1.W() * v2.W() );
 	}
 
 	inline Vec4 operator / ( const Vec4 & v1, const Vec4 & v2 )
 	{
-		return Vec4( v1.m_v[ 0 ] / v2.m_v[ 0 ], v1.m_v[ 1 ] / v2.m_v[ 1 ], v1.m_v[ 2 ] / v2.m_v[ 2 ], v1.m_v[ 3 ] / v2.m_v[ 3 ] );
+		return Vec4( v1.X() / v2.X(), v1.Y() / v2.Y(), v1.Z() / v2.Z(), v1.W() / v2.W() );
 	}
+
 }
 
 #endif

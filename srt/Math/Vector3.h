@@ -14,6 +14,7 @@ namespace srt
 
 		inline Vec3 & operator = ( const Vec3 & other );
 
+		inline Vec3 operator - ();
 		inline Vec3 & operator += ( const float f );
 		inline Vec3 & operator -= ( const float f );
 		inline Vec3 & operator *= ( const float f );
@@ -28,6 +29,7 @@ namespace srt
 		float Y() const { return m_v[ 1 ]; }
 		float Z() const { return m_v[ 2 ]; }
 
+	private:
 		float	m_v[ 3 ];
 	};
 
@@ -39,6 +41,11 @@ namespace srt
 		m_v[ 2 ] = other.m_v[ 2 ];
 
 		return *this;
+	}
+
+	inline Vec3 Vec3::operator - ()
+	{
+		return Vec3( -m_v[ 0 ], -m_v[ 1 ], -m_v[ 2 ] );
 	}
 
 	inline Vec3 & Vec3::operator += ( const float f )
@@ -115,52 +122,52 @@ namespace srt
 
 	inline Vec3 operator + ( const Vec3 & v, const float f )
 	{
-		return Vec3( v.m_v[ 0 ] + f, v.m_v[ 1 ] + f, v.m_v[ 2 ] + f );
+		return Vec3( v.X() + f, v.Y() + f, v.Z() + f );
 	}
 
 	inline Vec3 operator - ( const Vec3 & v, const float f )
 	{
-		return Vec3( v.m_v[ 0 ] - f, v.m_v[ 1 ] - f, v.m_v[ 2 ] - f );
+		return Vec3( v.X() - f, v.Y() - f, v.Z() - f );
 	}
 
 	inline Vec3 operator * ( const Vec3 & v, const float f )
 	{
-		return Vec3( v.m_v[ 0 ] * f, v.m_v[ 1 ] * f, v.m_v[ 2 ] * f );
+		return Vec3( v.X() * f, v.Y() * f, v.Z() * f );
 	}
 
 	inline Vec3 operator * ( const float f, const Vec3 & v )
 	{
-		return Vec3( v.m_v[ 0 ] * f, v.m_v[ 1 ] * f, v.m_v[ 2 ] * f );
+		return Vec3( v.X() * f, v.Y() * f, v.Z() * f );
 	}
 
 	inline Vec3 operator / ( const Vec3 & v, const float f )
 	{
-		return Vec3( v.m_v[ 0 ] / f, v.m_v[ 1 ] / f, v.m_v[ 2 ] / f );
+		return Vec3( v.X() / f, v.Y() / f, v.Z() / f );
 	}
 
 	inline Vec3 operator + ( const Vec3 & v1, const Vec3 & v2 )
 	{
-		return Vec3( v1.m_v[ 0 ] + v2.m_v[ 0 ], v1.m_v[ 1 ] + v2.m_v[ 1 ], v1.m_v[ 2 ] + v2.m_v[ 2 ] );
+		return Vec3( v1.X() + v2.X(), v1.Y() + v2.Y(), v1.Z() + v2.Z() );
 	}
 
 	inline Vec3 operator - ( const Vec3 & v1, const Vec3 & v2 )
 	{
-		return Vec3( v1.m_v[ 0 ] - v2.m_v[ 0 ], v1.m_v[ 1 ] - v2.m_v[ 1 ], v1.m_v[ 2 ] - v2.m_v[ 2 ] );
+		return Vec3( v1.X() - v2.X(), v1.Y() - v2.Y(), v1.Z() - v2.Z() );
 	}
 
 	inline Vec3 operator * ( const Vec3 & v1, const Vec3 & v2 )
 	{
-		return Vec3( v1.m_v[ 0 ] * v2.m_v[ 0 ], v1.m_v[ 1 ] * v2.m_v[ 1 ], v1.m_v[ 2 ] * v2.m_v[ 2 ] );
+		return Vec3( v1.X() * v2.X(), v1.Y() * v2.Y(), v1.Z() * v2.Z() );
 	}
 
 	inline Vec3 operator / ( const Vec3 & v1, const Vec3 & v2 )
 	{
-		return Vec3( v1.m_v[ 0 ] / v2.m_v[ 0 ], v1.m_v[ 1 ] / v2.m_v[ 1 ], v1.m_v[ 2 ] / v2.m_v[ 2 ] );
+		return Vec3( v1.X() / v2.X(), v1.Y() / v2.Y(), v1.Z() / v2.Z() );
 	}
 
 	inline float Dot( const Vec3 & v1, const Vec3 & v2 )
 	{
-		return v1.m_v[ 0 ] * v2.m_v[ 0 ] + v1.m_v[ 1 ] * v2.m_v[ 1 ] + v1.m_v[ 2 ] * v2.m_v[ 2 ];
+		return v1.X() * v2.X() + v1.Y() * v2.Y() + v1.Z() * v2.Z();
 	}
 
 	inline float Length( const Vec3 & v )
@@ -171,17 +178,16 @@ namespace srt
 	inline Vec3 Normalize( const Vec3 & v )
 	{
 		const float rlen = 1.0f / Length( v );
-		return Vec3( v.m_v[ 0 ] * rlen, v.m_v[ 1 ] * rlen, v.m_v[ 2 ] * rlen );
+		return Vec3( v.X() * rlen, v.Y() * rlen, v.Z() * rlen );
 	}
 
 	inline Vec3 Cross( const Vec3 & v1, const Vec3 & v2 )
 	{
-		Vec3 r;
-		r.m_v[ 0 ] = v1.m_v[ 1 ] * v2.m_v[ 2 ] - v1.m_v[ 2 ] * v2.m_v[ 1 ]; 
-		r.m_v[ 1 ] = v1.m_v[ 2 ] * v2.m_v[ 0 ] - v1.m_v[ 0 ] * v2.m_v[ 2 ];
-		r.m_v[ 2 ] = v1.m_v[ 0 ] * v2.m_v[ 1 ] - v1.m_v[ 1 ] * v2.m_v[ 0 ];
+		const float x = v1.Y() * v2.Z() - v1.Z() * v2.Y();
+		const float y = v1.Z() * v2.X() - v1.X() * v2.Z();
+		const float z = v1.X() * v2.Y() - v1.Y() * v2.X();
 
-		return r;
+		return Vec3( x, y ,z );
 	}
 }
 

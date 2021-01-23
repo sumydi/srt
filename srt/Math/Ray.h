@@ -8,6 +8,8 @@ namespace srt
 	class Ray
 	{
 	public:
+		Ray() = default;
+
 		explicit Ray( const Vec3 & origin, const Vec3 & direction )
 		: m_origin( origin )
 		, m_direction( direction )
@@ -15,6 +17,10 @@ namespace srt
 		
 		}
 
+		const Vec3 & GetOrigin( ) const { return m_origin; }
+		const Vec3 & GetDirection( ) const { return m_direction; }
+
+	private:
 		Vec3	m_origin;
 		Vec3	m_direction;
 	};
