@@ -66,6 +66,9 @@
     <ClInclude Include="srt\Math\Vector4.h">
       <Filter>srt\Math</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Math\Sphere.h">
+      <Filter>srt\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">

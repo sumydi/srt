@@ -7,6 +7,7 @@
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"
 #include "Math/Ray.h"
+#include "Math/Sphere.h"
 
 #if defined (SRT_PLATFORM_WINDOWS )
 	#include "Graphic/DIBDevice.h"
@@ -136,6 +137,7 @@ namespace srt
 	// ------------------------------------------------------------------------
 	void Application::Update( )
 	{
+		// Unit test vectors
 		{
 			Vec3 vx{ 10.0f, 0.0f, 0.0f };
 
@@ -149,6 +151,12 @@ namespace srt
 			Vec3 vz = Cross( vxn, vyn );
 
 			Vec4 fcolor{ 1.0f, .0f, .0f, 1.0f };
+		}
+
+		// Unit test SPhere
+		{
+			Sphere s{ Vec3{ 0.0f, 0.0f, 0.0f }, 10.0f };
+		
 		}
 
 		// Output back buffer

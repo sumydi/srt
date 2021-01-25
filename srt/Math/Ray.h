@@ -17,6 +17,8 @@ namespace srt
 		
 		}
 
+		inline Ray & operator = ( const Ray & other );
+
 		const Vec3 & GetOrigin( ) const { return m_origin; }
 		const Vec3 & GetDirection( ) const { return m_direction; }
 
@@ -25,6 +27,11 @@ namespace srt
 		Vec3	m_direction;
 	};
 
+	inline Ray & Ray::operator = ( const Ray & other )
+	{
+		m_origin = other.m_origin;
+		m_direction = other.m_direction;
+	}
 
 }
 #endif
