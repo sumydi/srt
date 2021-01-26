@@ -19,8 +19,8 @@ namespace srt
 
 		inline Ray & operator = ( const Ray & other );
 
-		const Vec3 & GetOrigin( ) const { return m_origin; }
-		const Vec3 & GetDirection( ) const { return m_direction; }
+		const Vec3 & Origin( ) const { return m_origin; }
+		const Vec3 & Direction( ) const { return m_direction; }
 
 	private:
 		Vec3	m_origin;

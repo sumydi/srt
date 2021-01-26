@@ -9,10 +9,10 @@ namespace srt
 	// ----------------------------------------------------------------------------
 	void RaySphereHit( const Ray & ray, const Sphere & sphere, RayHitResult & result )
 	{
-		const Vec3 oc = ray.GetOrigin() - sphere.GetCenter();
-		const float a = Dot( ray.GetDirection(), ray.GetDirection() );
-		const float b = 2.0f * Dot( oc, ray.GetDirection() );
-		const float c = Dot( oc, oc ) - sphere.GetRadius() * sphere.GetRadius();
+		const Vec3 oc = ray.Origin() - sphere.Center();
+		const float a = Dot( ray.Direction(), ray.Direction() );
+		const float b = 2.0f * Dot( oc, ray.Direction() );
+		const float c = Dot( oc, oc ) - sphere.Radius() * sphere.Radius();
 		const float discriminant = b * b - 4.0f * a * c;
 
 		if( discriminant < 0.0f )
@@ -22,7 +22,7 @@ namespace srt
 		else
 		{
 			result.hitTime = ( -b - sqrtf( discriminant ) ) / ( 2.0f * a );
-			result.normal = Normalize( ( ray.GetOrigin( ) + result.hitTime * ray.GetDirection( ) ) - sphere.GetCenter( ) );
+			result.normal = Normalize( ( ray.Origin() + result.hitTime * ray.Direction() ) - sphere.Center() );
 		}
 	}
 }

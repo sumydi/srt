@@ -192,12 +192,13 @@ namespace srt
 
 				if( result.hitTime > 0.0f )
 				{
+					// hit the sphere: output normal at the hit point
 					resultColor = 0.5f * Vec3{ result.normal.X() + 1.0f, result.normal.Y() + 1.0f, result.normal.Z() + 1.0f };
 				}
 				else
 				{
 					// hit nothing: sky
-					const float t = 0.5f * ( ray.GetDirection().Y() + 1.0f );
+					const float t = 0.5f * ( ray.Direction().Y() + 1.0f );
 					resultColor = ( 1.0f - t ) * Vec3( 1.0f, 1.0f, 1.0f ) + t * Vec3( 0.5f, 0.7f, 1.0f );
 				}
 
