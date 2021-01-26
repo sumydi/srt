@@ -111,6 +111,7 @@ namespace srt
 	void Application::Run( )
 	{
 		bool canContinue = true;
+		float frameTime = 0.016f; // 16 ms by default
 
 		while( canContinue )
 		{
@@ -127,16 +128,15 @@ namespace srt
 			}
 	#endif
 			auto startFrame = std::chrono::high_resolution_clock::now( );
-			Update( );
+			Update( frameTime );
 			auto endFrame = std::chrono::high_resolution_clock::now( );
-			const float frameTime = std::chrono::duration< float, std::milli >( endFrame - startFrame ).count();
-
+			frameTime = (float)( std::chrono::duration< double, std::milli >( endFrame - startFrame ).count() / 1000.0 );
 		}
 	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void Application::Update( )
+	void Application::Update( float dt )
 	{
 		// Unit test vectors
 		{
@@ -167,6 +167,10 @@ namespace srt
 		const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
 		const float aspectRatio = (float)bbWidth / (float)bbHeight;
 
+		static float t = 0.0f;
+		t += dt;
+		const float cs = cos( t ) * 0.5f;
+
 		for( uint32_t y = 0; y < bbHeight; ++y )
 		{
 			uint32_t *line = reinterpret_cast< uint32_t * >( surf + y * m_backBuffer->GetMipDesc( 0 ).pitch );
@@ -182,7 +186,7 @@ namespace srt
 
 				Vec3 resultColor;
 
-				Sphere sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.3f };
+				Sphere sphere{ Vec3{ 0.0f + cs, 0.0f, -1.0f }, 0.3f };
 				RayHitResult result;
 				RaySphereHit( ray, sphere, result );
 

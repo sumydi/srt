@@ -30,7 +30,7 @@ public:
 	~Application( );
 
 	void Run( );
-	void Update( );
+	void Update( float dt );
 
 private:
 	Application( const Application & other ) = delete;
