@@ -1,7 +1,7 @@
 #ifndef SRT_RAYHITTEST_H
 #define SRT_RAYHITTEST_H
 
-//#include "Ray.h"
+#include "Vector3.h"
 
 namespace srt
 {
@@ -13,6 +13,7 @@ namespace srt
 	struct RayHitResult
 	{
 		float	hitTime;
+		Vec3	normal;
 		
 	};
 

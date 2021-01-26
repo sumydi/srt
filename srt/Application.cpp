@@ -160,7 +160,7 @@ namespace srt
 		
 		}
 
-		// Output back buffer
+		// Do the real math!
 		uint8_t * surf = reinterpret_cast< uint8_t * >( m_backBuffer->LockMipSurface( 0 ) );
 
 		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
@@ -178,7 +178,7 @@ namespace srt
 				const float ny = -( ( (float)y / (float)bbHeight ) * 2.0f - 1.0f );
 
 				// make a ray from the origin to the current normalized pixel
-				const Ray ray{ Vec3{ 0.0f, 0.0f, 0.0f }, Normalize( Vec3{ nx, ny, -1.0f }  )};
+				const Ray ray{ Vec3{ 0.0f, 0.0f, 0.0f }, Normalize( Vec3{ nx, ny, -1.0f } ) };
 
 				Vec3 resultColor;
 
@@ -188,7 +188,7 @@ namespace srt
 
 				if( result.hitTime > 0.0f )
 				{
-					resultColor = Vec3{ 1.0f, 0.0f, 0.0f };
+					resultColor = 0.5f * Vec3{ result.normal.X() + 1.0f, result.normal.Y() + 1.0f, result.normal.Z() + 1.0f };
 				}
 				else
 				{
