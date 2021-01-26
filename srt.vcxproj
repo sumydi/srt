@@ -157,6 +157,7 @@
     <ClInclude Include="srt\Graphic\Image.h" />
     <ClInclude Include="srt\Graphic\Texture.h" />
     <ClInclude Include="srt\Graphic\Types.h" />
+    <ClInclude Include="srt\Math\RayHitTest.h" />
     <ClInclude Include="srt\Math\Ray.h" />
     <ClInclude Include="srt\Math\Sphere.h" />
     <ClInclude Include="srt\Math\Vector3.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="srt\Application.cpp" />
     <ClCompile Include="srt\Graphic\DIBDevice.cpp" />
     <ClCompile Include="srt\Graphic\Image.cpp" />
+    <ClCompile Include="srt\Math\RayHitTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="srt.rc" />

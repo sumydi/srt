@@ -8,6 +8,7 @@
 #include "Math/Vector4.h"
 #include "Math/Ray.h"
 #include "Math/Sphere.h"
+#include "Math/RayHitTest.h"
 
 #if defined (SRT_PLATFORM_WINDOWS )
 	#include "Graphic/DIBDevice.h"
@@ -164,29 +165,42 @@ namespace srt
 
 		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
 		const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
+		const float aspectRatio = (float)bbWidth / (float)bbHeight;
+
 		for( uint32_t y = 0; y < bbHeight; ++y )
 		{
 			uint32_t *line = reinterpret_cast< uint32_t * >( surf + y * m_backBuffer->GetMipDesc( 0 ).pitch );
 			for( uint32_t x = 0; x < bbWidth; ++x )
 			{
-				// transform coordinates to -1.0 to 1.0
+				// transform coordinates to "normalized" coordinates
 				// note: y is reverted so 1.0 is the top of the image and -1.0 is the bottom
-				const float nx = ( (float)x / (float)bbWidth ) * 2.0f - 1.0f;
+				const float nx = ( (float)x / (float)bbWidth ) * 2.0f * aspectRatio - aspectRatio;
 				const float ny = -( ( (float)y / (float)bbHeight ) * 2.0f - 1.0f );
 
-				// make a vector from the origin to the current normalized pixel
-				const Vec3 dir{ nx, ny, 0.0f };
+				// make a ray from the origin to the current normalized pixel
+				const Ray ray{ Vec3{ 0.0f, 0.0f, 0.0f }, Normalize( Vec3{ nx, ny, -1.0f }  )};
 
-				// timestep (use the current y position to have a value between 0.0 & 1.0)
-				const float t = 0.5f * ( dir.Y() + 1.0f );
+				Vec3 resultColor;
 
-				// lerp between clear blue to white
-				const Vec3 fcolor = ( 1.0f - t ) * Vec3( 1.0f, 1.0f, 1.0f ) + t * Vec3( 0.5f, 0.7f, 1.0f );
+				Sphere sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.3f };
+				RayHitResult result;
+				RaySphereHit( ray, sphere, result );
+
+				if( result.hitTime > 0.0f )
+				{
+					resultColor = Vec3{ 1.0f, 0.0f, 0.0f };
+				}
+				else
+				{
+					// hit nothing: sky
+					const float t = 0.5f * ( ray.GetDirection().Y() + 1.0f );
+					resultColor = ( 1.0f - t ) * Vec3( 1.0f, 1.0f, 1.0f ) + t * Vec3( 0.5f, 0.7f, 1.0f );
+				}
 
 				// convert to RGB
-				const uint32_t r = (uint32_t)( fcolor.X() * 255.0f );
-				const uint32_t g = (uint32_t)( fcolor.Y() * 255.0f );
-				const uint32_t b = (uint32_t)( fcolor.Z() * 255.0f );
+				const uint32_t r = (uint32_t)( resultColor.X() * 255.0f );
+				const uint32_t g = (uint32_t)( resultColor.Y() * 255.0f );
+				const uint32_t b = (uint32_t)( resultColor.Z() * 255.0f );
 
 				const uint32_t color = ( r << 16 ) | ( g << 8 ) | ( b );
 

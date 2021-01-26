@@ -18,6 +18,9 @@ namespace srt
 
 		inline Sphere & operator = ( const Sphere & other );
 
+		const Vec3 &	GetCenter( ) const { return m_center; }
+		float			GetRadius( ) const { return m_radius; }
+
 	private:
 		Vec3	m_center;
 		float	m_radius { 1.0f };
