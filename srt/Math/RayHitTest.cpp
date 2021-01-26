@@ -22,7 +22,7 @@ namespace srt
 		else
 		{
 			result.hitTime = ( -b - sqrtf( discriminant ) ) / ( 2.0f * a );
-			result.normal = Normalize( ( ray.GetOrigin( ) + result.hitTime * ray.GetDirection( ) ) - Vec3{ 0.0f, 0.0f, -1.0f } );
+			result.normal = Normalize( ( ray.GetOrigin( ) + result.hitTime * ray.GetDirection( ) ) - sphere.GetCenter( ) );
 		}
 	}
 }
