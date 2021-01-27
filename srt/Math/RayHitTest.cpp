@@ -7,7 +7,7 @@ namespace srt
 
 	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
-	void RaySphereHit( const Ray & ray, const Sphere & sphere, RayHitResult & result )
+	void RaySphereHit( const Ray & ray, const Sphere & sphere, float tMin, float tMax, RayHitResult & result )
 	{
 		const Vec3 oc = ray.Origin() - sphere.Center();
 		const float a = Dot( ray.Direction(), ray.Direction() );
@@ -15,14 +15,28 @@ namespace srt
 		const float c = Dot( oc, oc ) - sphere.Radius() * sphere.Radius();
 		const float discriminant = b * b - 4.0f * a * c;
 
-		if( discriminant < 0.0f )
+		result.hitTime = -1.0f;
+
+		if( discriminant >= 0.0f )
 		{
-			result.hitTime = -1.0f;
-		}
-		else
-		{
-			result.hitTime = ( -b - sqrtf( discriminant ) ) / ( 2.0f * a );
-			result.normal = Normalize( ( ray.Origin() + result.hitTime * ray.Direction() ) - sphere.Center() );
+			const float sqrDiscriminant = sqrtf( discriminant );
+
+			const float r1 = ( -b - sqrDiscriminant ) / ( 2.0f * a );
+			if( r1 > tMin && r1 < tMax )
+			{
+				result.hitTime = r1;
+				result.normal = Normalize( ( ray.Origin() + result.hitTime * ray.Direction() ) - sphere.Center() );
+			}
+			else
+			{
+				const float r2 = ( -b + sqrDiscriminant ) / ( 2.0f * a );
+				if( r2 > tMin && r2 < tMax )
+				{
+					result.hitTime = r2;
+					result.normal = -Normalize( ( ray.Origin() + result.hitTime * ray.Direction() ) - sphere.Center() );
+				}
+			}
+			
 		}
 	}
 }

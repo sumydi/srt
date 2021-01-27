@@ -22,7 +22,7 @@ namespace srt
 
 	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
-	void RaySphereHit( const Ray & ray, const Sphere & sphere, RayHitResult & result );
+	void RaySphereHit( const Ray & ray, const Sphere & sphere, float tMin, float tMax, RayHitResult & result );
 
 }
 

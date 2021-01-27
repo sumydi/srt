@@ -186,9 +186,9 @@ namespace srt
 
 				Vec3 resultColor;
 
-				Sphere sphere{ Vec3{ 0.0f + cs, 0.0f, -1.0f }, 0.3f };
+				Sphere sphere{ Vec3{ 0.0f + cs, 0.0f, 0.0f }, 0.3f };
 				RayHitResult result;
-				RaySphereHit( ray, sphere, result );
+				RaySphereHit( ray, sphere, 0.0f, FLT_MAX, result );
 
 				if( result.hitTime > 0.0f )
 				{
