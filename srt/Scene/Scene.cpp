@@ -16,7 +16,7 @@ namespace srt
 	void Scene::TraceRay( const Ray & ray, SceneTraceResult & result ) const
 	{
 		SceneTraceContext context;
-		context.tMin = 0.0f;
+		context.tMin = 0.001f;
 		context.tMax = FLT_MAX;
 
 		SceneTraceResult	tmpResult;

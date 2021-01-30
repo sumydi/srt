@@ -150,14 +150,16 @@ namespace srt
 	// ------------------------------------------------------------------------
 	static Vec3 RandomInUnitSphere()
 	{
-		Vec3 p;
-		//do
-		//{
-		//	p = 2.0f * Vec3( std::rand() )
-		//
-		//}while ( Dot( p, p ) > 1.0f );
+		const float x = ( (float)rand() / (float)RAND_MAX ) * 2.0f - 1.0f;
+		const float y = ( (float)rand() / (float)RAND_MAX ) * 2.0f - 1.0f;
+		const float z = ( (float)rand() / (float)RAND_MAX ) * 2.0f - 1.0f;
 
-		return p;
+		Vec3 v{ x, y, z };
+		v = Normalize( v );
+		const float t = (float)rand() / (float)RAND_MAX;
+		v *= t;
+
+		return v;
 	}
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
@@ -173,9 +175,8 @@ namespace srt
 		{
 			// hits an object
 			//resultColor = 0.5f * Vec3{ result.hitResult.normal.X() + 1.0f, result.hitResult.normal.Y() + 1.0f, result.hitResult.normal.Z() + 1.0f };
-			//Vec3 target = result.hitResult.position + result.hitResult.normal * 
-
-			resultColor = result.diffuse;
+			Vec3 target = result.hitResult.position + result.hitResult.normal + RandomInUnitSphere();
+			resultColor = 0.5f * ComputeColor( scene, Ray{ result.hitResult.position, Normalize( target - result.hitResult.position ) } );
 		}
 		else
 		{
