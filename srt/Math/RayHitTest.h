@@ -13,6 +13,7 @@ namespace srt
 	struct RayHitResult
 	{
 		float	hitTime { - 1.0f };
+		Vec3	position;
 		Vec3	normal;
 		
 	};

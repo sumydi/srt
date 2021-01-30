@@ -4,6 +4,7 @@
 #include <chrono>
 
 #include "Graphic/Image.h"
+#include "Graphic/Material.h"
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"
 #include "Math/Ray.h"
@@ -58,9 +59,13 @@ namespace srt
 	{
 
 		m_scene = new Scene;
-		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f } );
-		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -100.5f, -1.0f }, 100.0f } );
 
+		Material * mat1 = new Material{ Vec3{ 1.0f, 0.0f, 0.0f }, 0.5f, 0.0f };
+		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
+		m_scene->AddObject( new Sphere{ Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *mat1 } );
+
+		Material * mat2 = new Material{ Vec3{ 0.0f, 0.0f, 1.0f }, 0.5f, 0.0f };
+		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -100.5f, -1.0f }, 100.0f, *mat2 } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
@@ -143,6 +148,46 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
+	static Vec3 RandomInUnitSphere()
+	{
+		Vec3 p;
+		//do
+		//{
+		//	p = 2.0f * Vec3( std::rand() )
+		//
+		//}while ( Dot( p, p ) > 1.0f );
+
+		return p;
+	}
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	static Vec3 ComputeColor( const Scene & scene, const Ray& ray )
+	{
+		Vec3 resultColor;
+
+		SceneTraceResult result;
+		scene.TraceRay( ray, result );
+
+
+		if( result.hitResult.hitTime > 0.0f )
+		{
+			// hits an object
+			//resultColor = 0.5f * Vec3{ result.hitResult.normal.X() + 1.0f, result.hitResult.normal.Y() + 1.0f, result.hitResult.normal.Z() + 1.0f };
+			//Vec3 target = result.hitResult.position + result.hitResult.normal * 
+
+			resultColor = result.diffuse;
+		}
+		else
+		{
+			// hit nothing: sky
+			const float t = 0.5f * ( ray.Direction().Y() + 1.0f );
+			resultColor = ( 1.0f - t ) * Vec3( 1.0f, 1.0f, 1.0f ) + t * Vec3( 0.5f, 0.7f, 1.0f );
+		}
+
+		return resultColor;
+	}
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	void Application::Update( float dt )
 	{
 		// Unit test vectors
@@ -183,25 +228,9 @@ namespace srt
 				const float ny = -( ( (float)y / (float)bbHeight ) * 2.0f - 1.0f );
 
 				// make a ray from the origin to the current normalized pixel
-				const Ray ray{ Vec3{ 0.0f, 0.0f, 0.0f }, Normalize( Vec3{ nx, ny, -1.0f } ) };
+				const Ray ray{ Vec3{ 0.0f, 0.0f, 1.0f }, Normalize( Vec3{ nx, ny, -1.0f } ) };
 
-				Vec3 resultColor;
-
-				SceneTraceResult result;
-				m_scene->TraceRay( ray, result );
-
-
-				if( result.hitResult.hitTime > 0.0f )
-				{
-					// hit the sphere: output normal at the hit point
-					resultColor = 0.5f * Vec3{ result.hitResult.normal.X() + 1.0f, result.hitResult.normal.Y() + 1.0f, result.hitResult.normal.Z() + 1.0f };
-				}
-				else
-				{
-					// hit nothing: sky
-					const float t = 0.5f * ( ray.Direction().Y() + 1.0f );
-					resultColor = ( 1.0f - t ) * Vec3( 1.0f, 1.0f, 1.0f ) + t * Vec3( 0.5f, 0.7f, 1.0f );
-				}
+				Vec3 resultColor = ComputeColor( *m_scene, ray );
 
 				// convert to RGB
 				const uint32_t r = (uint32_t)( resultColor.X() * 255.0f );

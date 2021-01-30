@@ -24,7 +24,8 @@ namespace srt
 			if( r1 > tMin && r1 < tMax )
 			{
 				result.hitTime = r1;
-				result.normal = Normalize( ( ray.Origin() + result.hitTime * ray.Direction() ) - sphereCenter );
+				result.position = ray.Origin( ) + result.hitTime * ray.Direction( );
+				result.normal = Normalize( result.position - sphereCenter );
 			}
 			else
 			{
@@ -32,7 +33,8 @@ namespace srt
 				if( r2 > tMin && r2 < tMax )
 				{
 					result.hitTime = r2;
-					result.normal = -Normalize( ( ray.Origin() + result.hitTime * ray.Direction() ) - sphereCenter );
+					result.position = ray.Origin( ) + result.hitTime * ray.Direction( );
+					result.normal = -Normalize( result.position - sphereCenter );
 				}
 			}
 			

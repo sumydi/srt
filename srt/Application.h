@@ -9,6 +9,7 @@ namespace srt
 class Image;
 class OutputDevice;
 class Scene;
+class Ray;
 
 struct AppContext
 {

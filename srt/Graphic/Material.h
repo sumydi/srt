@@ -17,6 +17,14 @@ namespace srt
 	{
 	public:
 		Material( ) = default;
+		Material( const Vec3 & diffuse, const float roughness, const float metalness ) 
+		: m_diffuse{ diffuse }
+		, m_roughness{ roughness }
+		, m_metalness{ metalness }
+		{
+		
+		}
+
 		~Material( ) = default;
 
 		const Vec3 &	GetDiffuse( ) const { return m_diffuse; }

@@ -29,6 +29,9 @@ namespace srt
 	struct SceneTraceResult
 	{
 		RayHitResult	hitResult;	// Geometric result
+		Vec3			diffuse;
+		float			roughness{ 0.0f };
+		float			metalness{ 1.0f };
 	};
 
 	// ============================================================================
