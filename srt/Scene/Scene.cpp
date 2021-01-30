@@ -23,7 +23,7 @@ namespace srt
 		for( auto & it : m_objects )
 		{
 			it->TraceRay( context, ray, tmpResult );
-			if( tmpResult.hitResult.hitTime >= 0.0f )
+			if( tmpResult.hitResult.hitTime >= context.tMin )
 			{
 				context.tMax = tmpResult.hitResult.hitTime;
 				result = tmpResult;

@@ -216,7 +216,12 @@ namespace srt
 
 		static float t = 0.0f;
 		t += dt;
-		const float cs = cos( t ) * 0.5f;
+		const float cs = cos( t ) * 0.01f;
+
+		SceneObject * obj = m_scene->GetObject( 1 );
+		Vec3 objPos = obj->GetPosition() ;
+		objPos = objPos + Vec3( 0.0f, cs, 0.0f );
+		obj->SetPosition( objPos );
 
 		for( uint32_t y = 0; y < bbHeight; ++y )
 		{

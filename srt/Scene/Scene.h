@@ -46,6 +46,7 @@ namespace srt
 		~Scene() = default;
 
 		void AddObject( SceneObject * object );
+		SceneObject * GetObject( size_t idx ) { return m_objects[ idx ].get(); }
 
 		void TraceRay( const Ray & ray, SceneTraceResult & result ) const;
 
