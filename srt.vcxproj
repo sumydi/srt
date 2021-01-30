@@ -153,15 +153,18 @@
     <ClInclude Include="srt\Application.h" />
     <ClInclude Include="srt\Base.h" />
     <ClInclude Include="srt\Graphic\DIBDevice.h" />
+    <ClInclude Include="srt\Graphic\Material.h" />
     <ClInclude Include="srt\Graphic\OutputDevice.h" />
     <ClInclude Include="srt\Graphic\Image.h" />
     <ClInclude Include="srt\Graphic\Texture.h" />
     <ClInclude Include="srt\Graphic\Types.h" />
     <ClInclude Include="srt\Math\RayHitTest.h" />
     <ClInclude Include="srt\Math\Ray.h" />
-    <ClInclude Include="srt\Math\Sphere.h" />
     <ClInclude Include="srt\Math\Vector3.h" />
     <ClInclude Include="srt\Math\Vector4.h" />
+    <ClInclude Include="srt\Scene\Scene.h" />
+    <ClInclude Include="srt\Scene\SceneObject.h" />
+    <ClInclude Include="srt\Scene\Sphere.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +173,9 @@
     <ClCompile Include="srt\Graphic\DIBDevice.cpp" />
     <ClCompile Include="srt\Graphic\Image.cpp" />
     <ClCompile Include="srt\Math\RayHitTest.cpp" />
+    <ClCompile Include="srt\Scene\Scene.cpp" />
+    <ClCompile Include="srt\Scene\SceneObject.cpp" />
+    <ClCompile Include="srt\Scene\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="srt.rc" />

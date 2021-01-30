@@ -25,6 +25,9 @@
     <Filter Include="srt\Math">
       <UniqueIdentifier>{cecb285e-6d0e-46dc-8470-ce8c5161904c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="srt\Scene">
+      <UniqueIdentifier>{6fd88d61-7285-4558-a28d-9a2c801ab2b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -66,11 +69,20 @@
     <ClInclude Include="srt\Math\Vector4.h">
       <Filter>srt\Math</Filter>
     </ClInclude>
-    <ClInclude Include="srt\Math\Sphere.h">
-      <Filter>srt\Math</Filter>
-    </ClInclude>
     <ClInclude Include="srt\Math\RayHitTest.h">
       <Filter>srt\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="srt\Scene\Scene.h">
+      <Filter>srt\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="srt\Scene\SceneObject.h">
+      <Filter>srt\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="srt\Graphic\Material.h">
+      <Filter>srt\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="srt\Scene\Sphere.h">
+      <Filter>srt\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +100,15 @@
     </ClCompile>
     <ClCompile Include="srt\Math\RayHitTest.cpp">
       <Filter>srt\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Scene\Scene.cpp">
+      <Filter>srt\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Scene\SceneObject.cpp">
+      <Filter>srt\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Scene\Sphere.cpp">
+      <Filter>srt\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

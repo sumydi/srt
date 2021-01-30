@@ -1,18 +1,17 @@
 #include "RayHitTest.h"
 #include "Ray.h"
-#include "Sphere.h"
 
 namespace srt
 {
 
 	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
-	void RaySphereHit( const Ray & ray, const Sphere & sphere, float tMin, float tMax, RayHitResult & result )
+	void RaySphereHit( const Ray & ray, const Vec3 & sphereCenter, const float sphereRadius, float tMin, float tMax, RayHitResult & result )
 	{
-		const Vec3 oc = ray.Origin() - sphere.Center();
+		const Vec3 oc = ray.Origin() - sphereCenter;
 		const float a = Dot( ray.Direction(), ray.Direction() );
 		const float b = 2.0f * Dot( oc, ray.Direction() );
-		const float c = Dot( oc, oc ) - sphere.Radius() * sphere.Radius();
+		const float c = Dot( oc, oc ) - sphereRadius * sphereRadius;
 		const float discriminant = b * b - 4.0f * a * c;
 
 		result.hitTime = -1.0f;
@@ -25,7 +24,7 @@ namespace srt
 			if( r1 > tMin && r1 < tMax )
 			{
 				result.hitTime = r1;
-				result.normal = Normalize( ( ray.Origin() + result.hitTime * ray.Direction() ) - sphere.Center() );
+				result.normal = Normalize( ( ray.Origin() + result.hitTime * ray.Direction() ) - sphereCenter );
 			}
 			else
 			{
@@ -33,7 +32,7 @@ namespace srt
 				if( r2 > tMin && r2 < tMax )
 				{
 					result.hitTime = r2;
-					result.normal = -Normalize( ( ray.Origin() + result.hitTime * ray.Direction() ) - sphere.Center() );
+					result.normal = -Normalize( ( ray.Origin() + result.hitTime * ray.Direction() ) - sphereCenter );
 				}
 			}
 			

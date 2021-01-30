@@ -7,8 +7,9 @@
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"
 #include "Math/Ray.h"
-#include "Math/Sphere.h"
 #include "Math/RayHitTest.h"
+#include "Scene/Scene.h"
+#include "Scene/Sphere.h"
 
 #if defined (SRT_PLATFORM_WINDOWS )
 	#include "Graphic/DIBDevice.h"
@@ -56,6 +57,11 @@ namespace srt
 	, m_outputDev{ nullptr }
 	{
 
+		m_scene = new Scene;
+		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f } );
+		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -100.5f, -1.0f }, 100.0f } );
+
+
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
 	#if defined( SRT_PLATFORM_WINDOWS )
@@ -102,6 +108,7 @@ namespace srt
 	// ------------------------------------------------------------------------
 	Application::~Application()
 	{
+		delete m_scene;
 		delete m_backBuffer;
 		delete m_outputDev;
 	}
@@ -154,12 +161,6 @@ namespace srt
 			Vec4 fcolor{ 1.0f, .0f, .0f, 1.0f };
 		}
 
-		// Unit test SPhere
-		{
-			Sphere s{ Vec3{ 0.0f, 0.0f, 0.0f }, 10.0f };
-		
-		}
-
 		// Do the real math!
 		uint8_t * surf = reinterpret_cast< uint8_t * >( m_backBuffer->LockMipSurface( 0 ) );
 
@@ -186,14 +187,14 @@ namespace srt
 
 				Vec3 resultColor;
 
-				Sphere sphere{ Vec3{ 0.0f + cs, 0.0f, 0.0f }, 0.3f };
-				RayHitResult result;
-				RaySphereHit( ray, sphere, 0.0f, FLT_MAX, result );
+				SceneTraceResult result;
+				m_scene->TraceRay( ray, result );
 
-				if( result.hitTime > 0.0f )
+
+				if( result.hitResult.hitTime > 0.0f )
 				{
 					// hit the sphere: output normal at the hit point
-					resultColor = 0.5f * Vec3{ result.normal.X() + 1.0f, result.normal.Y() + 1.0f, result.normal.Z() + 1.0f };
+					resultColor = 0.5f * Vec3{ result.hitResult.normal.X() + 1.0f, result.hitResult.normal.Y() + 1.0f, result.hitResult.normal.Z() + 1.0f };
 				}
 				else
 				{

@@ -12,7 +12,7 @@ namespace srt
 	// ============================================================================
 	struct RayHitResult
 	{
-		float	hitTime;
+		float	hitTime { - 1.0f };
 		Vec3	normal;
 		
 	};
@@ -22,7 +22,7 @@ namespace srt
 
 	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
-	void RaySphereHit( const Ray & ray, const Sphere & sphere, float tMin, float tMax, RayHitResult & result );
+	void RaySphereHit( const Ray & ray, const Vec3 & sphereCenter, const float sphereRadius, float tMin, float tMax, RayHitResult & result );
 
 }
 

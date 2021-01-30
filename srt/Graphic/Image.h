@@ -5,8 +5,6 @@
 
 namespace srt
 {
-
-
 	// ============================================================================
 	//
 	// Class image holds all informations about an image:

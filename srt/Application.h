@@ -8,6 +8,7 @@ namespace srt
 
 class Image;
 class OutputDevice;
+class Scene;
 
 struct AppContext
 {
@@ -41,6 +42,7 @@ private:
 	HWND		m_hWnd;
 #endif
 
+	Scene *			m_scene;
 	Image *			m_backBuffer;
 	OutputDevice *	m_outputDev;
 
