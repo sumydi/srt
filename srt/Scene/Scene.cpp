@@ -8,7 +8,7 @@ namespace srt
 	// ------------------------------------------------------------------------
 	void Scene::AddObject( SceneObject * object )
 	{
-		m_objects.push_back( object );
+		m_objects.push_back( std::shared_ptr< SceneObject >( object ) );
 	}
 
 	// ------------------------------------------------------------------------
@@ -20,7 +20,7 @@ namespace srt
 		context.tMax = FLT_MAX;
 
 		SceneTraceResult	tmpResult;
-		for( auto it : m_objects )
+		for( auto & it : m_objects )
 		{
 			it->TraceRay( context, ray, tmpResult );
 			if( tmpResult.hitResult.hitTime >= 0.0f )

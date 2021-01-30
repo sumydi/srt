@@ -50,7 +50,7 @@ namespace srt
 		Scene( const Scene & other ) = delete;
 		Scene & operator = ( const Scene & other ) = delete;
 
-		using ObjectContainer = std::vector< SceneObject * >;
+		using ObjectContainer = std::vector< std::shared_ptr< SceneObject > >;
 
 		ObjectContainer		m_objects;
 	

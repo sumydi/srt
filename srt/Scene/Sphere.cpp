@@ -9,7 +9,6 @@ namespace srt
 	: m_radius{ radius }
 	{
 		m_position = position;
-	
 	}
 
 	// ------------------------------------------------------------------------
