@@ -6,7 +6,6 @@
 namespace srt
 {
 	class Ray;
-	struct SceneTraceContext;
 	struct SceneTraceResult;
 
 	class SceneObject
@@ -15,7 +14,7 @@ namespace srt
 		SceneObject() = default;
 		virtual ~SceneObject() = default;
 
-		virtual void	TraceRay( const SceneTraceContext & context, const Ray & ray, SceneTraceResult & result ) const = 0;
+		virtual void	TraceRay( const Ray & ray, float tMin, float tMax, SceneTraceResult & result ) const = 0;
 
 		const Vec3 &	GetPosition( ) { return m_position; }
 		void			SetPosition( const Vec3 & pos ) { m_position = pos; }

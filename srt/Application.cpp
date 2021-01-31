@@ -173,25 +173,21 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	static Vec3 ComputeColor( const SceneTraceContext & context, const Scene & scene, const Ray& ray )
+	static Vec3 ComputeColor( const Scene & scene, const Ray& ray, uint32_t rayIdx )
 	{
 		Vec3 resultColor;
 
-		const uint32_t rayIdx = context.curRayIdx + 1;
-
 		SceneTraceResult result;
-		scene.TraceRay( context, ray, result );
+		scene.TraceRay( ray, 0.001f, FLT_MAX, result );
 
 
-		if( result.hitResult.hitTime > 0.0f && rayIdx < context.maxRayCount )
+		if( result.hitResult.hitTime > 0.0f && rayIdx < 4 )
 		{
 			// hits an object
 			//resultColor = 0.5f * Vec3{ result.hitResult.normal.X() + 1.0f, result.hitResult.normal.Y() + 1.0f, result.hitResult.normal.Z() + 1.0f };
 
 			Vec3 target = result.hitResult.position + result.hitResult.normal + RandomInUnitSphere();
-			SceneTraceContext tmpContext { context };
-			tmpContext.curRayIdx = rayIdx;
-			resultColor = 0.5f * ComputeColor( tmpContext, scene, Ray{ result.hitResult.position, Normalize( target - result.hitResult.position ) } );
+			resultColor = 0.5f * ComputeColor( scene, Ray{ result.hitResult.position, Normalize( target - result.hitResult.position ) }, rayIdx + 1 );
 		}
 		else
 		{
@@ -238,9 +234,6 @@ namespace srt
 		objPos = objPos + Vec3( 0.0f, cs, 0.0f );
 		obj->SetPosition( objPos );
 
-		SceneTraceContext context;
-		context.maxRayCount = 4;
-
 		for( uint32_t y = 0; y < bbHeight; ++y )
 		{
 			uint32_t *line = reinterpret_cast< uint32_t * >( surf + y * m_backBuffer->GetMipDesc( 0 ).pitch );
@@ -254,7 +247,7 @@ namespace srt
 				// make a ray from the origin to the current normalized pixel
 				const Ray ray{ Vec3{ 0.0f, 0.0f, 1.0f }, Normalize( Vec3{ nx, ny, -1.0f } ) };
 
-				Vec3 resultColor = ComputeColor( context, *m_scene, ray );
+				Vec3 resultColor = ComputeColor( *m_scene, ray, 0 );
 
 				// convert to RGB
 				const uint32_t r = (uint32_t)( resultColor.X() * 255.0f );

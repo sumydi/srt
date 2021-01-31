@@ -15,9 +15,9 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void Sphere::TraceRay( const SceneTraceContext & context, const Ray & ray, SceneTraceResult & result ) const
+	void Sphere::TraceRay( const Ray & ray, float tMin, float tMax, SceneTraceResult & result ) const
 	{
-		RaySphereHit( ray, m_position, m_radius, context.tMin, context.tMax, result.hitResult );
+		RaySphereHit( ray, m_position, m_radius, tMin, tMax, result.hitResult );
 		if( result.hitResult.hitTime >= 0.0f )
 		{
 			result.material = m_material.get();

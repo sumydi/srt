@@ -13,7 +13,7 @@ namespace srt
 	public:
 		Sphere( const Vec3 & position, const float radius, const Material & material );
 
-		void TraceRay( const SceneTraceContext & context, const Ray & ray, SceneTraceResult & result ) const final;
+		void TraceRay( const Ray & ray, float tMin, float tMax, SceneTraceResult & result ) const final;
 
 	private:
 		float						m_radius { 1.0f };
