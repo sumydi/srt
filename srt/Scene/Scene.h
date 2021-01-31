@@ -17,8 +17,10 @@ namespace srt
 	// ============================================================================
 	struct SceneTraceContext
 	{
-		float	tMin;	// Current time min of ray trace
-		float	tMax;	// Current time max of ray trace
+		uint32_t	maxRayCount { 1 };
+		uint32_t	curRayIdx { 0 };
+		float		tMin { 0.001f };	// Current min time of ray trace
+		float		tMax { FLT_MAX };	// Current max time of ray trace
 	};
 
 	// ============================================================================
@@ -48,7 +50,7 @@ namespace srt
 		void AddObject( SceneObject * object );
 		SceneObject * GetObject( size_t idx ) { return m_objects[ idx ].get(); }
 
-		void TraceRay( const Ray & ray, SceneTraceResult & result ) const;
+		void TraceRay( const SceneTraceContext & context, const Ray & ray, SceneTraceResult & result ) const;
 
 	private:
 		Scene( const Scene & other ) = delete;

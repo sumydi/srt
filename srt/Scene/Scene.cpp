@@ -13,19 +13,17 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void Scene::TraceRay( const Ray & ray, SceneTraceResult & result ) const
+	void Scene::TraceRay( const SceneTraceContext & context, const Ray & ray, SceneTraceResult & result ) const
 	{
-		SceneTraceContext context;
-		context.tMin = 0.001f;
-		context.tMax = FLT_MAX;
-
+		SceneTraceContext	tmpCtx { context };
 		SceneTraceResult	tmpResult;
+
 		for( auto & it : m_objects )
 		{
-			it->TraceRay( context, ray, tmpResult );
-			if( tmpResult.hitResult.hitTime >= context.tMin )
+			it->TraceRay( tmpCtx, ray, tmpResult );
+			if( tmpResult.hitResult.hitTime >= tmpCtx.tMin )
 			{
-				context.tMax = tmpResult.hitResult.hitTime;
+				tmpCtx.tMax = tmpResult.hitResult.hitTime;
 				result = tmpResult;
 			}
 		}

@@ -10,9 +10,9 @@ namespace srt
 	{
 		const Vec3 oc = ray.Origin() - sphereCenter;
 		const float a = Dot( ray.Direction(), ray.Direction() );
-		const float b = 2.0f * Dot( oc, ray.Direction() );
+		const float b = Dot( oc, ray.Direction() );
 		const float c = Dot( oc, oc ) - sphereRadius * sphereRadius;
-		const float discriminant = b * b - 4.0f * a * c;
+		const float discriminant = b * b - a * c;
 
 		result.hitTime = -1.0f;
 
@@ -20,7 +20,7 @@ namespace srt
 		{
 			const float sqrDiscriminant = sqrtf( discriminant );
 
-			const float r1 = ( -b - sqrDiscriminant ) / ( 2.0f * a );
+			const float r1 = ( -b - sqrDiscriminant ) / a;
 			if( r1 > tMin && r1 < tMax )
 			{
 				result.hitTime = r1;
@@ -29,7 +29,7 @@ namespace srt
 			}
 			else
 			{
-				const float r2 = ( -b + sqrDiscriminant ) / ( 2.0f * a );
+				const float r2 = ( -b + sqrDiscriminant ) / a;
 				if( r2 > tMin && r2 < tMax )
 				{
 					result.hitTime = r2;
