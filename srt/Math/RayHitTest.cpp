@@ -20,24 +20,20 @@ namespace srt
 		{
 			const float sqrDiscriminant = sqrtf( discriminant );
 
-			const float r1 = ( -b - sqrDiscriminant ) / a;
-			if( r1 > tMin && r1 < tMax )
+			float root = ( -b - sqrDiscriminant ) / a;
+
+			if( root < tMin || root > tMax )
 			{
-				result.hitTime = r1;
-				result.position = ray.Origin( ) + result.hitTime * ray.Direction( );
-				result.normal = Normalize( result.position - sphereCenter );
-			}
-			else
-			{
-				const float r2 = ( -b + sqrDiscriminant ) / a;
-				if( r2 > tMin && r2 < tMax )
+				root = ( -b + sqrDiscriminant ) / a;
+				if( root < tMin || root > tMax )
 				{
-					result.hitTime = r2;
-					result.position = ray.Origin( ) + result.hitTime * ray.Direction( );
-					result.normal = -Normalize( result.position - sphereCenter );
+					return;
 				}
 			}
-			
+
+			result.hitTime = root;
+			result.position = ray.Origin( ) + result.hitTime * ray.Direction( );
+			result.normal = Normalize( result.position - sphereCenter );
 		}
 	}
 }
