@@ -84,6 +84,9 @@
     <ClInclude Include="srt\Scene\Sphere.h">
       <Filter>srt\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Math\Random.h">
+      <Filter>srt\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -109,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="srt\Scene\Sphere.cpp">
       <Filter>srt\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Math\Random.cpp">
+      <Filter>srt\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"
 #include "Math/Ray.h"
+#include "Math/Random.h"
 #include "Math/RayHitTest.h"
 #include "Scene/Scene.h"
 #include "Scene/Sphere.h"
@@ -148,15 +149,15 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	static Vec3 RandomInUnitSphere()
+	static Vec3 RandomInUnitSphere( )
 	{
-		const float x = ( (float)rand() / (float)RAND_MAX ) * 2.0f - 1.0f;
-		const float y = ( (float)rand() / (float)RAND_MAX ) * 2.0f - 1.0f;
-		const float z = ( (float)rand() / (float)RAND_MAX ) * 2.0f - 1.0f;
+		const float x = RandomFloat( -1.0f, 1.0f );
+		const float y = RandomFloat( -1.0f, 1.0f );
+		const float z = RandomFloat( -1.0f, 1.0f );
 
 		Vec3 v{ x, y, z };
 		v = Normalize( v );
-		const float t = (float)rand() / (float)RAND_MAX;
+		const float t = RandomFloat( );
 		v *= t;
 
 		return v;
@@ -173,31 +174,47 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
+	static Vec3 RandomUnitVector( )
+	{
+		const float x = RandomFloat( -1.0f, 1.0f );
+		const float y = RandomFloat( -1.0f, 1.0f );
+		const float z = RandomFloat( -1.0f, 1.0f );
+
+		Vec3 v{ x, y, z };
+		v = Normalize( v );
+		return v;
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	static Vec3 ComputeColor( const Scene & scene, const Ray& ray, uint32_t rayIdx )
 	{
-		Vec3 resultColor;
+		Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
 
-		SceneTraceResult result;
-		scene.TraceRay( ray, 0.001f, FLT_MAX, result );
-
-
-		if( result.hitResult.hitTime > 0.0f && rayIdx < 4 )
+		if( rayIdx < 4 )
 		{
-			// hits an object
-			//resultColor = 0.5f * Vec3{ result.hitResult.normal.X() + 1.0f, result.hitResult.normal.Y() + 1.0f, result.hitResult.normal.Z() + 1.0f };
+			SceneTraceResult result;
+			scene.TraceRay( ray, 0.001f, FLT_MAX, result );
 
-			Vec3 target = result.hitResult.position + result.hitResult.normal + RandomInUnitSphere();
-			resultColor = 0.5f * ComputeColor( scene, Ray{ result.hitResult.position, Normalize( target - result.hitResult.position ) }, rayIdx + 1 );
-		}
-		else
-		{
-			// hit nothing: sky
-			const float t = 0.5f * ( ray.Direction().Y() + 1.0f );
-			resultColor = ( 1.0f - t ) * Vec3( 1.0f, 1.0f, 1.0f ) + t * Vec3( 0.5f, 0.7f, 1.0f );
-		}
 
+			if( result.hitResult.hitTime > 0.0f )
+			{
+				// hits an object
+				//resultColor = 0.5f * Vec3{ result.hitResult.normal.X() + 1.0f, result.hitResult.normal.Y() + 1.0f, result.hitResult.normal.Z() + 1.0f };
+
+				Vec3 target = result.hitResult.position + result.hitResult.normal + RandomUnitVector( );
+				resultColor = 0.5f * ComputeColor( scene, Ray{ result.hitResult.position, Normalize( target - result.hitResult.position ) }, rayIdx + 1 );
+			}
+			else
+			{
+				// hit nothing: sky
+				const float t = 0.5f * ( ray.Direction().Y() + 1.0f );
+				resultColor = ( 1.0f - t ) * Vec3( 1.0f, 1.0f, 1.0f ) + t * Vec3( 0.5f, 0.7f, 1.0f );
+			}
+		}
 		return resultColor;
 	}
+
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	void Application::Update( float dt )
