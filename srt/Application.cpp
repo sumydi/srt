@@ -266,10 +266,10 @@ namespace srt
 
 				Vec3 resultColor = ComputeColor( *m_scene, ray, 0 );
 
-				// convert to RGB
-				const uint32_t r = (uint32_t)( resultColor.X() * 255.0f );
-				const uint32_t g = (uint32_t)( resultColor.Y() * 255.0f );
-				const uint32_t b = (uint32_t)( resultColor.Z() * 255.0f );
+				// convert from (normalized) linear to sRGB
+				const uint32_t r = (uint32_t)( sqrtf( resultColor.X() ) * 255.0f );
+				const uint32_t g = (uint32_t)( sqrtf( resultColor.Y() ) * 255.0f );
+				const uint32_t b = (uint32_t)( sqrtf( resultColor.Z() ) * 255.0f );
 
 				const uint32_t color = ( r << 16 ) | ( g << 8 ) | ( b );
 
