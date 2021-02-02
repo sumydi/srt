@@ -250,22 +250,28 @@ namespace srt
 		SceneObject * obj = m_scene->GetObject( 1 );
 		Vec3 objPos = obj->GetPosition() ;
 		objPos = objPos + Vec3( 0.0f, cs, 0.0f );
-		obj->SetPosition( objPos );
+		//obj->SetPosition( objPos );
 
 		for( uint32_t y = 0; y < bbHeight; ++y )
 		{
 			uint32_t *line = reinterpret_cast< uint32_t * >( surf + y * m_backBuffer->GetMipDesc( 0 ).pitch );
 			for( uint32_t x = 0; x < bbWidth; ++x )
 			{
-				// transform coordinates to "normalized" coordinates
-				// note: y is reverted so 1.0 is the top of the image and -1.0 is the bottom
-				const float nx = ( (float)x / (float)bbWidth ) * 2.0f * aspectRatio - aspectRatio;
-				const float ny = -( ( (float)y / (float)bbHeight ) * 2.0f - 1.0f );
+				constexpr uint32_t kSampleCount = 16;
+				Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
+				for( uint32_t sampleIdx =0; sampleIdx < kSampleCount; ++sampleIdx )
+				{
+					// transform coordinates to "normalized" coordinates
+					// note: y is reverted so 1.0 is the top of the image and -1.0 is the bottom
+					const float nx = ( ( (float)x + RandomFloat( ) ) / (float)bbWidth ) * 2.0f * aspectRatio - aspectRatio;
+					const float ny = -( ( ( (float)y + RandomFloat( ) ) / (float)bbHeight ) * 2.0f - 1.0f );
 
-				// make a ray from the origin to the current normalized pixel
-				const Ray ray{ Vec3{ 0.0f, 0.0f, 1.0f }, Normalize( Vec3{ nx, ny, -1.0f } ) };
+					// make a ray from the origin to the current normalized pixel
+					const Ray ray{ Vec3{ 0.0f, 0.0f, 1.0f }, Normalize( Vec3{ nx, ny, -1.0f } ) };
 
-				Vec3 resultColor = ComputeColor( *m_scene, ray, 0 );
+					resultColor += ComputeColor( *m_scene, ray, 0 );
+				}
+				resultColor /= (float)kSampleCount;
 
 				// convert from (normalized) linear to sRGB
 				const uint32_t r = (uint32_t)( sqrtf( resultColor.X() ) * 255.0f );
