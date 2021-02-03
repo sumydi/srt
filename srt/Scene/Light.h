@@ -6,6 +6,8 @@
 namespace srt
 {
 
+	class Material;
+
 	// ============================================================================
 	//
 	//	A light
@@ -18,7 +20,10 @@ namespace srt
 		explicit Light( const Vec3 & pos, const Vec3 & color );
 		~Light() = default;
 
-		Vec3 ComputeLighting( const Vec3 & pos, const Vec3 & normal ) const;
+		const Vec3 &	GetPosition( ) const { return m_position; }
+		void			SetPosition( const Vec3 & pos ) { m_position = pos; }
+
+		Vec3			ComputeLighting( const Vec3 & pos, const Vec3 & normal, const Material & mat ) const;
 
 	private:
 		Vec3	m_position{ 0.0f, 0.0f, 0.0f };
