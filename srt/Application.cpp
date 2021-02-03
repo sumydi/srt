@@ -21,7 +21,7 @@
 #endif
 
 static constexpr uint32_t kSampleCount = 1;
-static constexpr uint32_t kRayCount = 4;
+static constexpr uint32_t kRayCount = 3;
 
 
 namespace srt
@@ -225,8 +225,20 @@ namespace srt
 					}
 				}
 
+				// GI diffuse
+				/*
+				Vec3 target = result.hitResult.position + result.hitResult.normal + RandomUnitVector( );
+				resultColor += 0.5f * ComputeColor( scene, Ray{ result.hitResult.position, Normalize( target - result.hitResult.position ) }, rayIdx + 1 );
+				*/
 				resultColor = Clamp( resultColor, 0.0f, 1.0f );
 			}
+			else
+			{
+				// hit nothing: sky
+				const float t = 0.5f * ( ray.Direction().Y() + 1.0f );
+				resultColor = ( 1.0f - t ) * Vec3( 1.0f, 1.0f, 1.0f ) + t * Vec3( 0.5f, 0.7f, 1.0f );
+			}
+
 		}
 
 		/*
@@ -288,7 +300,7 @@ namespace srt
 		const float si = sin( t );
 
 		SceneObject * obj = m_scene->GetObject( 1 );
-		Vec3 objPos = Vec3( cs * 1.0f, 0.4f + cs * 0.5f, si * 1.0f - 0.5f );
+		Vec3 objPos = Vec3( 0.0f, 0.0f, -1.0f ) + Vec3( cs * 0.7f, cs * 0.3f, si * 1.0f );
 		obj->SetPosition( objPos );
 
 		Light * light = m_scene->GetLight( 0 );
