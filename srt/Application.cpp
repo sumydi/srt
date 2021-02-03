@@ -19,6 +19,10 @@
 	#include "Graphic/DIBDevice.h"
 #endif
 
+static constexpr uint32_t kSampleCount = 8;
+static constexpr uint32_t kRayCount = 4;
+
+
 namespace srt
 {
 	// ------------------------------------------------------------------------
@@ -71,7 +75,7 @@ namespace srt
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat2 } );
 
 		m_scene->AddLight( new Light{ Vec3{ -2.0f, 8.0f, -1.0f }, Vec3{ 1.0f, 1.0f, 1.0f } } );
-		m_scene->AddLight( new Light{ Vec3{ 2.0f, 8.0f, -1.0f }, Vec3{ 0.0f, 1.0f, 0.0f } } );
+		m_scene->AddLight( new Light{ Vec3{ 4.0f, 8.0f, -1.0f }, Vec3{ 0.0f, 1.0f, 0.0f } } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
@@ -196,7 +200,7 @@ namespace srt
 	{
 		Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
 
-		if( rayIdx < 4 )
+		if( rayIdx < kRayCount )
 		{
 			SceneTraceResult result;
 			scene.TraceRay( ray, 0.001f, FLT_MAX, result );
@@ -208,7 +212,14 @@ namespace srt
 				{
 					Light * light = scene.GetLight( lightIdx );
 
-					resultColor += light->ComputeLighting( result.hitResult.position, result.hitResult.normal, *result.material );
+					// shadow ray
+					Ray shadowRay{ result.hitResult.position, Normalize( light->GetPosition() - result.hitResult.position ) };
+					SceneTraceResult shadowResult;
+					scene.TraceRay( shadowRay, 0.001f, FLT_MAX, shadowResult );
+					if( shadowResult.hitResult.hitTime < 0.0f )
+					{
+						resultColor += light->ComputeLighting( result.hitResult.position, result.hitResult.normal, *result.material );
+					}
 				}
 
 				resultColor = Clamp( resultColor, 0.0f, 1.0f );
@@ -272,17 +283,21 @@ namespace srt
 		t += dt;
 		const float cs = cos( t ) * 0.6f * dt;
 
-		//SceneObject * obj = m_scene->GetObject( 1 );
-		//Vec3 objPos = obj->GetPosition() ;
-		//objPos = objPos + Vec3( 0.0f, cs, 0.0f );
-		//obj->SetPosition( objPos );
+		SceneObject * obj = m_scene->GetObject( 1 );
+		Vec3 objPos = obj->GetPosition() ;
+		objPos = objPos + Vec3( 0.0f, cs, 0.0f );
+		obj->SetPosition( objPos );
+
+		Light * light = m_scene->GetLight( 0 );
+		Vec3 lightPos = light->GetPosition( );
+		lightPos = lightPos + Vec3( cs * 2.0f, 0.0f, 0.0f );
+		light->SetPosition( lightPos );
 
 		for( uint32_t y = 0; y < bbHeight; ++y )
 		{
 			uint32_t *line = reinterpret_cast< uint32_t * >( surf + y * m_backBuffer->GetMipDesc( 0 ).pitch );
 			for( uint32_t x = 0; x < bbWidth; ++x )
 			{
-				constexpr uint32_t kSampleCount = 16;
 				Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
 				for( uint32_t sampleIdx =0; sampleIdx < kSampleCount; ++sampleIdx )
 				{
