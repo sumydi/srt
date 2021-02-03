@@ -10,6 +10,7 @@
 #include "Math/Vector4.h"
 #include "Math/Ray.h"
 #include "Math/Random.h"
+#include "Math/ConstantRandom.h"
 #include "Math/RayHitTest.h"
 #include "Scene/Scene.h"
 #include "Scene/Sphere.h"
@@ -19,7 +20,7 @@
 	#include "Graphic/DIBDevice.h"
 #endif
 
-static constexpr uint32_t kSampleCount = 8;
+static constexpr uint32_t kSampleCount = 1;
 static constexpr uint32_t kRayCount = 4;
 
 
@@ -75,7 +76,7 @@ namespace srt
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat2 } );
 
 		m_scene->AddLight( new Light{ Vec3{ -2.0f, 8.0f, -1.0f }, Vec3{ 1.0f, 1.0f, 1.0f } } );
-		m_scene->AddLight( new Light{ Vec3{ 4.0f, 8.0f, -1.0f }, Vec3{ 0.0f, 1.0f, 0.0f } } );
+		m_scene->AddLight( new Light{ Vec3{ 4.0f, 8.0f, -1.0f }, Vec3{ 1.0f, 1.0f, 1.0f } } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
@@ -281,16 +282,16 @@ namespace srt
 
 		static float t = 0.0f;
 		t += dt;
-		const float cs = cos( t ) * 0.6f * dt;
+		const float cs = cos( t );
+		const float si = sin( t );
 
 		SceneObject * obj = m_scene->GetObject( 1 );
-		Vec3 objPos = obj->GetPosition() ;
-		objPos = objPos + Vec3( 0.0f, cs, 0.0f );
+		Vec3 objPos = Vec3( cs * 1.0f, 0.0f, si * 1.0f - 0.5f );
 		obj->SetPosition( objPos );
 
 		Light * light = m_scene->GetLight( 0 );
 		Vec3 lightPos = light->GetPosition( );
-		lightPos = lightPos + Vec3( cs * 2.0f, 0.0f, 0.0f );
+		lightPos = lightPos + Vec3( cs * 0.5f, 0.0f, 0.0f );
 		light->SetPosition( lightPos );
 
 		for( uint32_t y = 0; y < bbHeight; ++y )
@@ -299,12 +300,12 @@ namespace srt
 			for( uint32_t x = 0; x < bbWidth; ++x )
 			{
 				Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
-				for( uint32_t sampleIdx =0; sampleIdx < kSampleCount; ++sampleIdx )
+				for( uint32_t sampleIdx = 0; sampleIdx < kSampleCount; ++sampleIdx )
 				{
 					// transform coordinates to "normalized" coordinates
 					// note: y is reverted so 1.0 is the top of the image and -1.0 is the bottom
-					const float nx = ( ( (float)x + RandomFloat( ) ) / (float)bbWidth ) * 2.0f * aspectRatio - aspectRatio;
-					const float ny = -( ( ( (float)y + RandomFloat( ) ) / (float)bbHeight ) * 2.0f - 1.0f );
+					const float nx = ( ( (float)x + ConstantRandom::GetInstance( ).GetValue( sampleIdx ) ) / (float)bbWidth ) * 2.0f * aspectRatio - aspectRatio;
+					const float ny = -( ( ( (float)y + ConstantRandom::GetInstance( ).GetValue( sampleIdx ) ) / (float)bbHeight ) * 2.0f - 1.0f );
 
 					// make a ray from the origin to the current normalized pixel
 					const Ray ray{ Vec3{ 0.0f, 0.0f, 1.0f }, Normalize( Vec3{ nx, ny, -1.0f } ) };
