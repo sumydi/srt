@@ -158,11 +158,13 @@
     <ClInclude Include="srt\Graphic\Image.h" />
     <ClInclude Include="srt\Graphic\Texture.h" />
     <ClInclude Include="srt\Graphic\Types.h" />
+    <ClInclude Include="srt\Math\MathUtils.h" />
     <ClInclude Include="srt\Math\Random.h" />
     <ClInclude Include="srt\Math\RayHitTest.h" />
     <ClInclude Include="srt\Math\Ray.h" />
     <ClInclude Include="srt\Math\Vector3.h" />
     <ClInclude Include="srt\Math\Vector4.h" />
+    <ClInclude Include="srt\Scene\Light.h" />
     <ClInclude Include="srt\Scene\Scene.h" />
     <ClInclude Include="srt\Scene\SceneObject.h" />
     <ClInclude Include="srt\Scene\Sphere.h" />
@@ -173,8 +175,10 @@
     <ClCompile Include="srt\Application.cpp" />
     <ClCompile Include="srt\Graphic\DIBDevice.cpp" />
     <ClCompile Include="srt\Graphic\Image.cpp" />
+    <ClCompile Include="srt\Math\MathUtils.cpp" />
     <ClCompile Include="srt\Math\Random.cpp" />
     <ClCompile Include="srt\Math\RayHitTest.cpp" />
+    <ClCompile Include="srt\Scene\Light.cpp" />
     <ClCompile Include="srt\Scene\Scene.cpp" />
     <ClCompile Include="srt\Scene\SceneObject.cpp" />
     <ClCompile Include="srt\Scene\Sphere.cpp" />

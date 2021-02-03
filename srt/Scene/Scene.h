@@ -8,6 +8,7 @@
 namespace srt
 {
 	class SceneObject;
+	class Light;
 	class Ray;
 	class Material;
 
@@ -33,18 +34,25 @@ namespace srt
 		Scene() = default;
 		~Scene() = default;
 
-		void AddObject( SceneObject * object );
-		SceneObject * GetObject( size_t idx ) { return m_objects[ idx ].get(); }
+		void			AddObject( SceneObject * object );
+		size_t			GetObjectCount( ) const { return m_objects.size(); }
+		SceneObject *	GetObject( size_t idx ) { return m_objects[ idx ].get(); }
 
-		void TraceRay( const Ray & ray, float tMin, float tMax, SceneTraceResult & result ) const;
+		void			AddLight( Light * light );
+		size_t			GetLightCount( ) const { return m_lights.size(); }
+		Light *			GetLight( size_t idx ) { return m_lights[ idx ].get(); }
+
+		void			TraceRay( const Ray & ray, float tMin, float tMax, SceneTraceResult & result ) const;
 
 	private:
 		Scene( const Scene & other ) = delete;
 		Scene & operator = ( const Scene & other ) = delete;
 
 		using ObjectContainer = std::vector< std::shared_ptr< SceneObject > >;
-
 		ObjectContainer		m_objects;
+
+		using LightContainer = std::vector< std::shared_ptr< Light > >;
+		LightContainer		m_lights;
 	
 	};
 }

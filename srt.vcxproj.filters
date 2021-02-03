@@ -87,6 +87,12 @@
     <ClInclude Include="srt\Math\Random.h">
       <Filter>srt\Math</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Scene\Light.h">
+      <Filter>srt\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="srt\Math\MathUtils.h">
+      <Filter>srt\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -114,6 +120,12 @@
       <Filter>srt\Scene</Filter>
     </ClCompile>
     <ClCompile Include="srt\Math\Random.cpp">
+      <Filter>srt\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Scene\Light.cpp">
+      <Filter>srt\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Math\MathUtils.cpp">
       <Filter>srt\Math</Filter>
     </ClCompile>
   </ItemGroup>
