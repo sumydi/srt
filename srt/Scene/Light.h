@@ -18,7 +18,7 @@ namespace srt
 		explicit Light( const Vec3 & pos, const Vec3 & color );
 		~Light() = default;
 
-		Vec3 ComputeLighting( const Vec3 & pos, const Vec3 & normal );
+		Vec3 ComputeLighting( const Vec3 & pos, const Vec3 & normal ) const;
 
 	private:
 		Vec3	m_position{ 0.0f, 0.0f, 0.0f };

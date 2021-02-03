@@ -5,7 +5,7 @@
 
 namespace srt
 {
-	float Clamp( float value, float min, float max )
+	inline float Clamp( float value, float min, float max )
 	{
 		return std::max( std::min( value, max ), min );
 	}

@@ -14,9 +14,9 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	Vec3 Light::ComputeLighting( const Vec3 & pos, const Vec3 & normal )
+	Vec3 Light::ComputeLighting( const Vec3 & pos, const Vec3 & normal ) const
 	{
-		Vec3 dir = ( pos - m_position );
+		Vec3 dir = ( m_position - pos );
 		const float dist = Length( dir );	// used later for attenuation
 
 		dir /= dist;

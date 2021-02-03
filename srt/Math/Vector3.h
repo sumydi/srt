@@ -2,6 +2,7 @@
 #define SRT_VECTOR3_H
 
 #include <math.h>
+#include "Math/MathUtils.h"
 
 namespace srt
 {
@@ -188,6 +189,11 @@ namespace srt
 		const float z = v1.X() * v2.Y() - v1.Y() * v2.X();
 
 		return Vec3( x, y ,z );
+	}
+
+	inline Vec3 Clamp( const Vec3 & v, float min, float max )
+	{
+		return Vec3( Vec3{ Clamp( v.X(), min, max ), Clamp( v.Y(), min, max ), Clamp( v.Z(), min, max ) } );
 	}
 }
 

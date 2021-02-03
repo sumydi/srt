@@ -70,7 +70,7 @@ namespace srt
 		Material * mat2 = new Material{ Vec3{ 0.0f, 0.0f, 1.0f }, 0.5f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -100.5f, -1.0f }, 100.0f, *mat2 } );
 
-		m_scene->AddLight( new Light{ Vec3{ -2.0f, -1.0f, -1.0f }, Vec3{ 0.5f, 0.5f, 0.0f } } );
+		m_scene->AddLight( new Light{ Vec3{ -2.0f, 8.0f, -1.0f }, Vec3{ 1.0f, 1.0f, 1.0f } } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
@@ -200,6 +200,24 @@ namespace srt
 			SceneTraceResult result;
 			scene.TraceRay( ray, 0.001f, FLT_MAX, result );
 
+			if( result.hitResult.hitTime > 0.0f )
+			{
+				for( size_t lightIdx = 0; lightIdx < scene.GetLightCount(); ++lightIdx )
+				{
+					Light * light = scene.GetLight( lightIdx );
+
+					resultColor += light->ComputeLighting( result.hitResult.position, result.hitResult.normal );
+				}
+
+				resultColor = Clamp( resultColor, 0.0f, 1.0f );
+			}
+		}
+
+		/*
+		if( rayIdx < 4 )
+		{
+			SceneTraceResult result;
+			scene.TraceRay( ray, 0.001f, FLT_MAX, result );
 
 			if( result.hitResult.hitTime > 0.0f )
 			{
@@ -216,6 +234,8 @@ namespace srt
 				resultColor = ( 1.0f - t ) * Vec3( 1.0f, 1.0f, 1.0f ) + t * Vec3( 0.5f, 0.7f, 1.0f );
 			}
 		}
+		*/
+
 		return resultColor;
 	}
 
@@ -250,9 +270,9 @@ namespace srt
 		t += dt;
 		const float cs = cos( t ) * 0.6f * dt;
 
-		SceneObject * obj = m_scene->GetObject( 1 );
-		Vec3 objPos = obj->GetPosition() ;
-		objPos = objPos + Vec3( 0.0f, cs, 0.0f );
+		//SceneObject * obj = m_scene->GetObject( 1 );
+		//Vec3 objPos = obj->GetPosition() ;
+		//objPos = objPos + Vec3( 0.0f, cs, 0.0f );
 		//obj->SetPosition( objPos );
 
 		for( uint32_t y = 0; y < bbHeight; ++y )

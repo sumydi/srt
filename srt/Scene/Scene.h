@@ -36,11 +36,11 @@ namespace srt
 
 		void			AddObject( SceneObject * object );
 		size_t			GetObjectCount( ) const { return m_objects.size(); }
-		SceneObject *	GetObject( size_t idx ) { return m_objects[ idx ].get(); }
+		SceneObject *	GetObject( size_t idx ) const { return m_objects[ idx ].get(); }
 
 		void			AddLight( Light * light );
 		size_t			GetLightCount( ) const { return m_lights.size(); }
-		Light *			GetLight( size_t idx ) { return m_lights[ idx ].get(); }
+		Light *			GetLight( size_t idx ) const { return m_lights[ idx ].get(); }
 
 		void			TraceRay( const Ray & ray, float tMin, float tMax, SceneTraceResult & result ) const;
 
