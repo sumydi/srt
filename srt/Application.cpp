@@ -70,13 +70,15 @@ namespace srt
 
 		Material * mat1 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.5f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
-		m_scene->AddObject( new Sphere{ Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *mat1 } );
 
-		Material * mat2 = new Material{ Vec3{ 0.2f, 0.2f, 1.0f }, 0.5f, 0.0f };
-		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat2 } );
+		Material * mat2 = new Material{ Vec3{ 0.4f, 1.0f, 0.2f }, 0.5f, 0.0f };
+		m_scene->AddObject( new Sphere{ Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *mat2 } );
+
+		Material * mat3 = new Material{ Vec3{ 0.2f, 0.2f, 1.0f }, 0.5f, 0.0f };
+		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat3 } );
 
 		m_scene->AddLight( new Light{ Vec3{ -2.0f, 8.0f, -1.0f }, Vec3{ 1.0f, 1.0f, 1.0f } } );
-		m_scene->AddLight( new Light{ Vec3{ 4.0f, 8.0f, -1.0f }, Vec3{ 1.0f, 1.0f, 1.0f } } );
+		m_scene->AddLight( new Light{ Vec3{ 4.0f, 8.0f, 2.5f }, Vec3{ 1.0f, 1.0f, 1.0f } } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
@@ -286,13 +288,13 @@ namespace srt
 		const float si = sin( t );
 
 		SceneObject * obj = m_scene->GetObject( 1 );
-		Vec3 objPos = Vec3( cs * 1.0f, 0.0f, si * 1.0f - 0.5f );
+		Vec3 objPos = Vec3( cs * 1.0f, 0.4f + cs * 0.5f, si * 1.0f - 0.5f );
 		obj->SetPosition( objPos );
 
 		Light * light = m_scene->GetLight( 0 );
 		Vec3 lightPos = light->GetPosition( );
-		lightPos = lightPos + Vec3( cs * 0.5f, 0.0f, 0.0f );
-		light->SetPosition( lightPos );
+		lightPos = lightPos + Vec3( -cs * 0.5f, 0.0f, 0.0f );
+		//light->SetPosition( lightPos );
 
 		for( uint32_t y = 0; y < bbHeight; ++y )
 		{
