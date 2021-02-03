@@ -15,6 +15,7 @@ namespace srt
 	{
 	public:
 		Light() = default;
+		explicit Light( const Vec3 & pos, const Vec3 & color );
 		~Light() = default;
 
 		Vec3 ComputeLighting( const Vec3 & pos, const Vec3 & normal );

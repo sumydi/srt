@@ -13,6 +13,7 @@
 #include "Math/RayHitTest.h"
 #include "Scene/Scene.h"
 #include "Scene/Sphere.h"
+#include "Scene/Light.h"
 
 #if defined (SRT_PLATFORM_WINDOWS )
 	#include "Graphic/DIBDevice.h"
@@ -68,6 +69,8 @@ namespace srt
 
 		Material * mat2 = new Material{ Vec3{ 0.0f, 0.0f, 1.0f }, 0.5f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -100.5f, -1.0f }, 100.0f, *mat2 } );
+
+		m_scene->AddLight( new Light{ Vec3{ -2.0f, -1.0f, -1.0f }, Vec3{ 0.5f, 0.5f, 0.0f } } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
