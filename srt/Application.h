@@ -46,7 +46,6 @@ private:
 	Scene *			m_scene;
 	Image *			m_backBuffer;
 	OutputDevice *	m_outputDev;
-
 };
 
 }

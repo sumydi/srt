@@ -11,7 +11,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	srt::AppContext context;
 
 	context.width = 800; //640;
-	context.height = 600; //480;
+	context.height = 450; //480;
 
 	#if defined( SRT_PLATFORM_WINDOWS )
 		context.hInstance = hInstance;

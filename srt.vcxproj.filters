@@ -93,9 +93,6 @@
     <ClInclude Include="srt\Math\MathUtils.h">
       <Filter>srt\Math</Filter>
     </ClInclude>
-    <ClInclude Include="srt\Math\ConstantRandom.h">
-      <Filter>srt\Math</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -129,9 +126,6 @@
       <Filter>srt\Scene</Filter>
     </ClCompile>
     <ClCompile Include="srt\Math\MathUtils.cpp">
-      <Filter>srt\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="srt\Math\ConstantRandom.cpp">
       <Filter>srt\Math</Filter>
     </ClCompile>
   </ItemGroup>

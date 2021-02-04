@@ -10,7 +10,6 @@
 #include "Math/Vector4.h"
 #include "Math/Ray.h"
 #include "Math/Random.h"
-#include "Math/ConstantRandom.h"
 #include "Math/RayHitTest.h"
 #include "Scene/Scene.h"
 #include "Scene/Sphere.h"
@@ -20,7 +19,7 @@
 	#include "Graphic/DIBDevice.h"
 #endif
 
-static constexpr uint32_t kSampleCount = 1;
+static constexpr uint32_t kSampleCount = 8;
 static constexpr uint32_t kRayCount = 3;
 
 
@@ -226,10 +225,8 @@ namespace srt
 				}
 
 				// GI diffuse
-				/*
 				Vec3 target = result.hitResult.position + result.hitResult.normal + RandomUnitVector( );
 				resultColor += 0.5f * ComputeColor( scene, Ray{ result.hitResult.position, Normalize( target - result.hitResult.position ) }, rayIdx + 1 );
-				*/
 				resultColor = Clamp( resultColor, 0.0f, 1.0f );
 			}
 			else
@@ -308,6 +305,9 @@ namespace srt
 		lightPos = lightPos + Vec3( -cs * 0.5f, 0.0f, 0.0f );
 		//light->SetPosition( lightPos );
 
+		// do not apply jitterring on the camera when kSamplecount==1 to avoid wobling picture
+		const float jitteringFactor = kSampleCount > 1 ? 1.0f : 0.0f;
+
 		for( uint32_t y = 0; y < bbHeight; ++y )
 		{
 			uint32_t *line = reinterpret_cast< uint32_t * >( surf + y * m_backBuffer->GetMipDesc( 0 ).pitch );
@@ -318,8 +318,8 @@ namespace srt
 				{
 					// transform coordinates to "normalized" coordinates
 					// note: y is reverted so 1.0 is the top of the image and -1.0 is the bottom
-					const float nx = ( ( (float)x + ConstantRandom::GetInstance( ).GetValue( sampleIdx ) ) / (float)bbWidth ) * 2.0f * aspectRatio - aspectRatio;
-					const float ny = -( ( ( (float)y + ConstantRandom::GetInstance( ).GetValue( sampleIdx ) ) / (float)bbHeight ) * 2.0f - 1.0f );
+					const float nx = ( ( (float)x + RandomFloat() * jitteringFactor ) / (float)bbWidth ) * 2.0f * aspectRatio - aspectRatio;
+					const float ny = -( ( ( (float)y + RandomFloat() * jitteringFactor ) / (float)bbHeight ) * 2.0f - 1.0f );
 
 					// make a ray from the origin to the current normalized pixel
 					const Ray ray{ Vec3{ 0.0f, 0.0f, 1.0f }, Normalize( Vec3{ nx, ny, -1.0f } ) };
