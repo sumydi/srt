@@ -14,16 +14,30 @@ namespace srt
 	}
 
 	// ------------------------------------------------------------------------
+	//
+	// Refs:
+	//	- https://github.com/Nadrin/PBR/blob/master/data/shaders/hlsl/pbr.hlsl
+	//	- https://gist.github.com/galek/53557375251e1a942dfa
+	//
+	//
 	// ------------------------------------------------------------------------
 	Vec3 Light::ComputeLighting( const Vec3 & pos, const Vec3 & normal, const Material & mat ) const
 	{
-		Vec3 dir = ( m_position - pos );
-		const float dist = Length( dir );	// used later for attenuation
-		const float att = Clamp( 10.0f / dist , 0.0f, 1.0f );
-		dir /= dist;
+		const Vec3 L	= Normalize( m_position - pos );
+		const Vec3 V	= Normalize( -pos );
+		const Vec3 H	= Normalize( L + V );
+		const float LdN = std::max( 0.0f, Dot( L, normal ) );
+		const float HdV	= std::max( 0.0f, Dot( H, V ) );
 
-		const float dot = Clamp( Dot( dir, normal ), 0.0f, 1.0f );
-		return m_color * mat.GetDiffuse() * dot * att;
+		// Fresnel schlick approx
+		const Vec3 F0 = Lerp( Vec3( 0.04f ), mat.GetAlbedo(), mat.GetMetalness() );	// can be computed in material...
+		const Vec3 fresnel = Lerp( F0, Vec3( 1.0f ), powf( 1.0f - HdV, 5.0f ) );
+
+		// Simple Lambertian diffuse
+		const Vec3 kd = Lerp( Vec3( 1.0f ) - fresnel, Vec3( 0.0f ), mat.GetMetalness() );
+		const Vec3 diffuseBRDF = kd * mat.GetAlbedo( );
+
+		return diffuseBRDF * m_color * LdN;
 	}
 
 }

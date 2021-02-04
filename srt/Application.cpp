@@ -19,7 +19,7 @@
 	#include "Graphic/DIBDevice.h"
 #endif
 
-static constexpr uint32_t kSampleCount = 8;
+static constexpr uint32_t kSampleCount = 1;
 static constexpr uint32_t kRayCount = 3;
 
 
@@ -225,9 +225,12 @@ namespace srt
 				}
 
 				// GI diffuse
+				/*
 				Vec3 target = result.hitResult.position + result.hitResult.normal + RandomUnitVector( );
 				resultColor += 0.5f * ComputeColor( scene, Ray{ result.hitResult.position, Normalize( target - result.hitResult.position ) }, rayIdx + 1 );
+				*/
 				resultColor = Clamp( resultColor, 0.0f, 1.0f );
+				
 			}
 			else
 			{

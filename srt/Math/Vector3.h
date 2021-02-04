@@ -11,11 +11,12 @@ namespace srt
 	{
 	public:
 		Vec3( ) : m_v{ 0.0f, 0.0f, 0.0f } {}
+		explicit Vec3( const float v ) : m_v{ v, v, v } { }
 		explicit Vec3( const float x, const float y, const float z ) : m_v{ x, y, z } {}
 
 		inline Vec3 & operator = ( const Vec3 & other );
 
-		inline Vec3 operator - ();
+		inline Vec3 operator - () const;
 		inline Vec3 & operator += ( const float f );
 		inline Vec3 & operator -= ( const float f );
 		inline Vec3 & operator *= ( const float f );
@@ -44,7 +45,7 @@ namespace srt
 		return *this;
 	}
 
-	inline Vec3 Vec3::operator - ()
+	inline Vec3 Vec3::operator - () const
 	{
 		return Vec3( -m_v[ 0 ], -m_v[ 1 ], -m_v[ 2 ] );
 	}
@@ -131,6 +132,11 @@ namespace srt
 		return Vec3( v.X() - f, v.Y() - f, v.Z() - f );
 	}
 
+	inline Vec3 operator - ( const float f, const Vec3 & v )
+	{
+		return Vec3( f - v.X(), f - v.Y(), f - v.Z() );
+	}
+
 	inline Vec3 operator * ( const Vec3 & v, const float f )
 	{
 		return Vec3( v.X() * f, v.Y() * f, v.Z() * f );
@@ -194,6 +200,11 @@ namespace srt
 	inline Vec3 Clamp( const Vec3 & v, float min, float max )
 	{
 		return Vec3( Vec3{ Clamp( v.X(), min, max ), Clamp( v.Y(), min, max ), Clamp( v.Z(), min, max ) } );
+	}
+
+	inline Vec3 Lerp( const Vec3 & v1, const Vec3 & v2, float t )
+	{
+		return v1 + t * ( v2 - v1 );
 	}
 }
 

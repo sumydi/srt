@@ -18,7 +18,7 @@ namespace srt
 	public:
 		Material( ) = default;
 		Material( const Vec3 & diffuse, const float roughness, const float metalness ) 
-		: m_diffuse{ diffuse }
+		: m_albedo{ diffuse }
 		, m_roughness{ roughness }
 		, m_metalness{ metalness }
 		{
@@ -27,8 +27,8 @@ namespace srt
 
 		~Material( ) = default;
 
-		const Vec3 &	GetDiffuse( ) const { return m_diffuse; }
-		void			SetDiffuse( const Vec3 & diffuse ) { m_diffuse = diffuse; }
+		const Vec3 &	GetAlbedo( ) const { return m_albedo; }
+		void			SetAlbedo( const Vec3 & albedo ) { m_albedo = albedo; }
 
 		float			GetRoughness( ) const { return m_roughness; }
 		void			SetRoughness( const float roughness ) { m_roughness = roughness; }
@@ -38,7 +38,7 @@ namespace srt
 	
 	private:
 
-		Vec3	m_diffuse;
+		Vec3	m_albedo;
 		float	m_roughness { 0.5f };
 		float	m_metalness { 0.0f };
 	
