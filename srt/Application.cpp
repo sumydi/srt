@@ -70,7 +70,7 @@ namespace srt
 		Material * mat1 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.5f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
 
-		Material * mat2 = new Material{ Vec3{ 0.4f, 1.0f, 0.2f }, 0.0f, 0.0f };
+		Material * mat2 = new Material{ Vec3{ 0.4f, 1.0f, 0.2f }, 0.0f, 1.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *mat2 } );
 
 		Material * mat3 = new Material{ Vec3{ 0.2f, 0.2f, 1.0f }, 0.5f, 0.0f };
@@ -172,15 +172,6 @@ namespace srt
 		v *= t;
 
 		return v;
-	
-		/*
-		Vec3	p;
-		do
-		{
-			p = 2.0f * Vec3( (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX ) - Vec3( 1.0f, 1.0f, 1.0f );
-		}while( Dot( p, p ) >= 1.0f );
-		return p;
-		*/
 	}
 
 	// ------------------------------------------------------------------------

@@ -15,21 +15,39 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	inline float D_GGX( const float roughness, const float NdH )
+	inline Vec3 FresnelSchlick( float cosTheta, const Vec3 & F0 )
 	{
-		const float m = roughness * roughness;
-		const float m2 = m * m;
-		const float d = ( NdH * m2 - NdH ) * NdH + 1.0f;
-		return m2 / ( kPI * d * d );
+		return F0 + ( 1.0f - F0 ) *	 powf( 1.0f - cosTheta, 5.0f );
 	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	inline Vec3 BlinnSpecular( const float NdH, const Vec3 & specColor, const float roughness )
+	inline float DistributionGGX( const float NdH, const float roughness )
 	{
-		const float k = 1.999f / ( roughness * roughness );
+		const float a = roughness * roughness;
+		const float a2 = a * a;
+		const float d = ( NdH * a2 - NdH ) * NdH + 1.0f;
+		return a2 / ( kPI * d * d );
+	}
 
-		return std::min( 1.0f, 3.0f * 0.0398f * k ) * powf( NdH, std::min( 10000.0f, k ) ) * specColor;
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	float GeometrySchlickGGX( float NdV, float roughness )
+	{
+		const float r = ( roughness + 1.0f );
+		const float k = ( r * r ) / 8.0f;
+
+		return NdV / ( NdV * ( 1.0f - k ) + k );
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	float GeometrySmith( float NdV, float NdL, float roughness )
+	{
+		float ggx2  = GeometrySchlickGGX( NdV, roughness );
+		float ggx1  = GeometrySchlickGGX( NdL, roughness );
+
+		return ggx1 * ggx2;
 	}
 
 	// ------------------------------------------------------------------------
@@ -37,29 +55,33 @@ namespace srt
 	// Refs:
 	//	- https://github.com/Nadrin/PBR/blob/master/data/shaders/hlsl/pbr.hlsl
 	//	- https://gist.github.com/galek/53557375251e1a942dfa
+	//	- https://learnopengl.com/PBR/Lighting
 	//
 	//
 	// ------------------------------------------------------------------------
 	Vec3 Light::ComputeLighting( const Vec3 & pos, const Vec3 & normal, const Material & mat ) const
 	{
 		const Vec3 L	= Normalize( m_position - pos );
-		const Vec3 V	= Normalize( -pos );
+		const Vec3 V	= Normalize( -pos );				// because our camera is always on the world's origin currently
 		const Vec3 H	= Normalize( L + V );
 		const float NdL = std::max( 0.001f, Dot( normal, L ) );
 		const float HdV	= std::max( 0.001f, Dot( H, V ) );
 		const float NdH	= std::max( 0.001f, Dot( normal, H ) );
+		const float NdV	= std::max( 0.001f, Dot( normal, V ) );
 
 		// Fresnel schlick approx
-		const Vec3 F0 = Lerp( Vec3( 0.04f ), mat.GetAlbedo(), mat.GetMetalness() );	// can be computed in material if constant across the material
-		const Vec3 fresnel = Lerp( F0, Vec3( 1.0f ), powf( 1.01f - HdV, 5.0f ) );
+		const Vec3 F0	= Lerp( Vec3( 0.04f ), mat.GetAlbedo(), mat.GetMetalness() );	// can be computed constant across all lights (and even material if no textures)
+		const Vec3 F	= FresnelSchlick( HdV, F0 );
 
-		// Blinn specular microfacet BRDF
-		const Vec3 specularBRDF = BlinnSpecular( NdH, fresnel, mat.GetRoughness() );
+		// Specular microfacet BRDF
+		const float NDF	= DistributionGGX( NdH, mat.GetRoughness() );
+		const float G	= GeometrySmith( NdV, NdL, mat.GetRoughness() );
 
+		const Vec3 specularBRDF = ( NDF * G * F ) / ( 4.0f * NdV * NdL );
+		
 		// Simple Lambertian diffuse
-		//const Vec3 kd = Lerp( Vec3( 1.0f ) - fresnel, Vec3( 0.0f ), mat.GetMetalness() );
-		//const Vec3 diffuseBRDF = kd * mat.GetAlbedo( );
-		const Vec3 diffuseBRDF = ( 1.0f - fresnel ) * mat.GetAlbedo( );
+		const Vec3 kD = ( Vec3( 1.0f ) - F ) * ( 1.0f - mat.GetMetalness( ) );
+		const Vec3 diffuseBRDF = kD * mat.GetAlbedo( );
 
 
 		return ( diffuseBRDF + specularBRDF ) * m_color * NdL;
