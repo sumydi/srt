@@ -18,7 +18,7 @@ namespace srt
 		OutputDevice() = default;
 		virtual ~OutputDevice() { };
 
-		virtual void Present( const Image & image ) = 0;
+		virtual void BlitImage( const Image & image ) = 0;
 
 	private:
 		OutputDevice( const OutputDevice & other ) = delete;

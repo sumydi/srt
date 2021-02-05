@@ -19,7 +19,7 @@
 	#include "Graphic/DIBDevice.h"
 #endif
 
-static constexpr uint32_t kSampleCount = 1;
+static constexpr uint32_t kSampleCount = 8;
 static constexpr uint32_t kRayCount = 3;
 
 
@@ -314,6 +314,6 @@ namespace srt
 
 		m_backBuffer->UnlockMipSurface( 0 );
 
-		m_outputDev->Present( *m_backBuffer );
+		m_outputDev->BlitImage( *m_backBuffer );
 	}
 }

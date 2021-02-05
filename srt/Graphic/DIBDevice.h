@@ -17,7 +17,7 @@ namespace srt
 		DIBDevice( HWND hWnd );
 		~DIBDevice( ) final;
 
-		void Present( const Image & image ) final;
+		void BlitImage( const Image & image ) final;
 
 	private:
 		HWND	m_hWnd;

@@ -50,7 +50,7 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void DIBDevice::Present( const Image & image )
+	void DIBDevice::BlitImage( const Image & image )
 	{
 		HDC wndDC = GetDC( m_hWnd );
 
