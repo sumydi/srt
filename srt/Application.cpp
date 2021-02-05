@@ -155,8 +155,10 @@ namespace srt
 			auto startFrame = std::chrono::high_resolution_clock::now( );
 			Update( frameTime );
 			auto endFrame = std::chrono::high_resolution_clock::now( );
+
 			frameTime = (float)( std::chrono::duration< double, std::milli >( endFrame - startFrame ).count() / 1000.0 );
-			m_outputDev->OutputText( 10, 10, "FrameTime: %.4fms", frameTime * 1000.0f );
+
+			m_outputDev->OutputText( 10, 10, "FrameTime: %.4f ms (%u fps)", frameTime * 1000.0f, ( uint32_t )( 1000.0f / ( frameTime * 1000.0f ) ) );
 			m_outputDev->Present( );
 		}
 	}
@@ -277,7 +279,7 @@ namespace srt
 		Light * light = m_scene->GetLight( 0 );
 		Vec3 lightPos = light->GetPosition( );
 		lightPos = lightPos + Vec3( -cs * 0.5f, 0.0f, 0.0f );
-		//light->SetPosition( lightPos );
+//		light->SetPosition( lightPos );
 
 		// do not apply jitterring on the camera when kSamplecount==1 to avoid wobling picture
 		const float jitteringFactor = kSampleCount > 1 ? 1.0f : 0.0f;
