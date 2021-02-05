@@ -70,13 +70,13 @@ namespace srt
 		Material * mat1 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.5f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
 
-		Material * mat2 = new Material{ Vec3{ 0.4f, 1.0f, 0.2f }, 0.5f, 0.0f };
+		Material * mat2 = new Material{ Vec3{ 0.4f, 1.0f, 0.2f }, 0.0f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *mat2 } );
 
 		Material * mat3 = new Material{ Vec3{ 0.2f, 0.2f, 1.0f }, 0.5f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat3 } );
 
-		m_scene->AddLight( new Light{ Vec3{ -2.0f, 8.0f, -1.0f }, Vec3{ 1.0f, 1.0f, 1.0f } } );
+		//m_scene->AddLight( new Light{ Vec3{ -2.0f, 8.0f, -1.0f }, Vec3{ 1.0f, 1.0f, 1.0f } } );
 		m_scene->AddLight( new Light{ Vec3{ 4.0f, 8.0f, 2.5f }, Vec3{ 1.0f, 1.0f, 1.0f } } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
