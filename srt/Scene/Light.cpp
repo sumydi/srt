@@ -61,13 +61,18 @@ namespace srt
 	// ------------------------------------------------------------------------
 	Vec3 Light::ComputeLighting( const Vec3 & pos, const Vec3 & normal, const Material & mat ) const
 	{
-		const Vec3 L	= Normalize( m_position - pos );
-		const Vec3 V	= Normalize( -pos );				// because our camera is always on the world's origin currently
+		// light radiance
+		const float lightDist		= Length( m_position - pos );
+		const Vec3	lightRadiance	= m_color * ( 1.0f / ( lightDist * lightDist ) );
+
+		// some usefull constants used later
+		const Vec3 L	= Normalize( m_position - pos );		// only works for omnis ;)
+		const Vec3 V	= Normalize( -pos );					// [constant across all lights] because our camera is always on the world's origin currently
 		const Vec3 H	= Normalize( L + V );
 		const float NdL = std::max( 0.0f, Dot( normal, L ) );
 		const float HdV	= std::max( 0.01f, Dot( H, V ) );
 		const float NdH	= std::max( 0.0f, Dot( normal, H ) );
-		const float NdV	= std::max( 0.01f, Dot( normal, V ) );
+		const float NdV	= std::max( 0.01f, Dot( normal, V ) );	// [constant across all lights]
 
 		// Fresnel schlick approx
 		const Vec3 F0	= Lerp( Vec3( 0.04f ), mat.GetAlbedo(), mat.GetMetalness() );	// can be computed constant across all lights (and even material if no textures)
@@ -84,7 +89,7 @@ namespace srt
 		const Vec3 diffuseBRDF = kD * mat.GetAlbedo( );
 
 
-		return ( diffuseBRDF + specularBRDF ) * m_color * NdL;
+		return ( diffuseBRDF + specularBRDF ) * lightRadiance * NdL;
 	}
 
 }

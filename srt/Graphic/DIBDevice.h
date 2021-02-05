@@ -6,7 +6,11 @@
 #if defined( SRT_PLATFORM_WINDOWS )
 namespace srt
 {
-
+	// ============================================================================
+	//
+	// Window's specific DIB output device
+	//
+	// ============================================================================
 	class DIBDevice final : public OutputDevice
 	{
 	public:
