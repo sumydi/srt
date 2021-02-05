@@ -18,8 +18,13 @@ namespace srt
 		~DIBDevice( ) final;
 
 		void BlitImage( const Image & image ) final;
+		void Present( ) final;
 
 	private:
+		virtual void OutputTextImpl( int x, int y, const char * text  ) final;
+
+		LONG	m_width;
+		LONG	m_height;
 		HWND	m_hWnd;
 		HDC		m_hDC;
 		HBITMAP	m_hBitmap;

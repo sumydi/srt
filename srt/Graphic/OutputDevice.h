@@ -18,11 +18,17 @@ namespace srt
 		OutputDevice() = default;
 		virtual ~OutputDevice() { };
 
-		virtual void BlitImage( const Image & image ) = 0;
+		void			OutputText( int x, int y, const char * text, ...  );
+
+		virtual void	BlitImage( const Image & image ) = 0;
+		virtual void	Present( ) = 0;
+		
 
 	private:
 		OutputDevice( const OutputDevice & other ) = delete;
 		OutputDevice & operator = ( const OutputDevice & other ) = delete;
+
+		virtual void OutputTextImpl( int x, int y, const char * text  ) = 0;
 	};
 
 }

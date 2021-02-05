@@ -175,6 +175,7 @@
     <ClCompile Include="srt\Application.cpp" />
     <ClCompile Include="srt\Graphic\DIBDevice.cpp" />
     <ClCompile Include="srt\Graphic\Image.cpp" />
+    <ClCompile Include="srt\Graphic\OutputDevice.cpp" />
     <ClCompile Include="srt\Math\MathUtils.cpp" />
     <ClCompile Include="srt\Math\Random.cpp" />
     <ClCompile Include="srt\Math\RayHitTest.cpp" />

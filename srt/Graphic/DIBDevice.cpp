@@ -25,10 +25,14 @@ namespace srt
 		RECT rect;
 		GetClientRect( hWnd, &rect );
 
+		m_width		= ( rect.right - rect.left );
+		m_height	= ( rect.bottom - rect.top );
+
+
 		BITMAPINFO bmpInfos{};
 		bmpInfos.bmiHeader.biSize			= sizeof( BITMAPINFOHEADER );
-		bmpInfos.bmiHeader.biWidth			= ( rect.right - rect.left );
-		bmpInfos.bmiHeader.biHeight			= -( rect.bottom - rect.top );
+		bmpInfos.bmiHeader.biWidth			= m_width;
+		bmpInfos.bmiHeader.biHeight			= -m_height;
 		bmpInfos.bmiHeader.biPlanes			= 1;
 		bmpInfos.bmiHeader.biBitCount		= 32;
 		bmpInfos.bmiHeader.biCompression	= BI_RGB;
@@ -50,18 +54,37 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void DIBDevice::BlitImage( const Image & image )
+	void DIBDevice::Present( )
 	{
 		HDC wndDC = GetDC( m_hWnd );
 
-		const PixelSurface::Desc & surfDesc = image.GetMipDesc( 0 );
+		SIZE size;
+		GetBitmapDimensionEx( m_hBitmap, &size );
 
-		memcpy( m_dcBits, image.GetMipSurface( 0 ), (size_t)surfDesc.pitch * (size_t)surfDesc.height );
-		BitBlt( wndDC, 0, 0, surfDesc.width, surfDesc.height, m_hDC, 0, 0, SRCCOPY );
+		BitBlt( wndDC, 0, 0, m_width, m_height, m_hDC, 0, 0, SRCCOPY );
 
 		ReleaseDC( m_hWnd, wndDC );
+
 	}
 
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void DIBDevice::BlitImage( const Image & image )
+	{
+		const PixelSurface::Desc & surfDesc = image.GetMipDesc( 0 );
+		memcpy( m_dcBits, image.GetMipSurface( 0 ), (size_t)surfDesc.pitch * (size_t)surfDesc.height );
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void DIBDevice::OutputTextImpl( int x, int y, const char * text )
+	{
+		const int strLen = static_cast< int >( strlen( text ) );
+
+		SetBkMode( m_hDC, TRANSPARENT );
+		TextOutA( m_hDC, x, y, text, strLen );
+	}
 }
 
 #endif // SRT_PLATFORM_WINDOWS

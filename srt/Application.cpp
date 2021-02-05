@@ -19,7 +19,7 @@
 	#include "Graphic/DIBDevice.h"
 #endif
 
-static constexpr uint32_t kSampleCount = 8;
+static constexpr uint32_t kSampleCount = 1;
 static constexpr uint32_t kRayCount = 3;
 
 
@@ -156,6 +156,8 @@ namespace srt
 			Update( frameTime );
 			auto endFrame = std::chrono::high_resolution_clock::now( );
 			frameTime = (float)( std::chrono::duration< double, std::milli >( endFrame - startFrame ).count() / 1000.0 );
+			m_outputDev->OutputText( 10, 10, "FrameTime: %.4fms", frameTime * 1000.0f );
+			m_outputDev->Present( );
 		}
 	}
 
