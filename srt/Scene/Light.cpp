@@ -64,10 +64,10 @@ namespace srt
 		const Vec3 L	= Normalize( m_position - pos );
 		const Vec3 V	= Normalize( -pos );				// because our camera is always on the world's origin currently
 		const Vec3 H	= Normalize( L + V );
-		const float NdL = std::max( 0.001f, Dot( normal, L ) );
-		const float HdV	= std::max( 0.001f, Dot( H, V ) );
-		const float NdH	= std::max( 0.001f, Dot( normal, H ) );
-		const float NdV	= std::max( 0.001f, Dot( normal, V ) );
+		const float NdL = std::max( 0.0f, Dot( normal, L ) );
+		const float HdV	= std::max( 0.01f, Dot( H, V ) );
+		const float NdH	= std::max( 0.0f, Dot( normal, H ) );
+		const float NdV	= std::max( 0.01f, Dot( normal, V ) );
 
 		// Fresnel schlick approx
 		const Vec3 F0	= Lerp( Vec3( 0.04f ), mat.GetAlbedo(), mat.GetMetalness() );	// can be computed constant across all lights (and even material if no textures)
@@ -77,7 +77,7 @@ namespace srt
 		const float NDF	= DistributionGGX( NdH, mat.GetRoughness() );
 		const float G	= GeometrySmith( NdV, NdL, mat.GetRoughness() );
 
-		const Vec3 specularBRDF = ( NDF * G * F ) / ( 4.0f * NdV * NdL );
+		const Vec3 specularBRDF = ( NDF * G * F ) / std::max( 0.0001f, ( 4.0f * NdV * NdL ) );
 		
 		// Simple Lambertian diffuse
 		const Vec3 kD = ( Vec3( 1.0f ) - F ) * ( 1.0f - mat.GetMetalness( ) );
