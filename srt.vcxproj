@@ -158,6 +158,7 @@
     <ClInclude Include="srt\Graphic\Image.h" />
     <ClInclude Include="srt\Graphic\Texture.h" />
     <ClInclude Include="srt\Graphic\Types.h" />
+    <ClInclude Include="srt\Lighting\LightingUtils.h" />
     <ClInclude Include="srt\Math\MathUtils.h" />
     <ClInclude Include="srt\Math\Random.h" />
     <ClInclude Include="srt\Math\RayHitTest.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="srt\Graphic\DIBDevice.cpp" />
     <ClCompile Include="srt\Graphic\Image.cpp" />
     <ClCompile Include="srt\Graphic\OutputDevice.cpp" />
+    <ClCompile Include="srt\Lighting\LightingUtils.cpp" />
     <ClCompile Include="srt\Math\MathUtils.cpp" />
     <ClCompile Include="srt\Math\Random.cpp" />
     <ClCompile Include="srt\Math\RayHitTest.cpp" />

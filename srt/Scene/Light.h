@@ -23,7 +23,7 @@ namespace srt
 		const Vec3 &	GetPosition( ) const { return m_position; }
 		void			SetPosition( const Vec3 & pos ) { m_position = pos; }
 
-		Vec3			ComputeLighting( const Vec3 & pos, const Vec3 & normal, const Material & mat ) const;
+		const Vec3 &	GetColor( ) const { return m_color; }
 
 	private:
 		Vec3	m_position{ 0.0f, 0.0f, 0.0f };

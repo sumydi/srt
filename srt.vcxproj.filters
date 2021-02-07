@@ -28,6 +28,9 @@
     <Filter Include="srt\Scene">
       <UniqueIdentifier>{6fd88d61-7285-4558-a28d-9a2c801ab2b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lighting">
+      <UniqueIdentifier>{1aa107b8-a589-40e4-8e9c-53060906641d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -93,6 +96,9 @@
     <ClInclude Include="srt\Math\MathUtils.h">
       <Filter>srt\Math</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Lighting\LightingUtils.h">
+      <Filter>Lighting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -130,6 +136,9 @@
     </ClCompile>
     <ClCompile Include="srt\Graphic\OutputDevice.cpp">
       <Filter>srt\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Lighting\LightingUtils.cpp">
+      <Filter>Lighting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

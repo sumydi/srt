@@ -14,6 +14,7 @@
 #include "Scene/Scene.h"
 #include "Scene/Sphere.h"
 #include "Scene/Light.h"
+#include "Lighting/LightingUtils.h"
 
 #if defined (SRT_PLATFORM_WINDOWS )
 	#include "Graphic/DIBDevice.h"
@@ -216,7 +217,7 @@ namespace srt
 					scene.TraceRay( shadowRay, 0.001f, FLT_MAX, shadowResult );
 					if( shadowResult.hitResult.hitTime < 0.0f )
 					{
-						resultColor += light->ComputeLighting( result.hitResult.position, result.hitResult.normal, *result.material );
+						resultColor += ComputeBRDF( result, *light );
 					}
 				}
 
