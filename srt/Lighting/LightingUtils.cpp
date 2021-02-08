@@ -82,7 +82,7 @@ namespace srt
 		const float NdH	= std::max( 0.0f, Dot( result.hitResult.normal, H ) );
 		const float NdV	= std::max( 0.01f, Dot( result.hitResult.normal, V ) );				// [constant across all lights]
 
-																// Fresnel schlick approx
+		// Fresnel schlick approx
 		const Vec3 F0	= Lerp( Vec3( 0.04f ), result.material->GetAlbedo(), result.material->GetMetalness() );	// can be computed constant across all lights (and even material if no textures)
 		const Vec3 F	= FresnelSchlick( HdV, F0 );
 
