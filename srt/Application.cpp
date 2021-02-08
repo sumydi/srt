@@ -77,9 +77,9 @@ namespace srt
 		Material * mat3 = new Material{ Vec3{ 0.2f, 0.2f, 1.0f }, 0.7f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat3 } );
 
-		m_scene->AddLight( new Light{ Vec3{ -3.2f, 3.0f, -4.0f }, Vec3{ 10.0f, 10.0f, 10.0f } } );
-		m_scene->AddLight( new Light{ Vec3{ 4.0f, 4.0f, 4.0f }, Vec3{ 10.0f, 10.0f, 10.0f } } );
-		m_scene->AddLight( new Light{ Vec3{ 4.0f, 4.0f, -4.0f }, Vec3{ 10.0f, 10.0f, 10.0f } } );
+		m_scene->AddLight( new Light{ Light::Type::kDirectionnal, Vec3{ 0, 0.0f, 0.0f }, Vec3{ 1.0f, -1.0f, 1.0f }, Vec3{ 1.0f, 0.8f, 0.4f } } );
+		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 4.0f, 4.0f, 4.0f }, Vec3{ 0.0f, 0.0f, 1.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
+		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 4.0f, 4.0f, -4.0f }, Vec3{ 0.0f, 0.0f, 1.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
@@ -217,7 +217,9 @@ namespace srt
 					scene.TraceRay( shadowRay, 0.001f, FLT_MAX, shadowResult );
 					if( shadowResult.hitResult.hitTime < 0.0f )
 					{
-						resultColor += ComputeBRDF( result, *light );
+						LightSource	lightSource;
+						InitLightSource( result, *light, lightSource );
+						resultColor += ComputeBRDF( result, lightSource );
 					}
 				}
 
@@ -226,7 +228,7 @@ namespace srt
 				Vec3 target = result.hitResult.position + result.hitResult.normal + RandomUnitVector( );
 				resultColor += 0.5f * ComputeColor( scene, Ray{ result.hitResult.position, Normalize( target - result.hitResult.position ) }, rayIdx + 1 );
 				*/
-				resultColor = Clamp( resultColor, 0.0f, 1.0f );
+				//resultColor = Clamp( resultColor, 0.0f, 1.0f );
 				
 			}
 			else
@@ -304,6 +306,9 @@ namespace srt
 					resultColor += ComputeColor( *m_scene, ray, 0 );
 				}
 				resultColor /= (float)kSampleCount;
+
+				// Basic tone mapping
+				resultColor = resultColor / ( resultColor + 1.0f );
 
 				// convert from (normalized) linear to sRGB
 				const uint32_t r = (uint32_t)( sqrtf( resultColor.X() ) * 255.0f );

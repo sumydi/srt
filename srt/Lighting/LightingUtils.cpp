@@ -67,14 +67,11 @@ namespace srt
 	//	- https://learnopengl.com/PBR/Lighting
 	//
 	// ------------------------------------------------------------------------
-	Vec3 ComputeBRDF( const SceneTraceResult & result, const Light & light )
+	Vec3 ComputeBRDF( const SceneTraceResult & result, const LightSource & lightSource )
 	{
-		// light radiance
-		const float lightDist		= Length( light.GetPosition() - result.hitResult.position );
-		const Vec3	lightRadiance	= light.GetColor() * ( 1.0f / ( lightDist * lightDist ) );
 
 		// some usefull constants used later
-		const Vec3 L	= Normalize( light.GetPosition() - result.hitResult.position );		// only works for omnis ;)
+		const Vec3 L	= -lightSource.direction;
 		const Vec3 V	= Normalize( -result.hitResult.position );							// [constant across all lights] because our camera is always on the world's origin currently
 		const Vec3 H	= Normalize( L + V );
 		const float NdL = std::max( 0.0f, Dot( result.hitResult.normal, L ) );
@@ -97,7 +94,25 @@ namespace srt
 		const Vec3 diffuseBRDF = kD * result.material->GetAlbedo( );
 
 
-		return ( diffuseBRDF + specularBRDF ) * lightRadiance * NdL;
+		return ( diffuseBRDF + specularBRDF ) * lightSource.radiance * NdL;
 
 	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void InitLightSource( const SceneTraceResult & result, const Light & light, LightSource & lightSource )
+	{
+		if( light.GetType()==Light::Type::kOmni )
+		{
+			const float lightDist		= Length( result.hitResult.position - light.GetPosition() );
+			lightSource.radiance		= light.GetColor() * ( 1.0f / ( lightDist * lightDist ) );
+			lightSource.direction		= Normalize( result.hitResult.position - light.GetPosition() );
+		}
+		else if( light.GetType()==Light::Type::kDirectionnal )
+		{
+			lightSource.radiance	= light.GetColor();
+			lightSource.direction	= light.GetDirection();
+		}
+	}
+
 }
