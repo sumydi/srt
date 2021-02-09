@@ -127,6 +127,11 @@ namespace srt
 		return Vec3( v.X() + f, v.Y() + f, v.Z() + f );
 	}
 
+	inline Vec3 operator + ( const float f, const Vec3 & v )
+	{
+		return Vec3( v.X() + f, v.Y() + f, v.Z() + f );
+	}
+
 	inline Vec3 operator - ( const Vec3 & v, const float f )
 	{
 		return Vec3( v.X() - f, v.Y() - f, v.Z() - f );
@@ -205,6 +210,24 @@ namespace srt
 	inline Vec3 Lerp( const Vec3 & v1, const Vec3 & v2, float t )
 	{
 		return v1 + t * ( v2 - v1 );
+	}
+
+	// ------------------------------------------------------------------------
+	//
+	//	Computes a reflection vector of v depending on n.
+	//	Note: n must be normalized.
+	//
+	//   v   n   r
+	//   \   ^   ^
+	//    \  |  /
+	//     \ | /
+	//		v|/	
+	//
+	//
+	// ------------------------------------------------------------------------
+	inline Vec3 Reflect( const Vec3 & v, const Vec3 n )
+	{
+		return v - 2.0f * Dot( v, n ) * n;
 	}
 }
 

@@ -217,8 +217,7 @@ namespace srt
 					scene.TraceRay( shadowRay, 0.001f, FLT_MAX, shadowResult );
 					if( shadowResult.hitResult.hitTime < 0.0f )
 					{
-						LightSource	lightSource;
-						InitLightSource( result, *light, lightSource );
+						LightSource	lightSource( result, *light );
 						resultColor += ComputeBRDF( result, lightSource );
 					}
 				}

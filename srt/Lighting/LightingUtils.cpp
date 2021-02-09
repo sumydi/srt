@@ -6,6 +6,35 @@
 
 namespace srt
 {
+	// ========================================================================
+	//
+	// LightSource immplementation
+	//
+	// ========================================================================
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	LightSource::LightSource( const SceneTraceResult & result, const Light & light )
+	{
+		if( light.GetType()==Light::Type::kOmni )
+		{
+			const float lightDist		= Length( result.hitResult.position - light.GetPosition() );
+			this->radiance				= light.GetColor() * ( 1.0f / ( lightDist * lightDist ) );
+			this->direction				= Normalize( result.hitResult.position - light.GetPosition() );
+		}
+		else if( light.GetType()==Light::Type::kDirectionnal )
+		{
+			this->radiance	= light.GetColor();
+			this->direction	= light.GetDirection();
+		}
+	}
+
+	// ========================================================================
+	//
+	// Lighting equations... hard math goes here
+	//
+	// ========================================================================
+
 	// ------------------------------------------------------------------------
 	// Computes fresnel term.
 	//
@@ -97,22 +126,4 @@ namespace srt
 		return ( diffuseBRDF + specularBRDF ) * lightSource.radiance * NdL;
 
 	}
-
-	// ------------------------------------------------------------------------
-	// ------------------------------------------------------------------------
-	void InitLightSource( const SceneTraceResult & result, const Light & light, LightSource & lightSource )
-	{
-		if( light.GetType()==Light::Type::kOmni )
-		{
-			const float lightDist		= Length( result.hitResult.position - light.GetPosition() );
-			lightSource.radiance		= light.GetColor() * ( 1.0f / ( lightDist * lightDist ) );
-			lightSource.direction		= Normalize( result.hitResult.position - light.GetPosition() );
-		}
-		else if( light.GetType()==Light::Type::kDirectionnal )
-		{
-			lightSource.radiance	= light.GetColor();
-			lightSource.direction	= light.GetDirection();
-		}
-	}
-
 }

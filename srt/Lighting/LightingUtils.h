@@ -11,17 +11,16 @@ namespace srt
 
 	// ============================================================================
 	//	Informations about a light source. It can be a light but also informations
-	//	about indirect lighting
+	//	about indirect lighting.
+	//	It holds all constant variable usefull to compute lighting.
+	//	You can see it as a local context of lighting.
 	// ============================================================================
 	struct LightSource
 	{
+		LightSource( const SceneTraceResult & result, const Light & light );
 		Vec3	direction;			// Light direction
 		Vec3	radiance;
 	};
-
-	// ----------------------------------------------------------------------------
-	// ----------------------------------------------------------------------------
-	void InitLightSource( const SceneTraceResult & result, const Light & light, LightSource & lightSource );
 
 	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
