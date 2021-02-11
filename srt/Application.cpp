@@ -84,8 +84,8 @@ namespace srt
 		Material * mat3 = new Material{ Vec3{ 0.2f, 0.2f, 1.0f }, 0.7f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat3 } );
 
-		m_scene->AddLight( new Light{ Light::Type::kDirectionnal, Vec3{ 0, 0.0f, 0.0f }, Vec3{ 1.0f, -1.0f, 1.0f }, Vec3{ 1.0f, 0.8f, 0.4f } } );
-		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 0.0f, 0.5f, 1.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
+		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ -2.0f, 2.0f, -3.0f }, Vec3{ 1.0f, -1.0f, 1.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
+		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 0.0f, 1.5f, 1.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 4.0f, 4.0f, -4.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
 
 		m_scene->AddCamera( new Camera{ Vec3{ 0.0f, 0.0f, 1.0f } } );
@@ -235,9 +235,9 @@ namespace srt
 					Light * light = scene.GetLight( lightIdx );
 
 					// shadow ray
-					Ray shadowRay{ result.hitResult.position, light->GetPosition() };
+					Ray shadowRay{ result.hitResult.position, Normalize( light->GetPosition() - result.hitResult.position ) };
 					SceneTraceResult shadowResult;
-					scene.TraceRay( shadowRay, 0.001f, FLT_MAX, shadowResult );
+					scene.TraceRay( shadowRay, 0.01f, FLT_MAX, shadowResult );
 					if( shadowResult.hitResult.hitTime < 0.0f )
 					{
 						// Direct lighting
