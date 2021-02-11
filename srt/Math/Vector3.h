@@ -11,8 +11,9 @@ namespace srt
 	{
 	public:
 		Vec3( ) : m_v{ 0.0f, 0.0f, 0.0f } {}
-		explicit Vec3( const float v ) : m_v{ v, v, v } { }
-		explicit Vec3( const float x, const float y, const float z ) : m_v{ x, y, z } {}
+		Vec3( const Vec3 & other ) : m_v{ other.X(), other.Y(), other.Z() } { }
+		Vec3( const float v ) : m_v{ v, v, v } { }
+		Vec3( const float x, const float y, const float z ) : m_v{ x, y, z } { }
 
 		inline Vec3 & operator = ( const Vec3 & other );
 

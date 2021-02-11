@@ -8,6 +8,7 @@ namespace srt
 
 	struct SceneTraceResult;
 	class Light;
+	class Camera;
 
 	// ============================================================================
 	//	Informations about a light source. It can be a light but also informations
@@ -18,13 +19,14 @@ namespace srt
 	struct LightSource
 	{
 		LightSource( const SceneTraceResult & result, const Light & light );
+		LightSource( const Vec3 & lightDir, const Vec3 & radiance );
 		Vec3	direction;			// Light direction
 		Vec3	radiance;
 	};
 
 	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
-	Vec3 ComputeBRDF( const SceneTraceResult & result, const LightSource & lightSource );
+	Vec3 ComputeBRDF( const Camera & camera, const SceneTraceResult & result, const LightSource & lightSource );
 
 }
 

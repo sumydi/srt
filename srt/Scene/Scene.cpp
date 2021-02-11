@@ -1,7 +1,8 @@
 #include "Scene.h"
 #include "Math/Ray.h"
-#include "Scene/SceneObject.h"
-#include "Scene/Light.h"
+#include "SceneObject.h"
+#include "Light.h"
+#include "Camera.h"
 
 namespace srt
 {
@@ -19,6 +20,12 @@ namespace srt
 		m_lights.push_back( std::shared_ptr< Light >( light ) );
 	}
 
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Scene::AddCamera( Camera * camera )
+	{
+		m_cameras.push_back( std::shared_ptr< Camera >( camera ) );
+	}
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	void Scene::TraceRay( const Ray & ray, float tMin, float tMax, SceneTraceResult & result ) const

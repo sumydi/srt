@@ -34,6 +34,9 @@ public:
 	void Run( );
 	void Update( float dt );
 
+	void OnKeyUp( char key );
+	void OnKeyDown( char key );
+
 private:
 	Application( const Application & other ) = delete;
 	Application operator = ( const Application & other ) = delete;

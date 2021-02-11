@@ -11,6 +11,7 @@ namespace srt
 	class Light;
 	class Ray;
 	class Material;
+	class Camera;
 
 	// ============================================================================
 	//
@@ -42,6 +43,10 @@ namespace srt
 		size_t			GetLightCount( ) const { return m_lights.size(); }
 		Light *			GetLight( size_t idx ) const { return m_lights[ idx ].get(); }
 
+		void			AddCamera( Camera * camera );
+		size_t			GetCameraCount( ) const { return m_cameras.size(); }
+		Camera *		GetCamera( size_t idx ) const { return m_cameras[ idx ].get(); }
+
 		void			TraceRay( const Ray & ray, float tMin, float tMax, SceneTraceResult & result ) const;
 
 	private:
@@ -53,6 +58,9 @@ namespace srt
 
 		using LightContainer = std::vector< std::shared_ptr< Light > >;
 		LightContainer		m_lights;
+
+		using CameraContainer = std::vector< std::shared_ptr< Camera > >;
+		CameraContainer		m_cameras;
 	
 	};
 }

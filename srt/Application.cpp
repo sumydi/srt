@@ -14,6 +14,7 @@
 #include "Scene/Scene.h"
 #include "Scene/Sphere.h"
 #include "Scene/Light.h"
+#include "Scene/Camera.h"
 #include "Lighting/LightingUtils.h"
 
 #if defined (SRT_PLATFORM_WINDOWS )
@@ -21,7 +22,7 @@
 #endif
 
 static constexpr uint32_t kSampleCount = 1;
-static constexpr uint32_t kRayCount = 3;
+static constexpr uint32_t kRayCount = 2;
 
 
 namespace srt
@@ -37,6 +38,12 @@ namespace srt
 			{
 				return DefWindowProc(hWnd, message, wParam, lParam);
 			}
+			break;
+
+			case WM_KEYDOWN:
+			break;
+
+			case WM_KEYUP:
 			break;
 
 			case WM_PAINT:
@@ -68,18 +75,20 @@ namespace srt
 
 		m_scene = new Scene;
 
-		Material * mat1 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.4f, 0.3f };
-		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
+		Material * mat1 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.4f, 0.01f };
+		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.5f, -1.0f }, 0.5f, *mat1 } );
 
-		Material * mat2 = new Material{ Vec3{ 0.4f, 1.0f, 0.2f }, 0.2f, 0.8f };
+		Material * mat2 = new Material{ Vec3{ 0.4f, 1.0f, 0.2f }, 0.2f, 0.3f };
 		m_scene->AddObject( new Sphere{ Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *mat2 } );
 
 		Material * mat3 = new Material{ Vec3{ 0.2f, 0.2f, 1.0f }, 0.7f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat3 } );
 
 		m_scene->AddLight( new Light{ Light::Type::kDirectionnal, Vec3{ 0, 0.0f, 0.0f }, Vec3{ 1.0f, -1.0f, 1.0f }, Vec3{ 1.0f, 0.8f, 0.4f } } );
-		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 4.0f, 4.0f, 4.0f }, Vec3{ 0.0f, 0.0f, 1.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
-		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 4.0f, 4.0f, -4.0f }, Vec3{ 0.0f, 0.0f, 1.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
+		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 0.0f, 0.5f, 1.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
+		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 4.0f, 4.0f, -4.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
+
+		m_scene->AddCamera( new Camera{ Vec3{ 0.0f, 0.0f, 1.0f } } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
@@ -166,6 +175,19 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
+	void Application::OnKeyDown( char key )
+	{
+	
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Application::OnKeyUp( char key )
+	{
+
+	}
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	static Vec3 RandomInUnitSphere( )
 	{
 		const float x = RandomFloat( -1.0f, 1.0f );
@@ -198,13 +220,14 @@ namespace srt
 	static Vec3 ComputeColor( const Scene & scene, const Ray& ray, uint32_t rayIdx )
 	{
 		Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
+		const Camera & camera = *scene.GetCamera( 0 );
 
-		if( rayIdx < kRayCount )
+		if( rayIdx > 0 )
 		{
 			SceneTraceResult result;
 			scene.TraceRay( ray, 0.001f, FLT_MAX, result );
 
-			if( result.hitResult.hitTime > 0.0f )
+			if( result.hitResult.hitTime >= 0.0f )
 			{
 				// Hit an object: compute lightings for all lights
 				for( size_t lightIdx = 0; lightIdx < scene.GetLightCount(); ++lightIdx )
@@ -212,13 +235,23 @@ namespace srt
 					Light * light = scene.GetLight( lightIdx );
 
 					// shadow ray
-					Ray shadowRay{ result.hitResult.position, Normalize( light->GetPosition() - result.hitResult.position ) };
+					const Vec3 biasedPos = result.hitResult.position + result.hitResult.normal * 0.01f;
+					Ray shadowRay{ biasedPos, Normalize( light->GetPosition() - biasedPos ) };
 					SceneTraceResult shadowResult;
 					scene.TraceRay( shadowRay, 0.001f, FLT_MAX, shadowResult );
 					if( shadowResult.hitResult.hitTime < 0.0f )
 					{
+						// Direct lighting
 						LightSource	lightSource( result, *light );
-						resultColor += ComputeBRDF( result, lightSource );
+						resultColor += ComputeBRDF( camera, result, lightSource );
+					}
+					else
+					{
+						//const Vec3 reflect = Reflect( shadowResult.hitResult.normal,shadowRay.Direction() );
+						//Ray reflectRay{ shadowResult.hitResult.position, reflect };
+						//const Vec3 reflectColor = ComputeColor( scene, reflectRay, rayIdx - 1 );
+						//LightSource lightSource{ shadowResult.hitResult.normal, reflectColor };
+						//resultColor += ComputeBRDF( result, lightSource );
 					}
 				}
 
@@ -236,7 +269,6 @@ namespace srt
 				const float t = 0.5f * ( ray.Direction().Y() + 1.0f );
 				resultColor = ( 1.0f - t ) * Vec3( 1.0f, 1.0f, 1.0f ) + t * Vec3( 0.5f, 0.7f, 1.0f );
 			}
-
 		}
 
 		return resultColor;
@@ -275,13 +307,15 @@ namespace srt
 		const float si = sin( t );
 
 		SceneObject * obj = m_scene->GetObject( 1 );
-		Vec3 objPos = Vec3( 0.0f, 0.0f, -1.0f ) + Vec3( cs * 0.7f, cs * 0.3f, si * 1.0f );
+		Vec3 objPos = Vec3( 0.0f, 0.0f, -1.0f ) + Vec3( cs * 0.8f, cs * 0.2f, si * 1.0f );
 		obj->SetPosition( objPos );
 
 		Light * light = m_scene->GetLight( 0 );
 		Vec3 lightPos = light->GetPosition( );
 		lightPos = lightPos + Vec3( -cs * 0.5f, 0.0f, 0.0f );
 //		light->SetPosition( lightPos );
+
+		Camera * camera = m_scene->GetCamera( 0 );
 
 		// do not apply jitterring on the camera when kSamplecount==1 to avoid wobling picture
 		const float jitteringFactor = kSampleCount > 1 ? 1.0f : 0.0f;
@@ -300,9 +334,9 @@ namespace srt
 					const float ny = -( ( ( (float)y + RandomFloat() * jitteringFactor ) / (float)bbHeight ) * 2.0f - 1.0f );
 
 					// make a ray from the origin to the current normalized pixel
-					const Ray ray{ Vec3{ 0.0f, 0.0f, 1.0f }, Normalize( Vec3{ nx, ny, -1.0f } ) };
+					const Ray ray{ camera->GetPosition( ), Normalize( Vec3{ nx, ny, -1.0f } ) };
 
-					resultColor += ComputeColor( *m_scene, ray, 0 );
+					resultColor += ComputeColor( *m_scene, ray, kRayCount );
 				}
 				resultColor /= (float)kSampleCount;
 

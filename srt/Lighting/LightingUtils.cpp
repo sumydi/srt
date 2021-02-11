@@ -1,7 +1,8 @@
 #include "LightingUtils.h"
-#include "Scene/Light.h"
-#include "Graphic/Material.h"
 #include "Scene/Scene.h"
+#include "Scene/Light.h"
+#include "Scene/Camera.h"
+#include "Graphic/Material.h"
 #include "Graphic/Material.h"
 
 namespace srt
@@ -29,6 +30,15 @@ namespace srt
 		}
 	}
 
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	LightSource::LightSource( const Vec3 & lightDir, const Vec3 & radiance )
+	: direction( lightDir )
+	, radiance( radiance )
+	{
+	
+	}
+
 	// ========================================================================
 	//
 	// Lighting equations... hard math goes here
@@ -43,7 +53,7 @@ namespace srt
 	// ------------------------------------------------------------------------
 	inline Vec3 FresnelSchlick( float cosTheta, const Vec3 & F0 )
 	{
-		return F0 + ( 1.0f - F0 ) *	 powf( 1.0f - cosTheta, 5.0f );
+		return F0 + ( 1.0f - F0 ) * powf( 1.0f - cosTheta, 5.0f );
 	}
 
 	// ------------------------------------------------------------------------
@@ -96,12 +106,12 @@ namespace srt
 	//	- https://learnopengl.com/PBR/Lighting
 	//
 	// ------------------------------------------------------------------------
-	Vec3 ComputeBRDF( const SceneTraceResult & result, const LightSource & lightSource )
+	Vec3 ComputeBRDF( const Camera & camera, const SceneTraceResult & result, const LightSource & lightSource )
 	{
 
 		// some usefull constants used later
 		const Vec3 L	= -lightSource.direction;
-		const Vec3 V	= Normalize( -result.hitResult.position );							// [constant across all lights] because our camera is always on the world's origin currently
+		const Vec3 V	= Normalize( camera.GetPosition( ) - result.hitResult.position );	// [constant across all lights]
 		const Vec3 H	= Normalize( L + V );
 		const float NdL = std::max( 0.0f, Dot( result.hitResult.normal, L ) );
 		const float HdV	= std::max( 0.01f, Dot( H, V ) );
@@ -120,10 +130,8 @@ namespace srt
 
 		// Simple Lambertian diffuse
 		const Vec3 kD = ( Vec3( 1.0f ) - F ) * ( 1.0f - result.material->GetMetalness( ) );
-		const Vec3 diffuseBRDF = kD * result.material->GetAlbedo( );
-
+		const Vec3 diffuseBRDF = ( kD * result.material->GetAlbedo( ) ) / kPI;
 
 		return ( diffuseBRDF + specularBRDF ) * lightSource.radiance * NdL;
-
 	}
 }

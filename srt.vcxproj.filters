@@ -99,6 +99,9 @@
     <ClInclude Include="srt\Lighting\LightingUtils.h">
       <Filter>Lighting</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Scene\Camera.h">
+      <Filter>srt\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -139,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="srt\Lighting\LightingUtils.cpp">
       <Filter>Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Scene\Camera.cpp">
+      <Filter>srt\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

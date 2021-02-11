@@ -14,7 +14,7 @@ namespace srt
 		const float c = Dot( oc, oc ) - sphereRadius * sphereRadius;
 		const float discriminant = b * b - a * c;
 
-		result.hitTime = -1.0f;
+		result.hitTime	= -1.0f;
 
 		if( discriminant >= 0.0f )
 		{
@@ -32,8 +32,8 @@ namespace srt
 			}
 
 			result.hitTime = root;
-			result.position = ray.Origin( ) + result.hitTime * ray.Direction( );
-			result.normal = Normalize( result.position - sphereCenter );
+			result.position = ray.Origin( ) + ray.Direction( ) * result.hitTime;
+			result.normal = ( result.position - sphereCenter ) / sphereRadius;
 		}
 	}
 }
