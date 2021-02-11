@@ -76,9 +76,9 @@ namespace srt
 		m_scene = new Scene;
 
 		Material * mat1 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.4f, 0.01f };
-		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.5f, -1.0f }, 0.5f, *mat1 } );
+		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
 
-		Material * mat2 = new Material{ Vec3{ 0.4f, 1.0f, 0.2f }, 0.2f, 0.3f };
+		Material * mat2 = new Material{ Vec3{ 0.4f, 1.0f, 0.2f }, 0.2f, 1.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *mat2 } );
 
 		Material * mat3 = new Material{ Vec3{ 0.2f, 0.2f, 1.0f }, 0.7f, 0.0f };
@@ -241,7 +241,7 @@ namespace srt
 					if( shadowResult.hitResult.hitTime < 0.0f )
 					{
 						// Direct lighting
-						LightSource	lightSource( result, *light );
+						LightSource	lightSource{ result, *light };
 						resultColor += ComputeBRDF( camera, result, lightSource );
 					}
 					else
@@ -266,7 +266,7 @@ namespace srt
 			{
 				// hit nothing: sky
 				const float t = 0.5f * ( ray.Direction().Y() + 1.0f );
-				resultColor = ( 1.0f - t ) * Vec3( 1.0f, 1.0f, 1.0f ) + t * Vec3( 0.5f, 0.7f, 1.0f );
+				resultColor = ( 1.0f - t ) * Vec3{ 1.0f, 1.0f, 1.0f } + t * Vec3{ 0.5f, 0.7f, 1.0f };
 			}
 		}
 
@@ -306,12 +306,12 @@ namespace srt
 		const float si = sin( t );
 
 		SceneObject * obj = m_scene->GetObject( 1 );
-		Vec3 objPos = Vec3( 0.0f, 0.0f, -1.0f ) + Vec3( cs * 0.8f, cs * 0.2f, si * 1.0f );
+		Vec3 objPos = Vec3{ 0.0f, 0.0f, -1.0f } + Vec3{ cs * 0.8f, cs * 0.2f, si * 1.0f };
 		obj->SetPosition( objPos );
 
 		Light * light = m_scene->GetLight( 0 );
 		Vec3 lightPos = light->GetPosition( );
-		lightPos = lightPos + Vec3( -cs * 0.5f, 0.0f, 0.0f );
+		lightPos = lightPos + Vec3{ -cs * 0.5f, 0.0f, 0.0f };
 //		light->SetPosition( lightPos );
 
 		Camera * camera = m_scene->GetCamera( 0 );
