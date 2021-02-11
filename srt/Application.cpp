@@ -235,8 +235,7 @@ namespace srt
 					Light * light = scene.GetLight( lightIdx );
 
 					// shadow ray
-					const Vec3 biasedPos = result.hitResult.position + result.hitResult.normal * 0.01f;
-					Ray shadowRay{ biasedPos, Normalize( light->GetPosition() - biasedPos ) };
+					Ray shadowRay{ result.hitResult.position, light->GetPosition() };
 					SceneTraceResult shadowResult;
 					scene.TraceRay( shadowRay, 0.001f, FLT_MAX, shadowResult );
 					if( shadowResult.hitResult.hitTime < 0.0f )
