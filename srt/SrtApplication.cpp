@@ -43,9 +43,9 @@ namespace srt
 		Material * mat3 = new Material{ Vec3{ 0.2f, 0.2f, 1.0f }, 0.7f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat3 } );
 
-		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ -2.0f, 2.0f, -3.0f }, Vec3{ 1.0f, -1.0f, 1.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
-		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 0.0f, 1.5f, 1.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
-		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 4.0f, 4.0f, -4.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
+		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ -1.0f, 2.0f, -3.0f }, Vec3{ 1.0f, -1.0f, 1.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
+		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 0.0f, 1.5f, 2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
+		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 4.0f, 4.0f, -2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
 
 		m_scene->AddCamera( new Camera{ Vec3{ 0.0f, 0.0f, 1.0f } } );
 
@@ -214,7 +214,7 @@ namespace srt
 		const float si = sin( t );
 
 		SceneObject * obj = m_scene->GetObject( 1 );
-		Vec3 objPos = Vec3{ 0.0f, 0.0f, -1.0f } + Vec3{ cs * 0.8f, cs * 0.2f, si * 1.0f };
+		Vec3 objPos = Vec3{ 0.0f, 0.5f, -1.0f } + Vec3{ cs * 0.8f, cs * 0.3f, si * 1.0f };
 		obj->SetPosition( objPos );
 
 		Light * light = m_scene->GetLight( 0 );
