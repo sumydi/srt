@@ -1,5 +1,5 @@
-#ifndef SRTAPPPLICATION_H
-#define SRTAPPPLICATION_H
+#ifndef SRT_SRTAPPPLICATION_H
+#define SRT_SRTAPPPLICATION_H
 
 #include "Base.h"
 
@@ -25,11 +25,11 @@ struct AppContext
 //
 //
 // ============================================================================
-class Application
+class SrtApplication
 {
 public:
-	Application( const AppContext & context);
-	~Application( );
+	SrtApplication( const AppContext & context);
+	~SrtApplication( );
 
 	void Run( );
 	void Update( float dt );
@@ -38,8 +38,8 @@ public:
 	void OnKeyDown( char key );
 
 private:
-	Application( const Application & other ) = delete;
-	Application operator = ( const Application & other ) = delete;
+	SrtApplication( const SrtApplication & other ) = delete;
+	SrtApplication operator = ( const SrtApplication & other ) = delete;
 
 #if defined( SRT_PLATFORM_WINDOWS )
 	HINSTANCE	m_hInstance;

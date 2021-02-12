@@ -1,5 +1,5 @@
 // github test
-#include "Application.h"
+#include "SrtApplication.h"
 #include "resource.h"
 #include <iostream>
 #include <chrono>
@@ -68,7 +68,7 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	Application::Application( const AppContext & context )
+	SrtApplication::SrtApplication( const AppContext & context )
 	: m_backBuffer{nullptr }
 	, m_outputDev{ nullptr }
 	{
@@ -134,7 +134,7 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	Application::~Application()
+	SrtApplication::~SrtApplication()
 	{
 		delete m_scene;
 		delete m_backBuffer;
@@ -143,7 +143,7 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void Application::Run( )
+	void SrtApplication::Run( )
 	{
 		bool canContinue = true;
 		float frameTime = 0.016f; // 16 ms by default
@@ -175,14 +175,14 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void Application::OnKeyDown( char key )
+	void SrtApplication::OnKeyDown( char key )
 	{
 	
 	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void Application::OnKeyUp( char key )
+	void SrtApplication::OnKeyUp( char key )
 	{
 
 	}
@@ -275,7 +275,7 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void Application::Update( float dt )
+	void SrtApplication::Update( float dt )
 	{
 		// Unit test vectors
 		{

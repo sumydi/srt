@@ -150,7 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="srt\Application.h" />
+    <ClInclude Include="srt\SrtApplication.h" />
     <ClInclude Include="srt\Base.h" />
     <ClInclude Include="srt\Graphic\DIBDevice.h" />
     <ClInclude Include="srt\Graphic\Material.h" />
@@ -174,7 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp" />
-    <ClCompile Include="srt\Application.cpp" />
+    <ClCompile Include="srt\SrtApplication.cpp" />
     <ClCompile Include="srt\Graphic\DIBDevice.cpp" />
     <ClCompile Include="srt\Graphic\Image.cpp" />
     <ClCompile Include="srt\Graphic\OutputDevice.cpp" />

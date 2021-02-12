@@ -1,7 +1,7 @@
 // srt.cpp : Defines the entry point for the application.
 //
 
-#include "srt/Application.h"
+#include "srt/SrtApplication.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -17,7 +17,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		context.hInstance = hInstance;
 	#endif
 
-	srt::Application app{ context };
+	srt::SrtApplication app{ context };
 
 	app.Run();
 
