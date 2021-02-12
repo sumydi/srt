@@ -13,4 +13,14 @@
 	#include <Windows.h>
 #endif
 
+namespace srt
+{
+	#if defined( SRT_PLATFORM_WINDOWS )
+		using AppHandle = HINSTANCE;
+		using WindowHandle = HWND;
+	#endif
+
+}
+
+
 #endif

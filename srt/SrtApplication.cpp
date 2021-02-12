@@ -1,6 +1,5 @@
 // github test
 #include "SrtApplication.h"
-#include "resource.h"
 #include <iostream>
 #include <chrono>
 
@@ -24,56 +23,16 @@
 static constexpr uint32_t kSampleCount = 1;
 static constexpr uint32_t kRayCount = 2;
 
-
 namespace srt
 {
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-#if defined (SRT_PLATFORM_WINDOWS )
-	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-	{
-		switch (message)
-		{
-			case WM_COMMAND:
-			{
-				return DefWindowProc(hWnd, message, wParam, lParam);
-			}
-			break;
-
-			case WM_KEYDOWN:
-			break;
-
-			case WM_KEYUP:
-			break;
-
-			case WM_PAINT:
-			{
-				PAINTSTRUCT ps;
-				HDC hdc = BeginPaint(hWnd, &ps);
-				// TODO: Add any drawing code that uses hdc here...
-				EndPaint(hWnd, &ps);
-			}
-			break;
-
-			case WM_DESTROY:
-				PostQuitMessage(0);
-				break;
-
-			default:
-				return DefWindowProc(hWnd, message, wParam, lParam);
-		}
-		return 0;
-	}
-#endif
-
-	// ------------------------------------------------------------------------
-	// ------------------------------------------------------------------------
 	SrtApplication::SrtApplication( const AppContext & context )
-	: m_backBuffer{nullptr }
+	: Application( context )
+	, m_backBuffer{nullptr }
 	, m_outputDev{ nullptr }
 	{
-
-		m_scene = new Scene;
+			m_scene = new Scene;
 
 		Material * mat1 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.4f, 0.01f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
@@ -93,42 +52,8 @@ namespace srt
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
 	#if defined( SRT_PLATFORM_WINDOWS )
-
-		m_hInstance = context.hInstance;
-
-		// Window class
-		WNDCLASSEXW wcex{};
-
-		wcex.cbSize = sizeof(WNDCLASSEX);
-
-		wcex.style          = CS_HREDRAW | CS_VREDRAW;
-		wcex.lpfnWndProc    = WndProc;
-		wcex.cbClsExtra     = 0;
-		wcex.cbWndExtra     = 0;
-		wcex.hInstance      = context.hInstance;
-		wcex.hIcon          = LoadIcon(context.hInstance, MAKEINTRESOURCE(IDI_SRT));
-		wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
-		wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-		wcex.lpszMenuName   = NULL;
-		wcex.lpszClassName  = L"SRTWindowClass";
-		wcex.hIconSm        = LoadIcon(NULL, MAKEINTRESOURCE(IDI_SMALL));
-
-		RegisterClassExW(&wcex);
-
-		// Compute the window size
-		constexpr DWORD wndStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_VISIBLE;
-		RECT wndRect;
-		SetRect( &wndRect, 0, 0, context.width, context.height);
-		AdjustWindowRect( &wndRect, wndStyle, FALSE );
-
-		// Create the window
-		const int wndWidth = wndRect.right - wndRect.left;
-		const int wndHeight = wndRect.bottom - wndRect.top;
-		const int wndX = ( GetSystemMetrics( SM_CXSCREEN ) - wndWidth ) / 2;
-		const int wndY = ( GetSystemMetrics( SM_CYSCREEN ) - wndHeight) / 2;
-		m_hWnd = CreateWindow( L"SRTWindowClass", L"SRT", wndStyle, wndX, wndY, wndWidth, wndHeight, NULL, NULL, GetModuleHandle( NULL ), NULL );
-
-		m_outputDev = new DIBDevice( m_hWnd );
+		// to be improved and make it platform independent....
+		m_outputDev = new DIBDevice( this->GetWindowHandle() );
 	#endif
 	}	
 
@@ -139,38 +64,6 @@ namespace srt
 		delete m_scene;
 		delete m_backBuffer;
 		delete m_outputDev;
-	}
-
-	// ------------------------------------------------------------------------
-	// ------------------------------------------------------------------------
-	void SrtApplication::Run( )
-	{
-		bool canContinue = true;
-		float frameTime = 0.016f; // 16 ms by default
-
-		while( canContinue )
-		{
-	#if defined( SRT_PLATFORM_WINDOWS )
-			MSG msg;
-			while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
-			{
-				if( LOWORD( msg.message )==WM_QUIT )
-				{
-					canContinue = false;
-				}
-				TranslateMessage( &msg );
-				DispatchMessage( &msg );
-			}
-	#endif
-			auto startFrame = std::chrono::high_resolution_clock::now( );
-			Update( frameTime );
-			auto endFrame = std::chrono::high_resolution_clock::now( );
-
-			frameTime = (float)( std::chrono::duration< double, std::milli >( endFrame - startFrame ).count() / 1000.0 );
-
-			m_outputDev->OutputText( 10, 10, "FrameTime: %.4f ms (%u fps)", frameTime * 1000.0f, ( uint32_t )( 1000.0f / ( frameTime * 1000.0f ) ) );
-			m_outputDev->Present( );
-		}
 	}
 
 	// ------------------------------------------------------------------------
@@ -275,7 +168,22 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void SrtApplication::Update( float dt )
+	void SrtApplication::FrameStart( )
+	{
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void SrtApplication::FrameEnd( const float frameDuration )
+	{
+		m_outputDev->BlitImage( *m_backBuffer );
+		m_outputDev->OutputText( 10, 10, "FrameDuration: %.4f ms (%u fps)", frameDuration * 1000.0f, ( uint32_t )( 1000.0f / ( frameDuration * 1000.0f ) ) );
+		m_outputDev->Present( );
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void SrtApplication::FrameUpdate( float dt )
 	{
 		// Unit test vectors
 		{
@@ -355,7 +263,7 @@ namespace srt
 		}
 
 		m_backBuffer->UnlockMipSurface( 0 );
-
-		m_outputDev->BlitImage( *m_backBuffer );
 	}
+
+
 }

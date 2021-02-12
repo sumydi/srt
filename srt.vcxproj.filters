@@ -31,6 +31,9 @@
     <Filter Include="Lighting">
       <UniqueIdentifier>{1aa107b8-a589-40e4-8e9c-53060906641d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="srt\Application">
+      <UniqueIdentifier>{c4fbf637-1348-448e-b6e9-502df58c8d75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -102,6 +105,9 @@
     <ClInclude Include="srt\SrtApplication.h">
       <Filter>srt</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Application\Application.h">
+      <Filter>srt\Application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -145,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="srt\SrtApplication.cpp">
       <Filter>srt</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Application\Application.cpp">
+      <Filter>srt\Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

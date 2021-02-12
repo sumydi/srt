@@ -14,7 +14,7 @@ namespace srt
 	class DIBDevice final : public OutputDevice
 	{
 	public:
-		DIBDevice( HWND hWnd );
+		DIBDevice( WindowHandle hWnd );
 		~DIBDevice( ) final;
 
 		void BlitImage( const Image & image ) final;

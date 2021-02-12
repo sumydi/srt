@@ -9,7 +9,7 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	DIBDevice::DIBDevice( HWND hWnd )
+	DIBDevice::DIBDevice( WindowHandle hWnd )
 	: OutputDevice( )
 	, m_hWnd{ hWnd }
 	, m_hDC{ nullptr }

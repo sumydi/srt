@@ -1,7 +1,8 @@
 #ifndef SRT_SRTAPPPLICATION_H
 #define SRT_SRTAPPPLICATION_H
 
-#include "Base.h"
+#include "Application/Application.h"
+#include <chrono>
 
 namespace srt
 {
@@ -11,40 +12,28 @@ class OutputDevice;
 class Scene;
 class Ray;
 
-struct AppContext
-{
-	uint32_t	width;
-	uint32_t	height;
-#if defined( SRT_PLATFORM_WINDOWS )
-	HINSTANCE	hInstance;
-#endif
-};
-
 // ============================================================================
 //
 //
 //
 // ============================================================================
-class SrtApplication
+class SrtApplication final : public Application
 {
 public:
 	SrtApplication( const AppContext & context);
 	~SrtApplication( );
 
-	void Run( );
-	void Update( float dt );
+private:
+
+	void FrameStart( ) final;
+	void FrameUpdate( const float dt ) final;
+	void FrameEnd( const float frameDuration ) final;
 
 	void OnKeyUp( char key );
 	void OnKeyDown( char key );
 
-private:
 	SrtApplication( const SrtApplication & other ) = delete;
-	SrtApplication operator = ( const SrtApplication & other ) = delete;
 
-#if defined( SRT_PLATFORM_WINDOWS )
-	HINSTANCE	m_hInstance;
-	HWND		m_hWnd;
-#endif
 
 	Scene *			m_scene;
 	Image *			m_backBuffer;
