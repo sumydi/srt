@@ -1,8 +1,4 @@
-// github test
 #include "SrtApplication.h"
-#include <iostream>
-#include <chrono>
-
 #include "Graphic/Image.h"
 #include "Graphic/Material.h"
 #include "Math/Vector3.h"
