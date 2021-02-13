@@ -1,22 +1,23 @@
-#include "DIBDevice.h"
+#include "WMOutputDevice.h"
 #include <assert.h>
 #include "Image.h"
-
-#if defined( SRT_PLATFORM_WINDOWS )
 
 namespace srt
 {
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	DIBDevice::DIBDevice( WindowHandle hWnd )
+	WMOutputDevice::WMOutputDevice( WindowHandle hWnd )
 	: OutputDevice( )
 	, m_hWnd{ hWnd }
 	, m_hDC{ nullptr }
+#if defined( SRT_PLATFORM_WINDOWS )
 	, m_hBitmap{ nullptr }
 	, m_hOldBitmap{nullptr }
 	, m_dcBits{ nullptr }
+#endif
 	{
+#if defined( SRT_PLATFORM_WINDOWS )
 		HDC hDC = GetDC( hWnd );
 		m_hDC = CreateCompatibleDC( hDC );
 		assert( m_hDC!=nullptr );
@@ -41,21 +42,25 @@ namespace srt
 		assert( m_hBitmap!=nullptr );
 
 		m_hOldBitmap = SelectObject( m_hDC, m_hBitmap );
+#endif
 	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	DIBDevice::~DIBDevice( )
+	WMOutputDevice::~WMOutputDevice( )
 	{
+#if defined( SRT_PLATFORM_WINDOWS )
 		SelectObject( m_hDC, m_hOldBitmap );
 		DeleteObject( m_hBitmap );
 		DeleteDC( m_hDC );
+#endif
 	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void DIBDevice::Present( )
+	void WMOutputDevice::Present( )
 	{
+#if defined( SRT_PLATFORM_WINDOWS )
 		HDC wndDC = GetDC( m_hWnd );
 
 		SIZE size;
@@ -64,26 +69,29 @@ namespace srt
 		BitBlt( wndDC, 0, 0, m_width, m_height, m_hDC, 0, 0, SRCCOPY );
 
 		ReleaseDC( m_hWnd, wndDC );
-
+#endif
 	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void DIBDevice::BlitImage( const Image & image )
+	void WMOutputDevice::BlitImage( const Image & image )
 	{
+#if defined( SRT_PLATFORM_WINDOWS )
 		const PixelSurface::Desc & surfDesc = image.GetMipDesc( 0 );
 		memcpy( m_dcBits, image.GetMipSurface( 0 ), (size_t)surfDesc.pitch * (size_t)surfDesc.height );
+#endif
 	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void DIBDevice::OutputTextImpl( int x, int y, const char * text )
+	void WMOutputDevice::OutputTextImpl( int x, int y, const char * text )
 	{
+#if defined( SRT_PLATFORM_WINDOWS )
 		const int strLen = static_cast< int >( strlen( text ) );
 
 		SetBkMode( m_hDC, TRANSPARENT );
 		TextOutA( m_hDC, x, y, text, strLen );
+#endif
 	}
 }
 
-#endif // SRT_PLATFORM_WINDOWS

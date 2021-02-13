@@ -153,7 +153,7 @@
     <ClInclude Include="srt\Application\Application.h" />
     <ClInclude Include="srt\SrtApplication.h" />
     <ClInclude Include="srt\Base.h" />
-    <ClInclude Include="srt\Graphic\DIBDevice.h" />
+    <ClInclude Include="srt\Graphic\WMOutputDevice.h" />
     <ClInclude Include="srt\Graphic\Material.h" />
     <ClInclude Include="srt\Graphic\OutputDevice.h" />
     <ClInclude Include="srt\Graphic\Image.h" />
@@ -177,7 +177,7 @@
     <ClCompile Include="srt.cpp" />
     <ClCompile Include="srt\Application\Application.cpp" />
     <ClCompile Include="srt\SrtApplication.cpp" />
-    <ClCompile Include="srt\Graphic\DIBDevice.cpp" />
+    <ClCompile Include="srt\Graphic\WMOutputDevice.cpp" />
     <ClCompile Include="srt\Graphic\Image.cpp" />
     <ClCompile Include="srt\Graphic\OutputDevice.cpp" />
     <ClCompile Include="srt\Lighting\LightingUtils.cpp" />

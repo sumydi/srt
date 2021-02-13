@@ -11,10 +11,7 @@
 #include "Scene/Light.h"
 #include "Scene/Camera.h"
 #include "Lighting/LightingUtils.h"
-
-#if defined (SRT_PLATFORM_WINDOWS )
-	#include "Graphic/DIBDevice.h"
-#endif
+#include "Graphic/WMOutputDevice.h"
 
 static constexpr uint32_t kSampleCount = 1;
 static constexpr uint32_t kRayCount = 2;
@@ -47,10 +44,7 @@ namespace srt
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
-	#if defined( SRT_PLATFORM_WINDOWS )
-		// to be improved and make it platform independent....
-		m_outputDev = new DIBDevice( this->GetWindowHandle() );
-	#endif
+		m_outputDev = new WMOutputDevice( this->GetWindowHandle() );
 	}	
 
 	// ------------------------------------------------------------------------
@@ -206,8 +200,8 @@ namespace srt
 
 		static float t = 0.0f;
 		t += dt;
-		const float cs = cos( t );
-		const float si = sin( t );
+		const float cs = cosf( t );
+		const float si = sinf( t );
 
 		SceneObject * obj = m_scene->GetObject( 1 );
 		Vec3 objPos = Vec3{ 0.0f, 0.5f, -1.0f } + Vec3{ cs * 0.8f, cs * 0.3f, si * 1.0f };

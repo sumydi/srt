@@ -1,21 +1,21 @@
-#ifndef SRT_DIBDEVICE_H
-#define SRT_DIBDEVICE_H
+#ifndef SRT_WMOUTUPDEVICE_H
+#define SRT_WMOUTUPDEVICE_H
 
 #include "OutputDevice.h"
 
-#if defined( SRT_PLATFORM_WINDOWS )
 namespace srt
 {
 	// ============================================================================
 	//
-	// Window's specific DIB output device
+	//	Window Manager default output device. It's system specific.
+	//	It's a basic output to screen using current platform window manager.
 	//
 	// ============================================================================
-	class DIBDevice final : public OutputDevice
+	class WMOutputDevice final : public OutputDevice
 	{
 	public:
-		DIBDevice( WindowHandle hWnd );
-		~DIBDevice( ) final;
+		WMOutputDevice( WindowHandle hWnd );
+		~WMOutputDevice( ) final;
 
 		void BlitImage( const Image & image ) final;
 		void Present( ) final;
@@ -23,17 +23,19 @@ namespace srt
 	private:
 		virtual void OutputTextImpl( int x, int y, const char * text  ) final;
 
-		LONG	m_width;
-		LONG	m_height;
-		HWND	m_hWnd;
+		int32_t			m_width;
+		int32_t			m_height;
+		WindowHandle	m_hWnd;
+
+#if defined( SRT_PLATFORM_WINDOWS)
 		HDC		m_hDC;
 		HBITMAP	m_hBitmap;
 		HGDIOBJ	m_hOldBitmap;
 		void *	m_dcBits;
+#endif
 	};
 
 }
 
-#endif // SRT_PLATFORM_WINDOWS
-
 #endif
+

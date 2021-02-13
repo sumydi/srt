@@ -2,7 +2,7 @@
 #define SRT_MATHUTILS_H
 
 #include <algorithm>
-#include <numbers>
+
 namespace srt
 {
 	constexpr float kPI = 3.141592653589793f;
