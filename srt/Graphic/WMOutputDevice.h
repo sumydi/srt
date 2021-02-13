@@ -1,5 +1,5 @@
-#ifndef SRT_WMOUTUPDEVICE_H
-#define SRT_WMOUTUPDEVICE_H
+#ifndef SRT_WMOUTPUPDEVICE_H
+#define SRT_WMOUTPUPDEVICE_H
 
 #include "OutputDevice.h"
 
