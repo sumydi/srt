@@ -42,13 +42,16 @@ namespace srt
 	protected:
 
 		//
-		virtual void FrameStart( ) { };
+		virtual void	FrameStart( ) { };
 
 		// dt is the delta time between the previous frame and the current frame in second
-		virtual void FrameUpdate( const float dt ) = 0;
+		virtual void	FrameUpdate( const float dt ) = 0;
 
 		// frameDuration is the time taken to process the current frame in second
-		virtual void FrameEnd( const float frameDuration ) { };
+		virtual void	FrameEnd( const float frameDuration ) { };
+
+		virtual void	OnKeyUp( char key ) = 0;
+		virtual void	OnKeyDown( char key ) = 0;
 
 	private:
 		Application( ) = delete;

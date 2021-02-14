@@ -29,8 +29,8 @@ private:
 	void FrameUpdate( const float dt ) final;
 	void FrameEnd( const float frameDuration ) final;
 
-	void OnKeyUp( char key );
-	void OnKeyDown( char key );
+	void OnKeyUp( char key ) final;
+	void OnKeyDown( char key ) final;
 
 	SrtApplication( const SrtApplication & other ) = delete;
 
@@ -38,6 +38,7 @@ private:
 	Scene *			m_scene;
 	Image *			m_backBuffer;
 	OutputDevice *	m_outputDev;
+	bool			m_isPaused;
 };
 
 }

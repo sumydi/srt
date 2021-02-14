@@ -22,8 +22,10 @@ namespace srt
 	// ------------------------------------------------------------------------
 	SrtApplication::SrtApplication( const AppContext & context )
 	: Application( context )
+	, m_scene{ nullptr }
 	, m_backBuffer{nullptr }
 	, m_outputDev{ nullptr }
+	, m_isPaused{ false }
 	{
 		m_scene = new Scene;
 
@@ -60,15 +62,18 @@ namespace srt
 	// ------------------------------------------------------------------------
 	void SrtApplication::OnKeyDown( char key )
 	{
-	
 	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	void SrtApplication::OnKeyUp( char key )
 	{
-
+		if( key=='P' )
+		{
+			m_isPaused = !m_isPaused;
+		}
 	}
+
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	static Vec3 RandomInUnitSphere( )
@@ -190,6 +195,8 @@ namespace srt
 
 			Vec4 fcolor{ 1.0f, .0f, .0f, 1.0f };
 		}
+
+		dt = m_isPaused ? 0.0f : dt;
 
 		// Do the real math!
 		uint8_t * surf = reinterpret_cast< uint8_t * >( m_backBuffer->LockMipSurface( 0 ) );

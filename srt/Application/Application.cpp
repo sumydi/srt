@@ -20,9 +20,17 @@ namespace srt
 			break;
 
 			case WM_KEYDOWN:
+				{
+					Application * app = reinterpret_cast< Application * >( GetWindowLongPtr( hWnd, GWLP_USERDATA ) );
+					app->OnKeyDown( (char)wParam );
+				}
 				break;
 
 			case WM_KEYUP:
+				{
+					Application * app = reinterpret_cast< Application * >( GetWindowLongPtr( hWnd, GWLP_USERDATA ) );
+					app->OnKeyUp( (char)wParam );
+				}
 				break;
 
 			case WM_PAINT:
@@ -83,6 +91,7 @@ namespace srt
 		const int wndX = ( GetSystemMetrics( SM_CXSCREEN ) - wndWidth ) / 2;
 		const int wndY = ( GetSystemMetrics( SM_CYSCREEN ) - wndHeight) / 2;
 		m_hWnd = CreateWindow( L"SRTWindowClass", L"SRT", wndStyle, wndX, wndY, wndWidth, wndHeight, NULL, NULL, GetModuleHandle( NULL ), NULL );
+		SetWindowLongPtr( m_hWnd, GWLP_USERDATA, (LONG_PTR)this );
 	#endif
 	}
 
