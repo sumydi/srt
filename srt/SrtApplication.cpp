@@ -25,7 +25,7 @@ namespace srt
 	, m_backBuffer{nullptr }
 	, m_outputDev{ nullptr }
 	{
-			m_scene = new Scene;
+		m_scene = new Scene;
 
 		Material * mat1 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.4f, 0.01f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
@@ -40,7 +40,7 @@ namespace srt
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 0.0f, 1.5f, 2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 4.0f, 4.0f, -2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
 
-		m_scene->AddCamera( new Camera{ Vec3{ 0.0f, 0.0f, 1.0f } } );
+		m_scene->AddCamera( new Camera{ Vec3{ 0.0f, 0.0f, 1.0f }, Vec3{ 0.0f, 0.0f, -1.0f }, 120.0f, (float)context.width / (float)context.height } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
@@ -226,12 +226,12 @@ namespace srt
 				for( uint32_t sampleIdx = 0; sampleIdx < kSampleCount; ++sampleIdx )
 				{
 					// transform coordinates to "normalized" coordinates
-					// note: y is reverted so 1.0 is the top of the image and -1.0 is the bottom
-					const float nx = ( ( (float)x + RandomFloat() * jitteringFactor ) / (float)bbWidth ) * 2.0f * aspectRatio - aspectRatio;
-					const float ny = -( ( ( (float)y + RandomFloat() * jitteringFactor ) / (float)bbHeight ) * 2.0f - 1.0f );
+					const float nx = ( ( (float)x + RandomFloat() * jitteringFactor ) / (float)bbWidth );
+					const float ny = ( ( (float)y + RandomFloat() * jitteringFactor ) / (float)bbHeight );
 
 					// make a ray from the origin to the current normalized pixel
-					const Ray ray{ camera->GetPosition( ), Normalize( Vec3{ nx, ny, -1.0f } ) };
+					const Ray ray = camera->GenerateRay( nx, ny );
+					//const Ray ray{ camera->GetPosition( ), Normalize( Vec3{ nx, ny, -1.0f } ) };
 
 					resultColor += ComputeColor( *m_scene, ray, kRayCount );
 				}

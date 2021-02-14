@@ -9,9 +9,16 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	inline float Clamp( float value, float min, float max )
+	inline float Clamp( const float value, const float min, const float max )
 	{
 		return std::max( std::min( value, max ), min );
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	inline float DegToRad( const float v )
+	{
+		return ( v / 180.0f ) * kPI;
 	}
 }
 
