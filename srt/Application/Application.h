@@ -7,6 +7,7 @@
 //
 // ============================================================================
 #include "Base.h"
+#include "Keyboard.h"
 #include <chrono>
 
 namespace srt
@@ -50,12 +51,15 @@ namespace srt
 		// frameDuration is the time taken to process the current frame in second
 		virtual void	FrameEnd( const float frameDuration ) { };
 
-		virtual void	OnKeyUp( char key ) = 0;
-		virtual void	OnKeyDown( char key ) = 0;
+		virtual void	OnKeyUp( KeyCode key ) = 0;
+		virtual void	OnKeyDown( KeyCode key ) = 0;
 
 	private:
 		Application( ) = delete;
 		Application operator = ( const Application & other ) = delete;
+
+		void	InitPlatform( const AppContext & context );
+		void	TermPlatform( );
 
 	#if defined( SRT_PLATFORM_WINDOWS )
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

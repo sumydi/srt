@@ -29,8 +29,8 @@ private:
 	void FrameUpdate( const float dt ) final;
 	void FrameEnd( const float frameDuration ) final;
 
-	void OnKeyUp( char key ) final;
-	void OnKeyDown( char key ) final;
+	void OnKeyUp( KeyCode key ) final;
+	void OnKeyDown( KeyCode key ) final;
 
 	SrtApplication( const SrtApplication & other ) = delete;
 

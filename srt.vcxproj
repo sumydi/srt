@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="srt\Application\Application.h" />
+    <ClInclude Include="srt\Application\Keyboard.h" />
     <ClInclude Include="srt\SrtApplication.h" />
     <ClInclude Include="srt\Base.h" />
     <ClInclude Include="srt\Graphic\WMOutputDevice.h" />
@@ -176,6 +177,7 @@
   <ItemGroup>
     <ClCompile Include="srt.cpp" />
     <ClCompile Include="srt\Application\Application.cpp" />
+    <ClCompile Include="srt\Application\ApplicationWindows.cpp" />
     <ClCompile Include="srt\SrtApplication.cpp" />
     <ClCompile Include="srt\Graphic\WMOutputDevice.cpp" />
     <ClCompile Include="srt\Graphic\Image.cpp" />

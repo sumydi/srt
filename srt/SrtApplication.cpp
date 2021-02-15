@@ -60,26 +60,26 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void SrtApplication::OnKeyDown( char key )
+	void SrtApplication::OnKeyDown( KeyCode key )
 	{
 	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void SrtApplication::OnKeyUp( char key )
+	void SrtApplication::OnKeyUp( KeyCode key )
 	{
-		if( key=='P' )
+		if( key==KeyCode::kP )
 		{
 			m_isPaused = !m_isPaused;
 		}
 
-		if( key=='k' )
+		if( key==KeyCode::kAdd )
 		{
 			Camera * camera = m_scene->GetCamera( 0 );
 			camera->SetFOV( camera->GetFOV( ) + 1.0f );
 		}
 
-		if( key=='m' )
+		if( key==KeyCode::kSubtract )
 		{
 			Camera * camera = m_scene->GetCamera( 0 );
 			camera->SetFOV( camera->GetFOV( ) - 1.0f );
