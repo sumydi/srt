@@ -26,11 +26,13 @@ namespace srt
 		~Camera( ) = default;
 
 		const Vec3 &	GetPosition( ) const { return m_position; }
-
+		float			GetFOV( ) const { return m_fov; }
+		void			SetFOV( const float fov);
 
 		Ray				GenerateRay( const float x, const float y );
 
 	private:
+		void	UpdateFocalDistance( );
 		Vec3	m_position;
 		Vec3	m_direction;
 		float	m_fov { 90.0f };

@@ -72,6 +72,19 @@ namespace srt
 		{
 			m_isPaused = !m_isPaused;
 		}
+
+		if( key=='k' )
+		{
+			Camera * camera = m_scene->GetCamera( 0 );
+			camera->SetFOV( camera->GetFOV( ) + 1.0f );
+		}
+
+		if( key=='m' )
+		{
+			Camera * camera = m_scene->GetCamera( 0 );
+			camera->SetFOV( camera->GetFOV( ) - 1.0f );
+		}
+
 	}
 
 	// ------------------------------------------------------------------------

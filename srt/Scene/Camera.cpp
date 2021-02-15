@@ -11,7 +11,7 @@ namespace srt
 	, m_fov{ fov }
 	, m_aspectRation{ ratio }
 	{
-		m_focalDistance = tanf( DegToRad( fov / 2.0f ) );
+		UpdateFocalDistance( );
 	}
 
 	// ------------------------------------------------------------------------
@@ -24,4 +24,18 @@ namespace srt
 		return ray;
 	}
 
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Camera::UpdateFocalDistance( )
+	{
+		m_focalDistance = tanf( DegToRad( m_fov / 2.0f ) );
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Camera::SetFOV( const float fov )
+	{
+		m_fov = fov;
+		UpdateFocalDistance( );
+	}
 }
