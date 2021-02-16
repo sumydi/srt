@@ -23,7 +23,7 @@ namespace srt
 	SrtApplication::SrtApplication( const AppContext & context )
 	: Application( context )
 	, m_scene{ nullptr }
-	, m_backBuffer{nullptr }
+	, m_backBuffer{ nullptr }
 	, m_outputDev{ nullptr }
 	, m_isPaused{ false }
 	{
@@ -72,17 +72,25 @@ namespace srt
 		{
 			m_isPaused = !m_isPaused;
 		}
-
-		if( key==KeyCode::kAdd )
+		else if( key==KeyCode::kAdd )
 		{
 			Camera * camera = m_scene->GetCamera( 0 );
 			camera->SetFOV( camera->GetFOV( ) + 1.0f );
 		}
-
-		if( key==KeyCode::kSubtract )
+		else if( key==KeyCode::kSubtract )
 		{
 			Camera * camera = m_scene->GetCamera( 0 );
 			camera->SetFOV( camera->GetFOV( ) - 1.0f );
+		}
+		else if( key==KeyCode::kDown )
+		{
+			Camera * camera = m_scene->GetCamera( 0 );
+			camera->SetPosition( camera->GetPosition( ) + Vec3( 0.0f, 0.0f, 0.2f ) );
+		}
+		else if( key==KeyCode::kUp )
+		{
+			Camera * camera = m_scene->GetCamera( 0 );
+			camera->SetPosition( camera->GetPosition( ) - Vec3( 0.0f, 0.0f, 0.2f ) );
 		}
 
 	}

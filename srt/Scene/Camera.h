@@ -26,6 +26,8 @@ namespace srt
 		~Camera( ) = default;
 
 		const Vec3 &	GetPosition( ) const { return m_position; }
+		void			SetPosition( const Vec3 & pos ) { m_position = pos; }
+
 		float			GetFOV( ) const { return m_fov; }
 		void			SetFOV( const float fov);
 
