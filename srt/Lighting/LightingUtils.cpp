@@ -1,8 +1,6 @@
 #include "LightingUtils.h"
 #include "Scene/Scene.h"
 #include "Scene/Light.h"
-#include "Scene/Camera.h"
-#include "Graphic/Material.h"
 #include "Graphic/Material.h"
 
 namespace srt
@@ -106,12 +104,12 @@ namespace srt
 	//	- https://learnopengl.com/PBR/Lighting
 	//
 	// ------------------------------------------------------------------------
-	Vec3 ComputeBRDF( const Camera & camera, const SceneTraceResult & result, const LightSource & lightSource )
+	Vec3 ComputeBRDF( const const Vec3 & viewPosition, const SceneTraceResult & result, const LightSource & lightSource )
 	{
 
 		// some usefull constants used later
 		const Vec3 L	= -lightSource.direction;
-		const Vec3 V	= Normalize( camera.GetPosition( ) - result.hitResult.position );	// [constant across all lights]
+		const Vec3 V	= Normalize( viewPosition - result.hitResult.position );	// [constant across all lights]
 		const Vec3 H	= Normalize( L + V );
 		const float NdL = std::max( 0.0f, Dot( result.hitResult.normal, L ) );
 		const float HdV	= std::max( 0.01f, Dot( H, V ) );

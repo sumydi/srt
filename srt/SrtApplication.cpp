@@ -126,17 +126,16 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	static Vec3 ComputeColor( const Scene & scene, const Ray& ray, uint32_t rayIdx )
+	static Vec3 ComputeColor( const Scene & scene, const Ray & ray, uint32_t rayIdx )
 	{
 		Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
-		const Camera & camera = *scene.GetCamera( 0 );
 
 		if( rayIdx > 0 )
 		{
-			SceneTraceResult result;
-			scene.TraceRay( ray, 0.001f, FLT_MAX, result );
+			SceneTraceResult primaryResult;
+			scene.TraceRay( ray, 0.001f, FLT_MAX, primaryResult );
 
-			if( result.hitResult.hitTime >= 0.0f )
+			if( primaryResult.hitResult.hitTime >= 0.0f )
 			{
 				// Hit an object: compute lightings for all lights
 				for( size_t lightIdx = 0; lightIdx < scene.GetLightCount(); ++lightIdx )
@@ -144,29 +143,37 @@ namespace srt
 					Light * light = scene.GetLight( lightIdx );
 
 					// shadow ray
-					Ray shadowRay{ result.hitResult.position, Normalize( light->GetPosition() - result.hitResult.position ) };
+					Ray shadowRay{ primaryResult.hitResult.position, Normalize( light->GetPosition() - primaryResult.hitResult.position ) };
 					SceneTraceResult shadowResult;
 					scene.TraceRay( shadowRay, 0.01f, FLT_MAX, shadowResult );
 					if( shadowResult.hitResult.hitTime < 0.0f )
 					{
 						// Direct lighting
-						LightSource	lightSource{ result, *light };
-						resultColor += ComputeBRDF( camera, result, lightSource );
+						LightSource	lightSource{ primaryResult, *light };
+						resultColor += ComputeBRDF( ray.Origin(), primaryResult, lightSource );
 					}
 					else
 					{
-						//const Vec3 reflect = Reflect( shadowResult.hitResult.normal,shadowRay.Direction() );
+						//const Vec3 reflect = Reflect( shadowResult.hitResult.normal, shadowRay.Direction() );
 						//Ray reflectRay{ shadowResult.hitResult.position, reflect };
 						//const Vec3 reflectColor = ComputeColor( scene, reflectRay, rayIdx - 1 );
 						//LightSource lightSource{ shadowResult.hitResult.normal, reflectColor };
-						//resultColor += ComputeBRDF( result, lightSource );
+						//resultColor += ComputeBRDF( camera, shadowResult, lightSource );
 					}
+				}
+
+				//
+				if( primaryResult.material->GetMetalness() > 0.8f )
+				{
+					const Vec3 reflect = Reflect( ray.Direction(), primaryResult.hitResult.normal );
+					const Ray reflectRay { primaryResult.hitResult.position, reflect };
+					resultColor += ComputeColor( scene, reflectRay, rayIdx - 1 );
 				}
 
 				// GI diffuse
 				/*
-				Vec3 target = result.hitResult.position + result.hitResult.normal + RandomUnitVector( );
-				resultColor += 0.5f * ComputeColor( scene, Ray{ result.hitResult.position, Normalize( target - result.hitResult.position ) }, rayIdx + 1 );
+				Vec3 target = primaryResult.hitResult.position + primaryResult.hitResult.normal + RandomUnitVector( );
+				resultColor += 0.5f * ComputeColor( scene, Ray{ primaryResult.hitResult.position, Normalize( target - primaryResult.hitResult.position ) }, rayIdx + 1 );
 				*/
 				//resultColor = Clamp( resultColor, 0.0f, 1.0f );
 				
@@ -259,7 +266,6 @@ namespace srt
 
 					// make a ray from the origin to the current normalized pixel
 					const Ray ray = camera->GenerateRay( nx, ny );
-					//const Ray ray{ camera->GetPosition( ), Normalize( Vec3{ nx, ny, -1.0f } ) };
 
 					resultColor += ComputeColor( *m_scene, ray, kRayCount );
 				}
