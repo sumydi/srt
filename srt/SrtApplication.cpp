@@ -14,7 +14,7 @@
 #include "Graphic/WMOutputDevice.h"
 
 static constexpr uint32_t kSampleCount = 1;
-static constexpr uint32_t kRayCount = 3;
+static constexpr uint32_t kRayCount = 2;
 
 namespace srt
 {
@@ -29,7 +29,7 @@ namespace srt
 	{
 		m_scene = new Scene;
 
-		Material * mat1 = new Material{ Vec3{ 1.0f, 1.0f, 1.0f }, 0.6f, 1.0f };
+		Material * mat1 = new Material{ Vec3{ 1.0f, 1.0f, 1.0f }, 1.0f, 1.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
 
 		Material * mat2 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.2f, 0.0f };
@@ -42,7 +42,7 @@ namespace srt
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 2.0f, 1.5f, 2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 4.0f, 4.0f, -2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
 
-		m_scene->AddCamera( new Camera{ Vec3{ 0.0f, 0.0f, 1.0f }, Vec3{ 0.0f, 0.0f, -1.0f }, 90.0f, (float)context.width / (float)context.height } );
+		m_scene->AddCamera( new Camera{ Vec3{ 0.0f, 0.0f, 1.0f }, Vec3{ 0.0f, 0.0f, -1.0f }, 70.0f, (float)context.width / (float)context.height } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
@@ -170,7 +170,6 @@ namespace srt
 					const Vec3 indirectColor = ComputeColor( scene, reflectRay, rayIdx - 1 );
 					LightSource lightSource{ -reflectRay.Direction(), indirectColor };
 					resultColor += ComputeBRDF( reflectRay.Origin(), primaryResult, lightSource );
-					//resultColor += ComputeColor( scene, reflectRay, rayIdx - 1 );
 				}
 
 				// GI diffuse
