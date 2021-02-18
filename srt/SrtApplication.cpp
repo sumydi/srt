@@ -14,7 +14,7 @@
 #include "Graphic/WMOutputDevice.h"
 
 static constexpr uint32_t kSampleCount = 1;
-static constexpr uint32_t kRayCount = 2;
+static constexpr uint32_t kRayCount = 3;
 
 namespace srt
 {
@@ -29,17 +29,17 @@ namespace srt
 	{
 		m_scene = new Scene;
 
-		Material * mat1 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.4f, 0.01f };
+		Material * mat1 = new Material{ Vec3{ 1.0f, 1.0f, 1.0f }, 0.6f, 1.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
 
-		Material * mat2 = new Material{ Vec3{ 0.4f, 1.0f, 0.2f }, 0.2f, 1.0f };
+		Material * mat2 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.2f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *mat2 } );
 
 		Material * mat3 = new Material{ Vec3{ 0.2f, 0.2f, 1.0f }, 0.7f, 0.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat3 } );
 
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ -1.0f, 2.0f, -3.0f }, Vec3{ 1.0f, -1.0f, 1.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
-		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 0.0f, 1.5f, 2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
+		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 2.0f, 1.5f, 2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 4.0f, 4.0f, -2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
 
 		m_scene->AddCamera( new Camera{ Vec3{ 0.0f, 0.0f, 1.0f }, Vec3{ 0.0f, 0.0f, -1.0f }, 90.0f, (float)context.width / (float)context.height } );
@@ -167,7 +167,10 @@ namespace srt
 				{
 					const Vec3 reflect = Reflect( ray.Direction(), primaryResult.hitResult.normal );
 					const Ray reflectRay { primaryResult.hitResult.position, reflect };
-					resultColor += ComputeColor( scene, reflectRay, rayIdx - 1 );
+					const Vec3 indirectColor = ComputeColor( scene, reflectRay, rayIdx - 1 );
+					LightSource lightSource{ -reflectRay.Direction(), indirectColor };
+					resultColor += ComputeBRDF( reflectRay.Origin(), primaryResult, lightSource );
+					//resultColor += ComputeColor( scene, reflectRay, rayIdx - 1 );
 				}
 
 				// GI diffuse
