@@ -49,9 +49,9 @@ namespace srt
 	//	cosTheta	: dot product between light & view vetors
 	//	F0			: reflective value when directly looking at the surface
 	// ------------------------------------------------------------------------
-	inline Vec3 FresnelSchlick( float cosTheta, const Vec3 & F0 )
+	inline Vec3 FresnelSchlick( float cosTheta, const Vec3 & f0 )
 	{
-		return F0 + ( 1.0f - F0 ) * powf( 1.0f - cosTheta, 5.0f );
+		return f0 + ( 1.0f - f0 ) * powf( 1.0f - cosTheta, 5.0f );
 	}
 
 	// ------------------------------------------------------------------------
@@ -117,17 +117,17 @@ namespace srt
 		const float NdV	= std::max( 0.01f, Dot( result.hitResult.normal, V ) );				// [constant across all lights]
 
 		// Fresnel schlick approx
-		const Vec3 F0	= Lerp( Vec3( 0.04f ), result.material->GetAlbedo(), result.material->GetMetalness() );	// can be computed constant across all lights (and even material if no textures)
-		const Vec3 F	= FresnelSchlick( HdV, F0 );
+		const Vec3 f0	= Lerp( Vec3( 0.04f ), result.material->GetAlbedo(), result.material->GetMetalness() );	// can be computed constant across all lights (and even material if no textures)
+		const Vec3 f	= FresnelSchlick( HdV, f0 );
 
 		// Specular microfacet BRDF
-		const float NDF	= DistributionGGX( NdH, result.material->GetRoughness() );
-		const float G	= GeometrySmith( NdV, NdL, result.material->GetRoughness() );
+		const float d	= DistributionGGX( NdH, result.material->GetRoughness() );
+		const float g	= GeometrySmith( NdV, NdL, result.material->GetRoughness() );
 
-		const Vec3 specularBRDF = ( NDF * G * F ) / std::max( 0.0001f, ( 4.0f * NdV * NdL ) );
+		const Vec3 specularBRDF = ( d * g * f ) / std::max( 0.0001f, ( 4.0f * NdV * NdL ) );
 
 		// Simple Lambertian diffuse
-		const Vec3 kD = ( Vec3( 1.0f ) - F ) * ( 1.0f - result.material->GetMetalness( ) );
+		const Vec3 kD = ( Vec3( 1.0f ) - f ) * ( 1.0f - result.material->GetMetalness( ) );
 		const Vec3 diffuseBRDF = ( kD * result.material->GetAlbedo( ) ) / kPI;
 
 		return ( diffuseBRDF + specularBRDF ) * lightSource.radiance * NdL;
