@@ -168,7 +168,7 @@ namespace srt
 					const Vec3 reflect = Reflect( ray.Direction(), primaryResult.hitResult.normal );
 					const Ray reflectRay { primaryResult.hitResult.position, reflect };
 					const Vec3 indirectColor = ComputeColor( scene, reflectRay, rayIdx - 1 );
-					LightSource lightSource{ -reflectRay.Direction(), indirectColor };
+					LightSource lightSource{ -reflectRay.Direction(), indirectColor *10.0f };
 					resultColor += ComputeBRDF( reflectRay.Origin(), primaryResult, lightSource );
 				}
 
@@ -202,7 +202,10 @@ namespace srt
 	void SrtApplication::FrameEnd( const float frameDuration )
 	{
 		m_outputDev->BlitImage( *m_backBuffer );
-		m_outputDev->OutputText( 10, 10, "FrameDuration: %.4f ms (%u fps)", frameDuration * 1000.0f, ( uint32_t )( 1000.0f / ( frameDuration * 1000.0f ) ) );
+		int y = 10;
+		m_outputDev->OutputText( 10, y, "FrameDuration: %.4f ms (%u fps)", frameDuration * 1000.0f, ( uint32_t )( 1000.0f / ( frameDuration * 1000.0f ) ) );
+		y += 12;
+		m_outputDev->OutputText( 10, y, "Focal: %.02f°", m_scene->GetCamera( 0 )->GetFOV( ) );
 		m_outputDev->Present( );
 	}
 
