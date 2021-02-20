@@ -18,6 +18,7 @@ namespace srt
 #endif
 	{
 #if defined( SRT_PLATFORM_WINDOWS )
+		// Create DIB
 		HDC hDC = GetDC( hWnd );
 		m_hDC = CreateCompatibleDC( hDC );
 		assert( m_hDC!=nullptr );
@@ -28,7 +29,6 @@ namespace srt
 
 		m_width		= ( rect.right - rect.left );
 		m_height	= ( rect.bottom - rect.top );
-
 
 		BITMAPINFO bmpInfos{};
 		bmpInfos.bmiHeader.biSize			= sizeof( BITMAPINFOHEADER );
@@ -42,6 +42,18 @@ namespace srt
 		assert( m_hBitmap!=nullptr );
 
 		m_hOldBitmap = SelectObject( m_hDC, m_hBitmap );
+
+		// Font
+		LOGFONT logFont;
+		memset( &logFont, 0, sizeof( logFont ) );
+		logFont.lfHeight	= -12;
+		logFont.lfWeight	= FW_NORMAL;
+		logFont.lfCharSet	= ANSI_CHARSET;
+		logFont.lfPitchAndFamily = FIXED_PITCH;
+		wcscpy_s( logFont.lfFaceName, L"Consolas" );
+		m_hFont = CreateFontIndirect( &logFont );
+
+		m_hOldFont = SelectObject( m_hDC, m_hFont );
 #endif
 	}
 
@@ -50,7 +62,9 @@ namespace srt
 	WMOutputDevice::~WMOutputDevice( )
 	{
 #if defined( SRT_PLATFORM_WINDOWS )
+		SelectObject( m_hDC, m_hOldFont );
 		SelectObject( m_hDC, m_hOldBitmap );
+		DeleteObject( m_hFont );
 		DeleteObject( m_hBitmap );
 		DeleteDC( m_hDC );
 #endif

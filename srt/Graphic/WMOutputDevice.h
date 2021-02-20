@@ -30,7 +30,9 @@ namespace srt
 #if defined( SRT_PLATFORM_WINDOWS)
 		HDC		m_hDC;
 		HBITMAP	m_hBitmap;
+		HFONT	m_hFont;
 		HGDIOBJ	m_hOldBitmap;
+		HGDIOBJ	m_hOldFont;
 		void *	m_dcBits;
 #endif
 	};
