@@ -29,7 +29,7 @@ namespace srt
 	{
 		m_scene = new Scene;
 
-		Material * mat1 = new Material{ Vec3{ 1.0f, 1.0f, 1.0f }, 1.0f, 1.0f };
+		Material * mat1 = new Material{ Vec3{ 1.0f, 1.0f, 1.0f }, 0.8f, 1.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
 
 		Material * mat2 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.2f, 0.0f };

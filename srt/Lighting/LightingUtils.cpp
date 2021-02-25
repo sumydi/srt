@@ -98,6 +98,18 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	//	
+	// ------------------------------------------------------------------------
+	inline float GeometrySchlick( float NdV, float NdL, float roughness )
+	{
+		const float k  = roughness * 0.5f;
+		const float ggx1  = NdV  / ( NdV * ( 1.0f - k ) + k);
+		const float ggx2  = NdL  / ( NdL * ( 1.0f - k ) + k);
+
+		return ggx1 * ggx2;
+	}
+
+	// ------------------------------------------------------------------------
+	//	
 	// Refs:
 	//	- https://github.com/Nadrin/PBR/blob/master/data/shaders/hlsl/pbr.hlsl
 	//	- https://gist.github.com/galek/53557375251e1a942dfa
@@ -122,7 +134,8 @@ namespace srt
 
 		// Specular microfacet BRDF
 		const float d	= DistributionGGX( NdH, result.material->GetRoughness() );
-		const float g	= GeometrySmith( NdV, NdL, result.material->GetRoughness() );
+		//const float g	= GeometrySmith( NdV, NdL, result.material->GetRoughness() );
+		const float g	= GeometrySchlick( NdV, NdL, result.material->GetRoughness() );
 
 		const Vec3 specularBRDF = ( d * g * f ) / std::max( 0.0001f, ( 4.0f * NdV * NdL ) );
 
