@@ -29,7 +29,7 @@ namespace srt
 	{
 		m_scene = new Scene;
 
-		Material * mat1 = new Material{ Vec3{ 1.0f, 1.0f, 1.0f }, 0.8f, 1.0f };
+		Material * mat1 = new Material{ Vec3{ 1.0f, 1.0f, 1.0f }, 0.5f, 1.0f };
 		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
 
 		Material * mat2 = new Material{ Vec3{ 1.0f, 0.2f, 0.2f }, 0.2f, 0.0f };
@@ -152,14 +152,6 @@ namespace srt
 						LightSource	lightSource{ primaryResult, *light };
 						resultColor += ComputeBRDF( ray.Origin(), primaryResult, lightSource );
 					}
-					else
-					{
-						//const Vec3 reflect = Reflect( shadowResult.hitResult.normal, shadowRay.Direction() );
-						//Ray reflectRay{ shadowResult.hitResult.position, reflect };
-						//const Vec3 reflectColor = ComputeColor( scene, reflectRay, rayIdx - 1 );
-						//LightSource lightSource{ shadowResult.hitResult.normal, reflectColor };
-						//resultColor += ComputeBRDF( camera, shadowResult, lightSource );
-					}
 				}
 
 				//
@@ -168,7 +160,7 @@ namespace srt
 					const Vec3 reflect = Reflect( ray.Direction(), primaryResult.hitResult.normal );
 					const Ray reflectRay { primaryResult.hitResult.position, reflect };
 					const Vec3 indirectColor = ComputeColor( scene, reflectRay, rayIdx - 1 );
-					LightSource lightSource{ -reflectRay.Direction(), indirectColor *10.0f };
+					LightSource lightSource{ -reflectRay.Direction(), indirectColor };
 					resultColor += ComputeBRDF( reflectRay.Origin(), primaryResult, lightSource );
 				}
 
@@ -185,6 +177,7 @@ namespace srt
 				// hit nothing: sky
 				const float t = 0.5f * ( ray.Direction().Y() + 1.0f );
 				resultColor = ( 1.0f - t ) * Vec3{ 1.0f, 1.0f, 1.0f } + t * Vec3{ 0.5f, 0.7f, 1.0f };
+				resultColor *= 10.0f;
 			}
 		}
 
