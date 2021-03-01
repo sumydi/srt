@@ -22,10 +22,6 @@ namespace srt
 	// ------------------------------------------------------------------------
 	SrtApplication::SrtApplication( const AppContext & context )
 	: Application( context )
-	, m_scene{ nullptr }
-	, m_backBuffer{ nullptr }
-	, m_outputDev{ nullptr }
-	, m_isPaused{ false }
 	{
 		m_scene = new Scene;
 
@@ -62,6 +58,14 @@ namespace srt
 	// ------------------------------------------------------------------------
 	void SrtApplication::OnKeyDown( KeyCode key )
 	{
+		if( key==KeyCode::kMouseLeftButton )
+		{
+			m_mouseLeft = true;
+		}
+		else if( key==KeyCode::kMouseRightButton )
+		{
+			m_mouseRight = true;
+		}
 	}
 
 	// ------------------------------------------------------------------------
@@ -92,7 +96,21 @@ namespace srt
 			Camera * camera = m_scene->GetCamera( 0 );
 			camera->SetPosition( camera->GetPosition( ) - Vec3( 0.0f, 0.0f, 0.2f ) );
 		}
+		else if( key==KeyCode::kMouseLeftButton )
+		{
+			m_mouseLeft = false;
+		}
+		else if( key==KeyCode::kMouseRightButton )
+		{
+			m_mouseRight = false;
+		}
+	}
 
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void SrtApplication::OnMouseMove( const MousePos & pos )
+	{
+		m_mousePos = pos;
 	}
 
 	// ------------------------------------------------------------------------
@@ -195,10 +213,40 @@ namespace srt
 	void SrtApplication::FrameEnd( const float frameDuration )
 	{
 		m_outputDev->BlitImage( *m_backBuffer );
+		
 		int y = 10;
 		m_outputDev->OutputText( 10, y, "FrameDuration: %.4f ms (%u fps)", frameDuration * 1000.0f, ( uint32_t )( 1000.0f / ( frameDuration * 1000.0f ) ) );
+
 		y += 12;
 		m_outputDev->OutputText( 10, y, "Focal: %.02f°", m_scene->GetCamera( 0 )->GetFOV( ) );
+		y += 12;
+
+		m_outputDev->OutputText( 10, y, "Mouse: %d, %d", m_mousePos.posX, m_mousePos.posY );
+		y += 12;
+
+		// Picking
+		// -------
+		if( m_mouseLeft )
+		{
+			Camera * camera = m_scene->GetCamera( 0 );
+
+			const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
+			const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
+
+
+			const float nx = (float)m_mousePos.posX / (float)m_backBuffer->GetMipDesc( 0 ).width;
+			const float ny = (float)m_mousePos.posY / (float)m_backBuffer->GetMipDesc( 0 ).height;
+			const Ray ray = camera->GenerateRay( nx, ny );
+
+			SceneTraceResult	traceResult;
+			m_scene->TraceRay( ray, 0.01f, FLT_MAX, traceResult );
+
+			if( traceResult.hitResult.hitTime >= 0.0f )
+			{
+				m_outputDev->OutputText( 10, y , "HIT !!!" );
+			}
+		}
+
 		m_outputDev->Present( );
 	}
 
@@ -225,6 +273,7 @@ namespace srt
 		dt = m_isPaused ? 0.0f : dt;
 
 		// Do the real math!
+		// -----------------
 		uint8_t * surf = reinterpret_cast< uint8_t * >( m_backBuffer->LockMipSurface( 0 ) );
 
 		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;

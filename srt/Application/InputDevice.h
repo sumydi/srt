@@ -1,12 +1,12 @@
-#ifndef SRT_KEYBOARD_H
-#define SRT_KEYBOARD_H
+#ifndef SRT_INPUTDEVICE_H
+#define SRT_INPUTDEVICE_H
 #include "Base.h"
 
 namespace srt
 {
 	// ============================================================================
 	//
-	// Keyboard key code.
+	// Keyboard & mouse key code.
 	//
 	// ============================================================================
 	enum class KeyCode : uint32_t
@@ -68,8 +68,22 @@ namespace srt
 		kY,
 		kZ,
 
-		kUnknow
+		kMouseLeftButton,
+		kMouseMiddleButton,
+		kMouseRightButton,
 
+		kUnknow
+	};
+
+	// ============================================================================
+	//
+	// Mouse position.
+	//
+	// ============================================================================
+	struct MousePos
+	{
+		int32_t		posX { 0 };
+		int32_t		posY { 0 };
 	};
 
 }

@@ -2,7 +2,7 @@
 
 #if defined( SRT_PLATFORM_WINDOWS )
 #include "resource.h"
-#include "Keyboard.h"
+#include "InputDevice.h"
 
 namespace srt
 {
@@ -77,6 +77,8 @@ namespace srt
 	// ------------------------------------------------------------------------
 	LRESULT CALLBACK Application::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
+		Application * app = reinterpret_cast< Application * >( GetWindowLongPtr( hWnd, GWLP_USERDATA ) );
+
 		switch (message)
 		{
 			case WM_COMMAND:
@@ -87,7 +89,6 @@ namespace srt
 
 			case WM_KEYDOWN:
 			{
-				Application * app = reinterpret_cast< Application * >( GetWindowLongPtr( hWnd, GWLP_USERDATA ) );
 				const KeyCode keyCode = ConvertToKeyCode( wParam );
 				app->OnKeyDown( keyCode );
 			}
@@ -95,11 +96,56 @@ namespace srt
 
 			case WM_KEYUP:
 			{
-				Application * app = reinterpret_cast< Application * >( GetWindowLongPtr( hWnd, GWLP_USERDATA ) );
 				const KeyCode keyCode = ConvertToKeyCode( wParam );
 				app->OnKeyUp( keyCode );
 			}
 			break;
+
+			case WM_MOUSEMOVE:
+			{
+				POINTS  points = MAKEPOINTS( lParam );
+				MousePos pos { points.x, points.y };
+				app->OnMouseMove( pos );
+
+			}
+			break;
+
+			case WM_LBUTTONDOWN:
+			{
+				app->OnKeyDown( KeyCode::kMouseLeftButton );
+			}
+			break;
+
+			case WM_LBUTTONUP:
+			{
+				app->OnKeyUp( KeyCode::kMouseLeftButton );
+			}
+			break;
+
+			case WM_MBUTTONDOWN:
+			{
+				app->OnKeyDown( KeyCode::kMouseMiddleButton );
+			}
+			break;
+
+			case WM_MBUTTONUP:
+			{
+				app->OnKeyUp( KeyCode::kMouseMiddleButton );
+			}
+			break;
+
+			case WM_RBUTTONDOWN:
+			{
+				app->OnKeyDown( KeyCode::kMouseRightButton );
+			}
+			break;
+
+			case WM_RBUTTONUP:
+			{
+				app->OnKeyUp( KeyCode::kMouseRightButton );
+			}
+			break;
+
 
 			case WM_PAINT:
 			{

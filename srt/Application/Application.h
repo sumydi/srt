@@ -7,7 +7,7 @@
 //
 // ============================================================================
 #include "Base.h"
-#include "Keyboard.h"
+#include "InputDevice.h"
 #include <chrono>
 
 namespace srt
@@ -53,6 +53,8 @@ namespace srt
 
 		virtual void	OnKeyUp( KeyCode key ) = 0;
 		virtual void	OnKeyDown( KeyCode key ) = 0;
+
+		virtual void	OnMouseMove( const MousePos & pos ) = 0;
 
 	private:
 		Application( ) = delete;

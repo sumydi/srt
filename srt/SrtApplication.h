@@ -32,13 +32,19 @@ private:
 	void OnKeyUp( KeyCode key ) final;
 	void OnKeyDown( KeyCode key ) final;
 
+	void OnMouseMove( const MousePos & pos ) final;
+
 	SrtApplication( const SrtApplication & other ) = delete;
 
 
-	Scene *			m_scene;
-	Image *			m_backBuffer;
-	OutputDevice *	m_outputDev;
-	bool			m_isPaused;
+	Scene *				m_scene { nullptr };
+	Image *				m_backBuffer { nullptr };
+	OutputDevice *		m_outputDev { nullptr };
+	MousePos			m_mousePos;
+
+	bool				m_mouseLeft { false };
+	bool				m_mouseRight { false };
+	bool				m_isPaused { false };
 };
 
 }

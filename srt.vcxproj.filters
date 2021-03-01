@@ -108,7 +108,7 @@
     <ClInclude Include="srt\Graphic\WMOutputDevice.h">
       <Filter>srt\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="srt\Application\Keyboard.h">
+    <ClInclude Include="srt\Application\InputDevice.h">
       <Filter>srt\Application</Filter>
     </ClInclude>
   </ItemGroup>
