@@ -6,8 +6,9 @@ namespace srt
 {
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	Sphere::Sphere( const Vec3 & position, const float radius, const Material & material )
-	: m_radius{ radius }
+	Sphere::Sphere( const char * name, const Vec3 & position, const float radius, const Material & material )
+	: SceneObject{ name }
+	, m_radius{ radius }
 	{
 		m_position = position;
 		m_material = std::make_shared< Material >( material );

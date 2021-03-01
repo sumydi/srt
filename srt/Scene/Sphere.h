@@ -11,7 +11,7 @@ namespace srt
 	class Sphere final : public SceneObject
 	{
 	public:
-		Sphere( const Vec3 & position, const float radius, const Material & material );
+		Sphere( const char * name, const Vec3 & position, const float radius, const Material & material );
 
 		void TraceRay( const Ray & ray, float tMin, float tMax, SceneTraceResult & result ) const final;
 

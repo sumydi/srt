@@ -26,13 +26,13 @@ namespace srt
 		m_scene = new Scene;
 
 		Material * mat1 = new Material{ "White Metal", Vec3{ 1.0f, 1.0f, 1.0f }, 0.5f, 1.0f };
-		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
+		m_scene->AddObject( new Sphere{ "Sphere0", Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
 
 		Material * mat2 = new Material{ "Red", Vec3{ 1.0f, 0.2f, 0.2f }, 0.2f, 0.0f };
-		m_scene->AddObject( new Sphere{ Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *mat2 } );
+		m_scene->AddObject( new Sphere{ "Sphere1", Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *mat2 } );
 
 		Material * mat3 = new Material{ "Blue", Vec3{ 0.2f, 0.2f, 1.0f }, 0.7f, 0.0f };
-		m_scene->AddObject( new Sphere{ Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat3 } );
+		m_scene->AddObject( new Sphere{ "Sphere2", Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat3 } );
 
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ -1.0f, 2.0f, -3.0f }, Vec3{ 1.0f, -1.0f, 1.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 2.0f, 1.5f, 2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
