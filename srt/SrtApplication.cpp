@@ -214,15 +214,10 @@ namespace srt
 	{
 		m_outputDev->BlitImage( *m_backBuffer );
 		
-		int y = 10;
-		m_outputDev->OutputText( 10, y, "FrameDuration: %.4f ms (%u fps)", frameDuration * 1000.0f, ( uint32_t )( 1000.0f / ( frameDuration * 1000.0f ) ) );
-
-		y += 12;
-		m_outputDev->OutputText( 10, y, "Focal: %.02f°", m_scene->GetCamera( 0 )->GetFOV( ) );
-		y += 12;
-
-		m_outputDev->OutputText( 10, y, "Mouse: %d, %d", m_mousePos.posX, m_mousePos.posY );
-		y += 12;
+		m_outputDev->SetTextPosition( 10, 10 );
+		m_outputDev->PushText( "FrameDuration: %.4f ms (%u fps)", frameDuration * 1000.0f, ( uint32_t )( 1000.0f / ( frameDuration * 1000.0f ) ) );
+		m_outputDev->PushText( "Focal: %.02f°", m_scene->GetCamera( 0 )->GetFOV( ) );
+		m_outputDev->PushText( "Mouse: %d, %d", m_mousePos.posX, m_mousePos.posY );
 
 		// Picking
 		// -------
@@ -243,7 +238,7 @@ namespace srt
 
 			if( traceResult.hitResult.hitTime >= 0.0f )
 			{
-				m_outputDev->OutputText( 10, y , "HIT: %s", traceResult.material->GetName( ) );
+				m_outputDev->PushText( "HIT: %s", traceResult.material->GetName( ) );
 			}
 		}
 

@@ -5,6 +5,11 @@
 namespace srt
 {
 
+	namespace
+	{
+		constexpr int kFontHeight = 12;
+	}
+
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	WMOutputDevice::WMOutputDevice( WindowHandle hWnd )
@@ -46,7 +51,7 @@ namespace srt
 		// Font
 		LOGFONT logFont;
 		memset( &logFont, 0, sizeof( logFont ) );
-		logFont.lfHeight	= -12;
+		logFont.lfHeight	= -kFontHeight;
 		logFont.lfWeight	= FW_NORMAL;
 		logFont.lfCharSet	= ANSI_CHARSET;
 		logFont.lfPitchAndFamily = FIXED_PITCH;
@@ -68,6 +73,13 @@ namespace srt
 		DeleteObject( m_hBitmap );
 		DeleteDC( m_hDC );
 #endif
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	int WMOutputDevice::GetFontHeight( ) const
+	{
+		return kFontHeight;
 	}
 
 	// ------------------------------------------------------------------------

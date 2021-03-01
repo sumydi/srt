@@ -17,8 +17,10 @@ namespace srt
 		WMOutputDevice( WindowHandle hWnd );
 		~WMOutputDevice( ) final;
 
-		void BlitImage( const Image & image ) final;
-		void Present( ) final;
+		int		GetFontHeight( ) const final;
+
+		void	BlitImage( const Image & image ) final;
+		void	Present( ) final;
 
 	private:
 		virtual void OutputTextImpl( int x, int y, const char * text  ) final;

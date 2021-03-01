@@ -19,6 +19,10 @@ namespace srt
 		virtual ~OutputDevice() { };
 
 		void			OutputText( int x, int y, const char * text, ...  );
+		void			SetTextPosition( int x, int y );
+		void			PushText( const char * text, ... );
+
+		virtual int		GetFontHeight( ) const = 0;
 
 		virtual void	BlitImage( const Image & image ) = 0;
 		virtual void	Present( ) = 0;
@@ -29,6 +33,9 @@ namespace srt
 		OutputDevice & operator = ( const OutputDevice & other ) = delete;
 
 		virtual void OutputTextImpl( int x, int y, const char * text  ) = 0;
+
+		int		m_textX { 0 };
+		int		m_textY { 0 };
 	};
 
 }

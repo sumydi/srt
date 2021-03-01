@@ -39,6 +39,7 @@ namespace srt
 			{
 				tMax = tmpResult.hitResult.hitTime;
 				result = tmpResult;
+				result.object = it.get();
 			}
 		}
 	}

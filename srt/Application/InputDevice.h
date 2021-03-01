@@ -82,8 +82,8 @@ namespace srt
 	// ============================================================================
 	struct MousePos
 	{
-		int32_t		posX { 0 };
-		int32_t		posY { 0 };
+		int		posX { 0 };
+		int		posY { 0 };
 	};
 
 }

@@ -20,8 +20,9 @@ namespace srt
 	// ============================================================================
 	struct SceneTraceResult
 	{
-		RayHitResult	hitResult;				// Geometric result
-		Material *		material { nullptr };
+		RayHitResult		hitResult;				// Geometric result
+		const SceneObject *	object { nullptr };
+		const Material *	material { nullptr };
 	};
 
 	// ============================================================================

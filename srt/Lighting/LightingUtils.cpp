@@ -116,7 +116,7 @@ namespace srt
 	//	- https://learnopengl.com/PBR/Lighting
 	//
 	// ------------------------------------------------------------------------
-	Vec3 ComputeBRDF( const const Vec3 & viewPosition, const SceneTraceResult & result, const LightSource & lightSource )
+	Vec3 ComputeBRDF( const Vec3 & viewPosition, const SceneTraceResult & result, const LightSource & lightSource )
 	{
 
 		// some usefull constants used later
