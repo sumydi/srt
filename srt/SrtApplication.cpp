@@ -163,26 +163,9 @@ namespace srt
 		const MousePos & mousePos = GetMousePos( );
 		m_outputDev->PushText( "Mouse: %d, %d", mousePos.posX, mousePos.posY );
 
-		// Picking
-		// -------
-		if( GetKeyState( KeyCode::kMouseLeftButton ).pressed )
+		if( m_pickResult.hitResult.hitTime >= 0.0f )
 		{
-			Camera * camera = m_scene->GetCamera( 0 );
-
-			const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
-			const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
-
-			const float nx = (float)mousePos.posX / (float)m_backBuffer->GetMipDesc( 0 ).width;
-			const float ny = (float)mousePos.posY / (float)m_backBuffer->GetMipDesc( 0 ).height;
-			const Ray ray = camera->GenerateRay( nx, ny );
-
-			SceneTraceResult	traceResult;
-			m_scene->TraceRay( ray, 0.01f, FLT_MAX, traceResult );
-
-			if( traceResult.hitResult.hitTime >= 0.0f )
-			{
-				m_outputDev->PushText( "HIT: %s", traceResult.material->GetName( ) );
-			}
+			m_outputDev->PushText( "HIT: %s", m_pickResult.material->GetName( ) );
 		}
 
 		m_outputDev->Present( );
@@ -282,6 +265,22 @@ namespace srt
 		}
 
 		m_backBuffer->UnlockMipSurface( 0 );
+
+		// Pick
+		// ----
+		if( GetKeyState( KeyCode::kMouseLeftButton ).justPressed )
+		{
+			const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
+			const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
+
+			const float nx = (float)GetMousePos().posX / (float)m_backBuffer->GetMipDesc( 0 ).width;
+			const float ny = (float)GetMousePos().posY / (float)m_backBuffer->GetMipDesc( 0 ).height;
+			const Ray ray = camera->GenerateRay( nx, ny );
+
+			SceneTraceResult	traceResult;
+			m_scene->TraceRay( ray, 0.01f, FLT_MAX, traceResult );
+			m_pickResult = traceResult;
+		}
 	}
 
 

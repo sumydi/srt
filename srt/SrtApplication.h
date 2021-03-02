@@ -2,6 +2,8 @@
 #define SRT_SRTAPPPLICATION_H
 
 #include "Application/Application.h"
+#include "Scene/SceneTraceResult.h"
+
 #include <chrono>
 
 namespace srt
@@ -37,6 +39,8 @@ private:
 	OutputDevice *		m_outputDev { nullptr };
 
 	bool				m_isPaused { false };
+
+	SceneTraceResult	m_pickResult;
 };
 
 }
