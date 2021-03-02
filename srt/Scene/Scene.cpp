@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "Math/Ray.h"
+#include "SceneTraceResult.h"
 #include "SceneObject.h"
 #include "Light.h"
 #include "Camera.h"

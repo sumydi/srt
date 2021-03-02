@@ -31,7 +31,7 @@ private:
 
 	SrtApplication( const SrtApplication & other ) = delete;
 
-
+	 
 	Scene *				m_scene { nullptr };
 	Image *				m_backBuffer { nullptr };
 	OutputDevice *		m_outputDev { nullptr };

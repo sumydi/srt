@@ -10,6 +10,7 @@
 #include "Scene/Sphere.h"
 #include "Scene/Light.h"
 #include "Scene/Camera.h"
+#include "Scene/SceneTraceResult.h"
 #include "Lighting/LightingUtils.h"
 #include "Graphic/WMOutputDevice.h"
 

@@ -1,5 +1,6 @@
 #include "Sphere.h"
 #include "Scene/Scene.h"
+#include "Scene/ScenetraceResult.h"
 #include "Graphic/Material.h"
 
 namespace srt
