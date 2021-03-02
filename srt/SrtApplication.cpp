@@ -196,12 +196,12 @@ namespace srt
 		
 		if( GetKeyState( KeyCode::kDown ).pressed )
 		{
-			camera->SetPosition( camera->GetPosition( ) + Vec3( 0.0f, 0.0f, 0.2f ) );
+			camera->SetPosition( camera->GetPosition( ) + Vec3( 0.0f, 0.0f, 0.2f ) * dt );
 		}
 
 		if( GetKeyState( KeyCode::kUp ).pressed )
 		{
-			camera->SetPosition( camera->GetPosition( ) - Vec3( 0.0f, 0.0f, 0.2f ) );
+			camera->SetPosition( camera->GetPosition( ) - Vec3( 0.0f, 0.0f, 0.2f ) * dt );
 		}
 
 
