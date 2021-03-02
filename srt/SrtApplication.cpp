@@ -165,7 +165,9 @@ namespace srt
 
 		if( m_pickResult.hitResult.hitTime >= 0.0f )
 		{
-			m_outputDev->PushText( "HIT: %s", m_pickResult.material->GetName( ) );
+			m_outputDev->PushText( "HIT", m_pickResult.material->GetName( ) );
+			m_outputDev->PushText( "  Object %s", m_pickResult.object->GetName( ) );
+			m_outputDev->PushText( "  Material %s", m_pickResult.material->GetName( ) );
 		}
 
 		m_outputDev->Present( );
@@ -211,7 +213,6 @@ namespace srt
 
 		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
 		const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
-		const float aspectRatio = (float)bbWidth / (float)bbHeight;
 
 		static float t = 0.0f;
 		t += dt;
@@ -222,9 +223,9 @@ namespace srt
 		Vec3 objPos = Vec3{ 0.0f, 0.5f, -1.0f } + Vec3{ cs * 0.8f, cs * 0.3f, si * 1.0f };
 		obj->SetPosition( objPos );
 
-		Light * light = m_scene->GetLight( 0 );
-		Vec3 lightPos = light->GetPosition( );
-		lightPos = lightPos + Vec3{ -cs * 0.5f, 0.0f, 0.0f };
+//		Light * light = m_scene->GetLight( 0 );
+//		Vec3 lightPos = light->GetPosition( );
+//		lightPos = lightPos + Vec3{ -cs * 0.5f, 0.0f, 0.0f };
 //		light->SetPosition( lightPos );
 
 		// do not apply jitterring on the camera when kSamplecount==1 to avoid wobling picture
@@ -270,11 +271,8 @@ namespace srt
 		// ----
 		if( GetKeyState( KeyCode::kMouseLeftButton ).justPressed )
 		{
-			const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
-			const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
-
-			const float nx = (float)GetMousePos().posX / (float)m_backBuffer->GetMipDesc( 0 ).width;
-			const float ny = (float)GetMousePos().posY / (float)m_backBuffer->GetMipDesc( 0 ).height;
+			const float nx = (float)GetMousePos().posX / (float)bbWidth;
+			const float ny = (float)GetMousePos().posY / (float)bbHeight;
 			const Ray ray = camera->GenerateRay( nx, ny );
 
 			SceneTraceResult	traceResult;
