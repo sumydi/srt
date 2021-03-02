@@ -1,4 +1,5 @@
 #include "Application.h"
+#include <assert.h>
 
 namespace srt
 {
@@ -7,6 +8,7 @@ namespace srt
 	// ------------------------------------------------------------------------
 	Application::Application( const AppContext & context )
 	{
+		memset( m_keyPressed, 0, sizeof( m_keyPressed ) );
 		InitPlatform( context );
 	}
 
@@ -40,6 +42,26 @@ namespace srt
 		#endif
 
 			const auto startFrameTime = std::chrono::high_resolution_clock::now( );
+
+			// Update key states
+			for( size_t key = (size_t)KeyCode::kEscape; key < (size_t)KeyCode::kCount; ++key )
+			{
+				if( m_keyPressed[ key ] )
+				{
+					if( !m_keyState[ key ].pressed )
+						m_keyState[ key ].justPressed = 1;
+					else
+						m_keyState[ key ].justPressed = 0;
+					m_keyState[ key ].pressed = 1;
+				}
+				else
+				{
+					m_keyState[ key ].justPressed = 0;
+					m_keyState[ key ].pressed = 0;
+				}
+			}
+
+			// Update frame
 			FrameStart( );
 			FrameUpdate( frameDuration );
 			const auto endFrameTime = std::chrono::high_resolution_clock::now( );
@@ -47,5 +69,43 @@ namespace srt
 			FrameEnd( frameDuration );
 		}
 	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	const KeyState & Application::GetKeyState( KeyCode key ) const
+	{
+		assert( key < KeyCode::kCount );
+
+		return m_keyState[ (size_t)key ];
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Application::OnKeyDown( KeyCode key )
+	{
+		if( key < KeyCode::kCount )
+		{
+			m_keyPressed[ (size_t)key ] = 1;
+		}
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Application::OnKeyUp( KeyCode key )
+	{
+		if( key < KeyCode::kCount )
+		{
+			m_keyPressed[ (size_t)key ] = 0;
+		}
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Application::OnMouseMove( const MousePos & pos )
+	{
+		m_mousePos = pos;	
+	}
+
+
 
 }

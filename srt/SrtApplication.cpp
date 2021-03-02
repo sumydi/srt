@@ -56,65 +56,6 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void SrtApplication::OnKeyDown( KeyCode key )
-	{
-		if( key==KeyCode::kMouseLeftButton )
-		{
-			m_mouseLeft = true;
-		}
-		else if( key==KeyCode::kMouseRightButton )
-		{
-			m_mouseRight = true;
-		}
-	}
-
-	// ------------------------------------------------------------------------
-	// ------------------------------------------------------------------------
-	void SrtApplication::OnKeyUp( KeyCode key )
-	{
-		if( key==KeyCode::kP )
-		{
-			m_isPaused = !m_isPaused;
-		}
-		else if( key==KeyCode::kAdd )
-		{
-			Camera * camera = m_scene->GetCamera( 0 );
-			camera->SetFOV( camera->GetFOV( ) + 1.0f );
-		}
-		else if( key==KeyCode::kSubtract )
-		{
-			Camera * camera = m_scene->GetCamera( 0 );
-			camera->SetFOV( camera->GetFOV( ) - 1.0f );
-		}
-		else if( key==KeyCode::kDown )
-		{
-			Camera * camera = m_scene->GetCamera( 0 );
-			camera->SetPosition( camera->GetPosition( ) + Vec3( 0.0f, 0.0f, 0.2f ) );
-		}
-		else if( key==KeyCode::kUp )
-		{
-			Camera * camera = m_scene->GetCamera( 0 );
-			camera->SetPosition( camera->GetPosition( ) - Vec3( 0.0f, 0.0f, 0.2f ) );
-		}
-		else if( key==KeyCode::kMouseLeftButton )
-		{
-			m_mouseLeft = false;
-		}
-		else if( key==KeyCode::kMouseRightButton )
-		{
-			m_mouseRight = false;
-		}
-	}
-
-	// ------------------------------------------------------------------------
-	// ------------------------------------------------------------------------
-	void SrtApplication::OnMouseMove( const MousePos & pos )
-	{
-		m_mousePos = pos;
-	}
-
-	// ------------------------------------------------------------------------
-	// ------------------------------------------------------------------------
 	static Vec3 RandomInUnitSphere( )
 	{
 		const float x = RandomFloat( -1.0f, 1.0f );
@@ -217,20 +158,21 @@ namespace srt
 		m_outputDev->SetTextPosition( 10, 10 );
 		m_outputDev->PushText( "FrameDuration: %.4f ms (%u fps)", frameDuration * 1000.0f, ( uint32_t )( 1000.0f / ( frameDuration * 1000.0f ) ) );
 		m_outputDev->PushText( "Focal: %.02f°", m_scene->GetCamera( 0 )->GetFOV( ) );
-		m_outputDev->PushText( "Mouse: %d, %d", m_mousePos.posX, m_mousePos.posY );
+
+		const MousePos & mousePos = GetMousePos( );
+		m_outputDev->PushText( "Mouse: %d, %d", mousePos.posX, mousePos.posY );
 
 		// Picking
 		// -------
-		if( m_mouseLeft )
+		if( GetKeyState( KeyCode::kMouseLeftButton ).pressed )
 		{
 			Camera * camera = m_scene->GetCamera( 0 );
 
 			const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
 			const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
 
-
-			const float nx = (float)m_mousePos.posX / (float)m_backBuffer->GetMipDesc( 0 ).width;
-			const float ny = (float)m_mousePos.posY / (float)m_backBuffer->GetMipDesc( 0 ).height;
+			const float nx = (float)mousePos.posX / (float)m_backBuffer->GetMipDesc( 0 ).width;
+			const float ny = (float)mousePos.posY / (float)m_backBuffer->GetMipDesc( 0 ).height;
 			const Ray ray = camera->GenerateRay( nx, ny );
 
 			SceneTraceResult	traceResult;
@@ -249,21 +191,33 @@ namespace srt
 	// ------------------------------------------------------------------------
 	void SrtApplication::FrameUpdate( float dt )
 	{
-		// Unit test vectors
+		Camera * camera = m_scene->GetCamera( 0 );
+
+		if( GetKeyState( KeyCode::kP ).justPressed )
 		{
-			Vec3 vx{ 10.0f, 0.0f, 0.0f };
-
-			const float len = Length( vx );
-			Vec3 vxn = Normalize( vx );
-			const float newLen = Length( vxn );
-
-			Vec3 vy{ 0.0f, 5.0f, 0.0f };
-			Vec3 vyn = Normalize( vy );
-
-			Vec3 vz = Cross( vxn, vyn );
-
-			Vec4 fcolor{ 1.0f, .0f, .0f, 1.0f };
+			m_isPaused = !m_isPaused;
 		}
+
+		if( GetKeyState( KeyCode::kAdd ).pressed )
+		{
+			camera->SetFOV( camera->GetFOV( ) + 1.0f );
+		}
+		
+		if( GetKeyState( KeyCode::kSubtract ).pressed )
+		{
+			camera->SetFOV( camera->GetFOV( ) - 1.0f );
+		}
+		
+		if( GetKeyState( KeyCode::kDown ).pressed )
+		{
+			camera->SetPosition( camera->GetPosition( ) + Vec3( 0.0f, 0.0f, 0.2f ) );
+		}
+
+		if( GetKeyState( KeyCode::kUp ).pressed )
+		{
+			camera->SetPosition( camera->GetPosition( ) - Vec3( 0.0f, 0.0f, 0.2f ) );
+		}
+
 
 		dt = m_isPaused ? 0.0f : dt;
 
@@ -288,8 +242,6 @@ namespace srt
 		Vec3 lightPos = light->GetPosition( );
 		lightPos = lightPos + Vec3{ -cs * 0.5f, 0.0f, 0.0f };
 //		light->SetPosition( lightPos );
-
-		Camera * camera = m_scene->GetCamera( 0 );
 
 		// do not apply jitterring on the camera when kSamplecount==1 to avoid wobling picture
 		const float jitteringFactor = kSampleCount > 1 ? 1.0f : 0.0f;

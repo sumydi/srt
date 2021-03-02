@@ -72,8 +72,28 @@ namespace srt
 		kMouseMiddleButton,
 		kMouseRightButton,
 
-		kUnknow
+		kUnknow,
+		kCount = kUnknow
 	};
+
+	// ============================================================================
+	//
+	// Key state.
+	//
+	// ============================================================================
+	struct KeyState
+	{
+		union
+		{
+			uint32_t	raw { 0 };
+			struct
+			{
+				uint32_t	pressed : 1;		// if set to 1, the key is pressed
+				uint32_t	justPressed : 1;	// if set to 1, this is the first time the key is pressed, else the key is hold
+			};
+		};
+	};
+
 
 	// ============================================================================
 	//

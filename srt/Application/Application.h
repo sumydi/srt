@@ -37,8 +37,12 @@ namespace srt
 		Application( const AppContext & context );
 		virtual ~Application( );
 
-		void			Run( );
-		WindowHandle	GetWindowHandle( ) const { return m_hWnd; }
+		void				Run( );
+		WindowHandle		GetWindowHandle( ) const { return m_hWnd; }
+
+		const KeyState &	GetKeyState( KeyCode key ) const;
+
+		const MousePos &	GetMousePos( ) const { return m_mousePos; }
 
 	protected:
 
@@ -51,10 +55,10 @@ namespace srt
 		// frameDuration is the time taken to process the current frame in second
 		virtual void	FrameEnd( const float frameDuration ) { };
 
-		virtual void	OnKeyUp( KeyCode key ) = 0;
-		virtual void	OnKeyDown( KeyCode key ) = 0;
+		void	OnKeyDown( KeyCode key );
+		void	OnKeyUp( KeyCode key );
 
-		virtual void	OnMouseMove( const MousePos & pos ) = 0;
+		void	OnMouseMove( const MousePos & pos );
 
 	private:
 		Application( ) = delete;
@@ -63,11 +67,16 @@ namespace srt
 		void	InitPlatform( const AppContext & context );
 		void	TermPlatform( );
 
-	#if defined( SRT_PLATFORM_WINDOWS )
-		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	#endif
 		AppHandle		m_hApp;
 		WindowHandle	m_hWnd;
+
+		uint8_t			m_keyPressed[ (size_t)KeyCode::kCount ];
+		KeyState		m_keyState[ (size_t)KeyCode::kCount ];
+		MousePos		m_mousePos;
+
+		#if defined( SRT_PLATFORM_WINDOWS )
+			static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+		#endif
 	};
 }
 #endif
