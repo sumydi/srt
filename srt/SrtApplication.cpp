@@ -168,6 +168,9 @@ namespace srt
 			m_outputDev->PushText( "HIT", m_pickResult.material->GetName( ) );
 			m_outputDev->PushText( "  Object %s", m_pickResult.object->GetName( ) );
 			m_outputDev->PushText( "  Material %s", m_pickResult.material->GetName( ) );
+			m_outputDev->PushText( "    Albedo    : %.3f, %.3f, %.3f", m_pickResult.material->GetAlbedo().X(), m_pickResult.material->GetAlbedo().Y(), m_pickResult.material->GetAlbedo().Z() );
+			m_outputDev->PushText( "    Rougness  : %.2f", m_pickResult.material->GetRoughness() );
+			m_outputDev->PushText( "    Metalness : %.2f", m_pickResult.material->GetMetalness() );
 		}
 
 		m_outputDev->Present( );
