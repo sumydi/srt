@@ -156,6 +156,7 @@ namespace srt
 	{
 		m_outputDev->BlitImage( *m_backBuffer );
 		
+		m_outputDev->SetTextColor( 0, 0, 0 );
 		m_outputDev->SetTextPosition( 10, 10 );
 		m_outputDev->PushText( "FrameDuration: %.4f ms (%u fps)", frameDuration * 1000.0f, ( uint32_t )( 1000.0f / ( frameDuration * 1000.0f ) ) );
 		m_outputDev->PushText( "Focal: %.02f°", m_scene->GetCamera( 0 )->GetFOV( ) );
@@ -165,12 +166,15 @@ namespace srt
 
 		if( m_pickResult.hitResult.hitTime >= 0.0f )
 		{
+			m_outputDev->SetTextColor( 255, 0, 0 );
 			m_outputDev->PushText( "HIT", m_pickResult.material->GetName( ) );
 			m_outputDev->PushText( "  Object %s", m_pickResult.object->GetName( ) );
 			m_outputDev->PushText( "  Material %s", m_pickResult.material->GetName( ) );
 			m_outputDev->PushText( "    Albedo    : %.3f, %.3f, %.3f", m_pickResult.material->GetAlbedo().X(), m_pickResult.material->GetAlbedo().Y(), m_pickResult.material->GetAlbedo().Z() );
 			m_outputDev->PushText( "    Rougness  : %.2f", m_pickResult.material->GetRoughness() );
 			m_outputDev->PushText( "    Metalness : %.2f", m_pickResult.material->GetMetalness() );
+			const Vec3 f0 = ComputeF0( m_pickResult.material->GetAlbedo(), m_pickResult.material->GetMetalness() );
+			m_outputDev->PushText( "    F0        : %.2f, %.2f, %.2f", f0.X(), f0.Y(), f0.Z() );
 		}
 
 		m_outputDev->Present( );

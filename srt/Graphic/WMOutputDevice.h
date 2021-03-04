@@ -23,19 +23,20 @@ namespace srt
 		void	Present( ) final;
 
 	private:
-		virtual void OutputTextImpl( int x, int y, const char * text  ) final;
-
+		void	SetTextColorImpl( uint8_t r, uint8_t g, uint8_t b ) final;
+		void	OutputTextImpl( int x, int y, const char * text  ) final;
+		
 		int32_t			m_width;
 		int32_t			m_height;
 		WindowHandle	m_hWnd;
 
-#if defined( SRT_PLATFORM_WINDOWS)
-		HDC		m_hDC;
-		HBITMAP	m_hBitmap;
-		HFONT	m_hFont;
-		HGDIOBJ	m_hOldBitmap;
-		HGDIOBJ	m_hOldFont;
-		void *	m_dcBits;
+#if defined( SRT_PLATFORM_WINDOWS )
+		HDC				m_hDC;
+		HBITMAP			m_hBitmap;
+		HFONT			m_hFont;
+		HGDIOBJ			m_hOldBitmap;
+		HGDIOBJ			m_hOldFont;
+		void *			m_dcBits;
 #endif
 	};
 

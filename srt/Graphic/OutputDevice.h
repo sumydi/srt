@@ -18,7 +18,7 @@ namespace srt
 		OutputDevice() = default;
 		virtual ~OutputDevice() { };
 
-		void			OutputText( int x, int y, const char * text, ...  );
+		void			SetTextColor( uint8_t r, uint8_t g, uint8_t b );
 		void			SetTextPosition( int x, int y );
 		void			PushText( const char * text, ... );
 
@@ -26,12 +26,12 @@ namespace srt
 
 		virtual void	BlitImage( const Image & image ) = 0;
 		virtual void	Present( ) = 0;
-		
-
+	
 	private:
 		OutputDevice( const OutputDevice & other ) = delete;
 		OutputDevice & operator = ( const OutputDevice & other ) = delete;
 
+		virtual	void SetTextColorImpl( uint8_t r, uint8_t g, uint8_t b ) = 0;
 		virtual void OutputTextImpl( int x, int y, const char * text  ) = 0;
 
 		int		m_textX { 0 };

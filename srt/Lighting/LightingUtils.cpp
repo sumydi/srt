@@ -130,7 +130,7 @@ namespace srt
 		const float NdV	= std::max( 0.01f, Dot( result.hitResult.normal, V ) );				// [constant across all lights]
 
 		// Fresnel schlick approx
-		const Vec3 f0	= Lerp( Vec3( 0.04f ), result.material->GetAlbedo(), result.material->GetMetalness() );	// can be computed constant across all lights (and even material if no textures)
+		const Vec3 f0	= ComputeF0( result.material->GetAlbedo(), result.material->GetMetalness() );	// can be computed constant across all lights (and even material if no textures)
 		const Vec3 f	= FresnelSchlick( HdV, f0 );
 
 		// Specular microfacet BRDF

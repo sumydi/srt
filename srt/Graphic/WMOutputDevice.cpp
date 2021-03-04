@@ -7,7 +7,7 @@ namespace srt
 
 	namespace
 	{
-		constexpr int kFontHeight = 12;
+		constexpr int kFontHeight = 10;
 	}
 
 	// ------------------------------------------------------------------------
@@ -105,6 +105,17 @@ namespace srt
 #if defined( SRT_PLATFORM_WINDOWS )
 		const PixelSurface::Desc & surfDesc = image.GetMipDesc( 0 );
 		memcpy( m_dcBits, image.GetMipSurface( 0 ), (size_t)surfDesc.pitch * (size_t)surfDesc.height );
+#endif
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void WMOutputDevice::SetTextColorImpl( uint8_t r, uint8_t g, uint8_t b )
+	{
+#if defined( SRT_PLATFORM_WINDOWS )
+		COLORREF color = RGB( r, g, b );
+		::SetTextColor( m_hDC, color );
+
 #endif
 	}
 

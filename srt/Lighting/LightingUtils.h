@@ -24,6 +24,17 @@ namespace srt
 	};
 
 	// ----------------------------------------------------------------------------
+	// F0 is the fresnel reflectance at 0 degrees.
+	//
+	//	metalRef	: metal reflectance color.
+	//	metalness	: 0 = full dieletric, 1 = full metal
+	// ----------------------------------------------------------------------------
+	inline Vec3 ComputeF0( const Vec3 & metalRef, float metalness )
+	{
+		return Lerp( Vec3( 0.04f ), metalRef, metalness );
+	}
+
+	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
 	Vec3 ComputeBRDF( const Vec3 & viewPosition, const SceneTraceResult & result, const LightSource & lightSource );
 
