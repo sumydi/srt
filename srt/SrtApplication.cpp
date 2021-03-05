@@ -146,6 +146,38 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
+	void SrtApplication::UpdateEditMode( )
+	{
+		//
+		if( m_pickResult.material!=nullptr )
+		{
+			if( GetKeyState( KeyCode::kM ).pressed  )
+			{
+				if( GetKeyState( KeyCode::kAdd ).pressed )
+				{
+					m_pickResult.material->SetMetalness( m_pickResult.material->GetMetalness( ) + 0.05f );
+				}
+				else if( GetKeyState( KeyCode::kSubtract ).pressed )
+				{
+					m_pickResult.material->SetMetalness( m_pickResult.material->GetMetalness( ) - 0.05f );
+				}
+			}
+			else if( GetKeyState( KeyCode::kR ).pressed )
+			{
+				if( GetKeyState( KeyCode::kAdd ).pressed )
+				{
+					m_pickResult.material->SetRoughness( m_pickResult.material->GetRoughness( ) + 0.05f );
+				}
+				else if( GetKeyState( KeyCode::kSubtract ).pressed )
+				{
+					m_pickResult.material->SetRoughness( m_pickResult.material->GetRoughness( ) - 0.05f );
+				}
+			}
+		}
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	void SrtApplication::FrameStart( )
 	{
 	}
@@ -166,13 +198,24 @@ namespace srt
 
 		if( m_pickResult.hitResult.hitTime >= 0.0f )
 		{
-			m_outputDev->SetTextColor( 255, 0, 0 );
 			m_outputDev->PushText( "HIT", m_pickResult.material->GetName( ) );
 			m_outputDev->PushText( "  Object %s", m_pickResult.object->GetName( ) );
 			m_outputDev->PushText( "  Material %s", m_pickResult.material->GetName( ) );
 			m_outputDev->PushText( "    Albedo    : %.3f, %.3f, %.3f", m_pickResult.material->GetAlbedo().X(), m_pickResult.material->GetAlbedo().Y(), m_pickResult.material->GetAlbedo().Z() );
+
+			if( GetKeyState( KeyCode::kR ).pressed )
+				m_outputDev->SetTextColor( 255, 0, 0 );
+			else
+				m_outputDev->SetTextColor( 0, 0, 0 );
 			m_outputDev->PushText( "    Rougness  : %.2f", m_pickResult.material->GetRoughness() );
+
+			if( GetKeyState( KeyCode::kM ).pressed )
+				m_outputDev->SetTextColor( 255, 0, 0 );
+			else
+				m_outputDev->SetTextColor( 0, 0, 0 );
 			m_outputDev->PushText( "    Metalness : %.2f", m_pickResult.material->GetMetalness() );
+
+			m_outputDev->SetTextColor( 0, 0, 0 );
 			const Vec3 f0 = ComputeF0( m_pickResult.material->GetAlbedo(), m_pickResult.material->GetMetalness() );
 			m_outputDev->PushText( "    F0        : %.2f, %.2f, %.2f", f0.X(), f0.Y(), f0.Z() );
 		}
@@ -191,16 +234,6 @@ namespace srt
 			m_isPaused = !m_isPaused;
 		}
 
-		if( GetKeyState( KeyCode::kAdd ).pressed )
-		{
-			camera->SetFOV( camera->GetFOV( ) + 1.0f );
-		}
-		
-		if( GetKeyState( KeyCode::kSubtract ).pressed )
-		{
-			camera->SetFOV( camera->GetFOV( ) - 1.0f );
-		}
-		
 		if( GetKeyState( KeyCode::kDown ).pressed )
 		{
 			camera->SetPosition( camera->GetPosition( ) + Vec3( 0.0f, 0.0f, 0.2f ) * dt );
@@ -210,6 +243,8 @@ namespace srt
 		{
 			camera->SetPosition( camera->GetPosition( ) - Vec3( 0.0f, 0.0f, 0.2f ) * dt );
 		}
+
+		UpdateEditMode( );
 
 
 		dt = m_isPaused ? 0.0f : dt;

@@ -68,15 +68,15 @@ namespace srt
 	{
 		const float a = roughness * roughness;
 		const float a2 = a * a;
-		const float d = ( NdH * a2 - NdH ) * NdH + 1.0f;
+		const float d = ( NdH * NdH ) * ( a2 - 1.0f ) + 1.0f;
 		return a2 / ( kPI * d * d );
 	}
 
 	// ------------------------------------------------------------------------
 	//	Slick/GGX geometry shadowing.
 	//
-	//	dot	: can be dot normal & light (geom obstruction) or normal & view ( geom shadowing)
-	//	k	: roughness remaping (depending of direct light or IBKL)
+	//	dot	: can be dot normal & light (geom obstruction) or normal & view (geom shadowing)
+	//	k	: roughness remaping (depending of direct light or IBL)
 	//
 	// ------------------------------------------------------------------------
 	inline float GeometrySchlickGGX( float dot, float k )
@@ -122,7 +122,7 @@ namespace srt
 
 		// some usefull constants used later
 		const Vec3 L	= -lightSource.direction;
-		const Vec3 V	= Normalize( viewPosition - result.hitResult.position );	// [constant across all lights]
+		const Vec3 V	= Normalize( viewPosition - result.hitResult.position );			// [constant across all lights]
 		const Vec3 H	= Normalize( L + V );
 		const float NdL = std::max( 0.0f, Dot( result.hitResult.normal, L ) );
 		const float HdV	= std::max( 0.01f, Dot( H, V ) );

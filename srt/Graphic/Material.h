@@ -37,10 +37,10 @@ namespace srt
 		void			SetAlbedo( const Vec3 & albedo ) { m_albedo = albedo; }
 
 		float			GetRoughness( ) const { return m_roughness; }
-		void			SetRoughness( const float roughness ) { m_roughness = roughness; }
+		void			SetRoughness( const float roughness ) { m_roughness = std::max( 0.02f, std::min( 1.0f, roughness ) ); }
 
 		float			GetMetalness( ) const { return m_metalness; }
-		void			SetMetalness( const float metalness ) { m_metalness = metalness; }
+		void			SetMetalness( const float metalness ) { m_metalness = std::max( 0.0f, std::min( 1.0f, metalness ) ); }
 	
 	private:
 		std::string		m_name;

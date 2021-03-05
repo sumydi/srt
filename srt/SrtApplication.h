@@ -27,6 +27,8 @@ public:
 
 private:
 
+	void UpdateEditMode( );
+
 	void FrameStart( ) final;
 	void FrameUpdate( const float dt ) final;
 	void FrameEnd( const float frameDuration ) final;
