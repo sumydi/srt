@@ -1,4 +1,5 @@
 #include "SrtApplication.h"
+#include "JobScheduler/JobScheduler.h"
 #include "Graphic/Image.h"
 #include "Graphic/Material.h"
 #include "Math/Vector3.h"
@@ -24,6 +25,9 @@ namespace srt
 	SrtApplication::SrtApplication( const AppContext & context )
 	: Application( context )
 	{
+
+		m_jobScheduler = new JobScheduler{ 4 };
+
 		m_scene = new Scene;
 
 		Material * mat1 = new Material{ "White Metal", Vec3{ 1.0f, 1.0f, 1.0f }, 0.5f, 1.0f };
@@ -53,6 +57,7 @@ namespace srt
 		delete m_scene;
 		delete m_backBuffer;
 		delete m_outputDev;
+		delete m_jobScheduler;
 	}
 
 	// ------------------------------------------------------------------------

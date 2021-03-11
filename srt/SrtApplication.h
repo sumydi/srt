@@ -13,6 +13,7 @@ class Image;
 class OutputDevice;
 class Scene;
 class Ray;
+class JobScheduler;
 
 // ============================================================================
 //
@@ -35,6 +36,7 @@ private:
 
 	SrtApplication( const SrtApplication & other ) = delete;
 
+	JobScheduler *		m_jobScheduler { nullptr };
 	 
 	Scene *				m_scene { nullptr };
 	Image *				m_backBuffer { nullptr };

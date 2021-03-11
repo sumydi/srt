@@ -152,6 +152,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="srt\Application\Application.h" />
     <ClInclude Include="srt\Application\InputDevice.h" />
+    <ClInclude Include="srt\JobScheduler\JobScheduler.h" />
     <ClInclude Include="srt\Scene\SceneTraceResult.h" />
     <ClInclude Include="srt\SrtApplication.h" />
     <ClInclude Include="srt\Base.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="srt.cpp" />
     <ClCompile Include="srt\Application\Application.cpp" />
     <ClCompile Include="srt\Application\ApplicationWindows.cpp" />
+    <ClCompile Include="srt\JobScheduler\JobScheduler.cpp" />
     <ClCompile Include="srt\SrtApplication.cpp" />
     <ClCompile Include="srt\Graphic\WMOutputDevice.cpp" />
     <ClCompile Include="srt\Graphic\Image.cpp" />

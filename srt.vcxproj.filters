@@ -34,6 +34,9 @@
     <Filter Include="srt\Application">
       <UniqueIdentifier>{c4fbf637-1348-448e-b6e9-502df58c8d75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="srt\JobScheduler">
+      <UniqueIdentifier>{70eac0b0-aee2-403e-b734-9466ccc99633}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -114,6 +117,9 @@
     <ClInclude Include="srt\Scene\SceneTraceResult.h">
       <Filter>srt\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="srt\JobScheduler\JobScheduler.h">
+      <Filter>srt\JobScheduler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -163,6 +169,9 @@
     </ClCompile>
     <ClCompile Include="srt\Application\ApplicationWindows.cpp">
       <Filter>srt\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\JobScheduler\JobScheduler.cpp">
+      <Filter>srt\JobScheduler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
