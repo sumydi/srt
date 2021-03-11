@@ -73,26 +73,14 @@ namespace srt
 	}
 
 	// ------------------------------------------------------------------------
-	//	Slick/GGX geometry shadowing.
-	//
-	//	dot	: can be dot normal & light (geom obstruction) or normal & view (geom shadowing)
-	//	k	: roughness remaping (depending of direct light or IBL)
-	//
-	// ------------------------------------------------------------------------
-	inline float GeometrySchlickGGX( float dot, float k )
-	{
-		return dot / ( dot * ( 1.0f - k ) + k );
-	}
-
-	// ------------------------------------------------------------------------
 	//	
 	// ------------------------------------------------------------------------
 	inline float GeometrySmith( float NdV, float NdL, float roughness )
 	{
 		const float r  = ( roughness + 1.0f );
 		const float k = ( r * r ) / 8.0f;
-		const float ggx1  = GeometrySchlickGGX( NdL, k );
-		const float ggx2  = GeometrySchlickGGX( NdV, k );
+		const float ggx1  = NdV  / ( NdV * ( 1.0f - k ) + k );
+		const float ggx2  = NdL  / ( NdL * ( 1.0f - k ) + k );
 
 		return ggx1 * ggx2;
 	}
@@ -103,8 +91,8 @@ namespace srt
 	inline float GeometrySchlick( float NdV, float NdL, float roughness )
 	{
 		const float k  = roughness * 0.5f;
-		const float ggx1  = NdV  / ( NdV * ( 1.0f - k ) + k);
-		const float ggx2  = NdL  / ( NdL * ( 1.0f - k ) + k);
+		const float ggx1  = NdV  / ( NdV * ( 1.0f - k ) + k );
+		const float ggx2  = NdL  / ( NdL * ( 1.0f - k ) + k );
 
 		return ggx1 * ggx2;
 	}
