@@ -1,4 +1,5 @@
 #include "JobScheduler.h"
+#include <assert.h>
 
 namespace srt
 {
@@ -38,7 +39,12 @@ namespace srt
 		while( js->m_exit==false )
 		{
 			js->m_sem.Acquire();
-		
+			Job * job = js->PopJob( );
+			if( job )
+			{
+				job->Execute( );
+				js->SignalJobDone( );
+			}
 		}
 
 		int goodBye = 0;
@@ -77,8 +83,46 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void JobScheduler::PushJob( )
+	void JobScheduler::WaitForJobs( )
 	{
+		while( m_jobsToExecuteCount.load() > 0 )
+		{
+		
+		}
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void JobScheduler::PushJob( Job * job )
+	{
+		{
+			std::unique_lock < std::mutex > lock( m_jobsMutex );
+			m_jobs.push_back( job );
+			m_jobsToExecuteCount.fetch_add( 1 );
+		}
 		m_sem.Release();
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	Job * JobScheduler::PopJob( )
+	{
+		Job * job = nullptr;
+
+		std::unique_lock < std::mutex > lock( m_jobsMutex );
+		if( !m_jobs.empty() )
+		{
+			job = m_jobs.back();
+			m_jobs.pop_back();
+		}
+		return job;
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void JobScheduler::SignalJobDone( )
+	{
+		int32_t jobCount = m_jobsToExecuteCount.fetch_sub( 1 );
+		assert( jobCount > 0 );
 	}
 }

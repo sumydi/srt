@@ -3,6 +3,7 @@
 
 #include "Base.h"
 #include <thread>
+#include <atomic>
 #include <condition_variable>
 #include <mutex>
 #include <vector>
@@ -53,20 +54,27 @@ namespace srt
 		JobScheduler( const size_t threadCount );
 		~JobScheduler();
 
-		void PushJob();
+		void	PushJob( Job * job );
+		void	WaitForJobs( );
 
 	private:
 		static void ThreadFunc( JobScheduler * js );
-	
+		Job *		PopJob( );
+		void		SignalJobDone( );
+
+		// JobScheduler threads	
 		using ThreadContainer = std::vector< std::thread * >;
-		ThreadContainer	m_threads;
-		size_t			m_threadCount;
+		ThreadContainer				m_threads;
+		size_t						m_threadCount;
+		Semaphore					m_sem{ 0 };			// used to tell threads thre's something to do
 
-		Semaphore		m_sem{ 0 };
-
+		// Jobs list
+		using JobContainer = std::vector< Job * >;
+		JobContainer				m_jobs;
+		std::mutex					m_jobsMutex;
+		std::atomic< int32_t >		m_jobsToExecuteCount { 0 };	// Number of Jobs to be executed (pending or currently executing)
 
 		volatile bool	m_exit { false };
-
 	
 	};
 
