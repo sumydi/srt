@@ -66,7 +66,7 @@ namespace srt
 		using ThreadContainer = std::vector< std::thread * >;
 		ThreadContainer				m_threads;
 		size_t						m_threadCount;
-		Semaphore					m_sem{ 0 };			// used to tell threads thre's something to do
+		Semaphore					m_sem{ 0 };					// Used to tell to job threads there's something to do
 
 		// Jobs list
 		using JobContainer = std::vector< Job * >;

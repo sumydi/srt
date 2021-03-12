@@ -18,8 +18,9 @@
 
 namespace srt
 {
-	static constexpr uint32_t kWidthJobsCount = 4;
-	static constexpr uint32_t kHeightJobsCount = 4;
+	static constexpr uint32_t kJobSchedulerThreadCount = 6;
+	static constexpr uint32_t kWidthJobsCount = 16;
+	static constexpr uint32_t kHeightJobsCount = 8;
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
@@ -27,7 +28,7 @@ namespace srt
 	: Application( context )
 	{
 
-		m_jobScheduler = new JobScheduler{ 4 };
+		m_jobScheduler = new JobScheduler{ kJobSchedulerThreadCount };
 
 		m_scene = new Scene;
 

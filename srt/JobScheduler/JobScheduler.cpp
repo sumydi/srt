@@ -38,7 +38,10 @@ namespace srt
 	{
 		while( js->m_exit==false )
 		{
+			// The semaphore is used to tell us that there's something to do
 			js->m_sem.Acquire();
+
+			// Process job if any
 			Job * job = js->PopJob( );
 			if( job )
 			{
@@ -48,7 +51,6 @@ namespace srt
 		}
 
 		int goodBye = 0;
-		printf( "GoodBye: %d", goodBye );
 	}
 
 	// ------------------------------------------------------------------------
@@ -100,6 +102,8 @@ namespace srt
 			m_jobs.push_back( job );
 			m_jobsToExecuteCount.fetch_add( 1 );
 		}
+
+		// Signal scheduler's threads that there is a job to process
 		m_sem.Release();
 	}
 
