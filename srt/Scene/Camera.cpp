@@ -33,7 +33,7 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	Ray Camera::GenerateRay( const float x, const float y )
+	Ray Camera::GenerateRay( const float x, const float y ) const
 	{
 		// NOTE: revert y because the screen space Y is the inverse of the scene Y axis
 		const Ray ray{ m_position, Normalize( m_ppBottomLeft + x * m_ppRightAxis + ( 1.0f - y ) * m_ppUpAxis - m_position ) };

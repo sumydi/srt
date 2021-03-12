@@ -85,26 +85,22 @@ namespace srt
 	const void * Image::GetMipSurface( uint32_t mipIdx ) const
 	{
 		assert( mipIdx < m_mipCount );
-		assert( m_mips[ mipIdx ].lockCount==0 );	// It can be dangerous to read the surface while locked
 		return m_mips[ mipIdx ].surface;
 	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void * Image::LockMipSurface( uint32_t mipIdx )
+	void * Image::LockMipSurface( uint32_t mipIdx ) const
 	{
 		assert( mipIdx < m_mipCount );
-		m_mips[ mipIdx ].lockCount++;
 		return m_mips[ mipIdx ].surface;
 	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void Image::UnlockMipSurface( uint32_t mipIdx )
+	void Image::UnlockMipSurface( uint32_t mipIdx ) const
 	{
 		assert( mipIdx < m_mipCount );
-		assert( m_mips[ mipIdx ].lockCount > 0 );
-		m_mips[ mipIdx ].lockCount--;
 	}
 
 	// ------------------------------------------------------------------------

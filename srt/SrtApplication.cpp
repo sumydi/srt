@@ -12,14 +12,15 @@
 #include "Scene/Light.h"
 #include "Scene/Camera.h"
 #include "Scene/SceneTraceResult.h"
-#include "Lighting/LightingUtils.h"
 #include "Graphic/WMOutputDevice.h"
-
-static constexpr uint32_t kSampleCount = 1;
-static constexpr uint32_t kRayCount = 2;
+#include "Lighting/LightingUtils.h"
+#include "RenderJob.h"
 
 namespace srt
 {
+	static constexpr uint32_t kWidthJobsCount = 4;
+	static constexpr uint32_t kHeightJobsCount = 4;
+
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	SrtApplication::SrtApplication( const AppContext & context )
@@ -87,65 +88,6 @@ namespace srt
 		Vec3 v{ x, y, z };
 		v = Normalize( v );
 		return v;
-	}
-
-	// ------------------------------------------------------------------------
-	// ------------------------------------------------------------------------
-	static Vec3 ComputeColor( const Scene & scene, const Ray & ray, uint32_t rayIdx )
-	{
-		Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
-
-		if( rayIdx > 0 )
-		{
-			SceneTraceResult primaryResult;
-			scene.TraceRay( ray, 0.001f, FLT_MAX, primaryResult );
-
-			if( primaryResult.hitResult.hitTime >= 0.0f )
-			{
-				// Hit an object: compute lightings for all lights
-				for( size_t lightIdx = 0; lightIdx < scene.GetLightCount(); ++lightIdx )
-				{
-					Light * light = scene.GetLight( lightIdx );
-
-					// shadow ray
-					Ray shadowRay{ primaryResult.hitResult.position, Normalize( light->GetPosition() - primaryResult.hitResult.position ) };
-					SceneTraceResult shadowResult;
-					scene.TraceRay( shadowRay, 0.01f, FLT_MAX, shadowResult );
-					if( shadowResult.hitResult.hitTime < 0.0f )
-					{
-						// Direct lighting
-						LightSource	lightSource{ primaryResult, *light };
-						resultColor += ComputeBRDF( ray.Origin(), primaryResult, lightSource );
-					}
-				}
-
-				//
-				if( primaryResult.material->GetMetalness() > 0.8f )
-				{
-					const Vec3 reflect = Reflect( ray.Direction(), primaryResult.hitResult.normal );
-					const Ray reflectRay { primaryResult.hitResult.position, reflect };
-					const Vec3 indirectColor = ComputeColor( scene, reflectRay, rayIdx - 1 );
-					LightSource lightSource{ -reflectRay.Direction(), indirectColor };
-					resultColor += ComputeBRDF( reflectRay.Origin(), primaryResult, lightSource );
-				}
-
-				// GI diffuse
-				// Vec3 target = primaryResult.hitResult.position + primaryResult.hitResult.normal + RandomUnitVector( );
-				// resultColor += 0.5f * ComputeColor( scene, Ray{ primaryResult.hitResult.position, Normalize( target - primaryResult.hitResult.position ) }, rayIdx + 1 );
-
-				//resultColor = Clamp( resultColor, 0.0f, 1.0f );
-				
-			}
-			else
-			{
-				// hit nothing: sky
-				const float t = 0.5f * ( ray.Direction().Y() + 1.0f );
-				resultColor = ( 1.0f - t ) * Vec3{ 1.0f, 1.0f, 1.0f } + t * Vec3{ 0.5f, 0.7f, 1.0f };
-				resultColor *= 10.0f;
-			}
-		}
-
-		return resultColor;
 	}
 
 	// ------------------------------------------------------------------------
@@ -253,13 +195,8 @@ namespace srt
 
 		dt = m_isPaused ? 0.0f : dt;
 
-		// Do the real math!
-		// -----------------
-		uint8_t * surf = reinterpret_cast< uint8_t * >( m_backBuffer->LockMipSurface( 0 ) );
-
-		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
-		const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
-
+		// Let's move some scene object
+		// -----------------------------
 		static float t = 0.0f;
 		t += dt;
 		const float cs = cosf( t );
@@ -274,44 +211,32 @@ namespace srt
 //		lightPos = lightPos + Vec3{ -cs * 0.5f, 0.0f, 0.0f };
 //		light->SetPosition( lightPos );
 
-		// do not apply jitterring on the camera when kSamplecount==1 to avoid wobling picture
-		const float jitteringFactor = kSampleCount > 1 ? 1.0f : 0.0f;
 
-		for( uint32_t y = 0; y < bbHeight; ++y )
+		// Render!
+		// -------
+		RenderJob	jobs[ kWidthJobsCount * kHeightJobsCount ];
+		size_t		jobIdx = 0;
+
+		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
+		const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
+
+		RenderJob::Context context{ m_backBuffer, m_scene, camera };
+		context.width = ( bbWidth / kWidthJobsCount );
+		context.height = ( bbHeight / kHeightJobsCount );
+
+		for( uint32_t heightJob = 0; heightJob < kHeightJobsCount; ++heightJob )
 		{
-			uint32_t *line = reinterpret_cast< uint32_t * >( surf + y * m_backBuffer->GetMipDesc( 0 ).pitch );
-			for( uint32_t x = 0; x < bbWidth; ++x )
+			context.y = ( bbHeight / kHeightJobsCount ) * heightJob;
+			for( uint32_t widthJob = 0; widthJob < kWidthJobsCount; ++widthJob )
 			{
-				Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
-				for( uint32_t sampleIdx = 0; sampleIdx < kSampleCount; ++sampleIdx )
-				{
-					// transform coordinates to "normalized" coordinates
-					const float nx = ( ( (float)x + RandomFloat() * jitteringFactor ) / (float)bbWidth );
-					const float ny = ( ( (float)y + RandomFloat() * jitteringFactor ) / (float)bbHeight );
-
-					// make a ray from the origin to the current normalized pixel
-					const Ray ray = camera->GenerateRay( nx, ny );
-
-					resultColor += ComputeColor( *m_scene, ray, kRayCount );
-				}
-				resultColor /= (float)kSampleCount;
-
-				// Basic tone mapping
-				resultColor = resultColor / ( resultColor + 1.0f );
-
-				// convert from (normalized) linear to sRGB
-				const uint32_t r = (uint32_t)( sqrtf( resultColor.X() ) * 255.0f );
-				const uint32_t g = (uint32_t)( sqrtf( resultColor.Y() ) * 255.0f );
-				const uint32_t b = (uint32_t)( sqrtf( resultColor.Z() ) * 255.0f );
-
-				const uint32_t color = ( r << 16 ) | ( g << 8 ) | ( b );
-
-				*line = color;
-				++line;
+				context.x = ( bbWidth / kWidthJobsCount ) * widthJob;
+				jobs[ jobIdx ].SetContext( context );
+				m_jobScheduler->PushJob( &jobs[ jobIdx ] );
+				++jobIdx;
 			}
 		}
 
-		m_backBuffer->UnlockMipSurface( 0 );
+		m_jobScheduler->WaitForJobs( );
 
 		// Pick
 		// ----

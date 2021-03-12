@@ -31,7 +31,7 @@ namespace srt
 		float			GetFOV( ) const { return m_fov; }
 		void			SetFOV( const float fov);
 
-		Ray				GenerateRay( const float x, const float y );
+		Ray				GenerateRay( const float x, const float y ) const;
 
 	private:
 		void	UpdateProjectionPlane( );

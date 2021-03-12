@@ -120,6 +120,9 @@
     <ClInclude Include="srt\JobScheduler\JobScheduler.h">
       <Filter>srt\JobScheduler</Filter>
     </ClInclude>
+    <ClInclude Include="srt\RenderJob.h">
+      <Filter>srt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -172,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="srt\JobScheduler\JobScheduler.cpp">
       <Filter>srt\JobScheduler</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\RenderJob.cpp">
+      <Filter>srt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

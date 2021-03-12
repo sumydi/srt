@@ -30,14 +30,13 @@ namespace srt
 		static uint32_t				GetPixelFormatBPP( PixelFormat pf );
 
 		const void *				GetMipSurface( uint32_t mipIdx ) const;
-		void *						LockMipSurface( uint32_t mipIdx );
-		void						UnlockMipSurface( uint32_t mipIdx );
+		void *						LockMipSurface( uint32_t mipIdx ) const;
+		void						UnlockMipSurface( uint32_t mipIdx ) const;
 
 	private:
 		PixelFormat		m_pixelFormat;
 		uint32_t		m_bpp;
 		uint32_t		m_mipCount;
-		uint32_t		m_lockCount;
 		PixelSurface *	m_mips;
 		void *			m_surface;
 	};

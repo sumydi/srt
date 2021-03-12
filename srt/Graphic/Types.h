@@ -26,7 +26,6 @@ namespace srt
 		};
 
 		Desc		desc;
-		uint32_t	lockCount{ 0 };
 		void *		surface{ nullptr };
 	};
 }
