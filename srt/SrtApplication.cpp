@@ -127,6 +127,7 @@ namespace srt
 	// ------------------------------------------------------------------------
 	void SrtApplication::FrameStart( )
 	{
+		m_jobScheduler->ResetThreadStat();
 	}
 
 	// ------------------------------------------------------------------------
@@ -138,6 +139,15 @@ namespace srt
 		m_outputDev->SetTextColor( 0, 0, 0 );
 		m_outputDev->SetTextPosition( 10, 10 );
 		m_outputDev->PushText( "FrameDuration: %.4f ms (%u fps)", frameDuration * 1000.0f, ( uint32_t )( 1000.0f / ( frameDuration * 1000.0f ) ) );
+
+	#if defined( SRT_JOBSCHEDULER_STATS )
+		const size_t threadCount = m_jobScheduler->GetThreadCount( );
+		for( size_t threadIdx = 0; threadIdx < threadCount; ++threadIdx )
+		{
+			m_outputDev->PushText( "Thread%zu: %u", threadIdx, m_jobScheduler->GetThreadStat( threadIdx ).jobProcessed );
+		}
+	#endif
+
 		m_outputDev->PushText( "Focal: %.02f°", m_scene->GetCamera( 0 )->GetFOV( ) );
 
 		const MousePos & mousePos = GetMousePos( );

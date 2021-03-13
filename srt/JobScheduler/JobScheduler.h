@@ -10,6 +10,8 @@
 
 namespace srt
 {
+	#define SRT_JOBSCHEDULER_STATS
+
 	// ============================================================================
 	//
 	// Semaphore implementation. C++20 where are you?
@@ -57,16 +59,29 @@ namespace srt
 		void	PushJob( Job * job );
 		void	WaitForJobs( );
 
+		struct ThreadStat
+		{
+			uint32_t	jobProcessed { 0 };
+		};
+
+		size_t				GetThreadCount( ) const { return m_threads.size(); }
+		void				ResetThreadStat( );
+		const ThreadStat &	GetThreadStat( size_t threadIdx ) const;
+
 	private:
-		static void ThreadFunc( JobScheduler * js );
+		static void ThreadFunc( JobScheduler * js, size_t threadIdx );
 		Job *		PopJob( );
-		void		SignalJobDone( );
+		void		SignalJobDone( size_t threadIdx );
 
 		// JobScheduler threads	
 		using ThreadContainer = std::vector< std::thread * >;
 		ThreadContainer				m_threads;
-		size_t						m_threadCount;
 		Semaphore					m_sem{ 0 };					// Used to tell to job threads there's something to do
+
+#if defined( SRT_JOBSCHEDULER_STATS )
+		using ThreadStatsContainer = std::vector< ThreadStat >;
+		ThreadStatsContainer		m_threadStats;
+#endif
 
 		// Jobs list
 		using JobContainer = std::vector< Job * >;

@@ -34,7 +34,7 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void JobScheduler::ThreadFunc( JobScheduler * js )
+	void JobScheduler::ThreadFunc( JobScheduler * js, size_t threadIdx )
 	{
 		while( js->m_exit==false )
 		{
@@ -46,7 +46,7 @@ namespace srt
 			if( job )
 			{
 				job->Execute( );
-				js->SignalJobDone( );
+				js->SignalJobDone( threadIdx );
 			}
 		}
 
@@ -56,12 +56,15 @@ namespace srt
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	JobScheduler::JobScheduler( const size_t threadCount )
-	: m_threadCount{ threadCount }
 	{
-		for( size_t threadIdx = 0; threadIdx < m_threadCount; ++threadIdx )
+		for( size_t threadIdx = 0; threadIdx < threadCount; ++threadIdx )
 		{
-			m_threads.push_back( new std::thread( ThreadFunc, this ) );
+			m_threads.push_back( new std::thread( ThreadFunc, this, threadIdx ) );
 		}
+
+	#if defined( SRT_JOBSCHEDULER_STATS )
+		m_threadStats.resize( threadCount );
+	#endif
 	}
 
 	// ------------------------------------------------------------------------
@@ -124,9 +127,38 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	void JobScheduler::SignalJobDone( )
+	void JobScheduler::SignalJobDone( size_t threadIdx )
 	{
 		int32_t jobCount = m_jobsToExecuteCount.fetch_sub( 1 );
 		assert( jobCount > 0 );
+
+	#if defined( SRT_JOBSCHEDULER_STATS )
+		m_threadStats[ threadIdx ].jobProcessed++;
+	#endif
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void JobScheduler::ResetThreadStat( )
+	{
+	#if defined( SRT_JOBSCHEDULER_STATS )
+		for( auto & threadStat : m_threadStats )
+		{
+			threadStat.jobProcessed = 0;
+		}
+	#endif
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	const JobScheduler::ThreadStat & JobScheduler::GetThreadStat( size_t threadIdx ) const
+	{
+	#if defined( SRT_JOBSCHEDULER_STATS )
+		assert( threadIdx < m_threadStats.size( ) );
+		return m_threadStats[ threadIdx ];
+	#else
+		static ThreadStat dummyThreadStat;
+		return dummyThreadStat;
+	#endif
 	}
 }
