@@ -226,7 +226,7 @@ namespace srt
 	//
 	//
 	// ------------------------------------------------------------------------
-	inline Vec3 Reflect( const Vec3 & v, const Vec3 n )
+	inline Vec3 Reflect( const Vec3 & v, const Vec3 & n )
 	{
 		return v - 2.0f * Dot( v, n ) * n;
 	}
