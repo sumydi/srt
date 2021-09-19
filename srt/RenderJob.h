@@ -28,9 +28,9 @@ namespace srt
 
 			}
 
-			const Image *		image;
-			const Scene *		scene;
-			const Camera *		camera;
+			const Image *		image { nullptr };
+			const Scene *		scene { nullptr };
+			const Camera *		camera { nullptr };
 
 			uint32_t			x { 0 };
 			uint32_t			y { 0 };
