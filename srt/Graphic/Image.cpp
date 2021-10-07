@@ -22,7 +22,7 @@ namespace srt
 
 		if( mipCount==0 )
 		{
-			m_mipCount = mipCount;
+			m_mipCount = greatestMipCount;
 		}
 		else
 		{
