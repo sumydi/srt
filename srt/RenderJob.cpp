@@ -12,7 +12,6 @@
 namespace srt
 {
 
-	static constexpr uint32_t kSampleCount = 1;
 	static constexpr uint32_t kRayCount = 2;
 
 	// ------------------------------------------------------------------------
@@ -79,7 +78,7 @@ namespace srt
 	void RenderJob::Execute( )
 	{
 		// do not apply jitterring on the camera when kSamplecount==1 to avoid wobling picture
-		const float jitteringFactor = kSampleCount > 1 ? 1.0f : 0.0f;
+		const float jitteringFactor = m_context.sampleCount > 1 ? 1.0f : 0.0f;
 
 		const float surfWidth = static_cast< float >( m_context.image->GetMipDesc( 0 ).width );
 		const float surfHeight = static_cast< float >( m_context.image->GetMipDesc( 0 ).height );
@@ -92,7 +91,7 @@ namespace srt
 			for( uint32_t x = 0; x < m_context.width; ++x )
 			{
 				Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
-				for( uint32_t sampleIdx = 0; sampleIdx < kSampleCount; ++sampleIdx )
+				for( uint32_t sampleIdx = 0; sampleIdx < m_context.sampleCount; ++sampleIdx )
 				{
 					// transform coordinates to "normalized" coordinates
 					const float nx = ( ( (float)( x + m_context.x ) + RandomFloat() * jitteringFactor ) / surfWidth );
@@ -103,7 +102,7 @@ namespace srt
 
 					resultColor += ComputeColor( *m_context.scene, ray, kRayCount );
 				}
-				resultColor /= (float)kSampleCount;
+				resultColor /= (float)m_context.sampleCount;
 
 				// Basic tone mapping
 				resultColor = resultColor / ( resultColor + 1.0f );

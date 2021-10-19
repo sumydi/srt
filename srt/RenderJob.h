@@ -21,7 +21,7 @@ namespace srt
 		{
 			Context() = default;
 			Context( const Image * image, const Scene * scene, const Camera * camera )
-			: image{image }
+			: image{ image }
 			, scene{ scene }
 			, camera{ camera }
 			{
@@ -36,6 +36,7 @@ namespace srt
 			uint32_t			y { 0 };
 			uint32_t			width { 0 };
 			uint32_t			height { 0 };
+			uint32_t			sampleCount { 1 };
 		};
 
 		RenderJob() : Job{ } { };
