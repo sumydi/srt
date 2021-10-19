@@ -68,9 +68,21 @@ namespace srt
 		kY,
 		kZ,
 
+		kF1,
+		kF2,
+		kF3,
+		kF4,
+		kF5,
+		kF6,
+		kF7,
+		kF8,
+		kF9,
+		kF10,
+
 		kMouseLeftButton,
 		kMouseMiddleButton,
 		kMouseRightButton,
+
 
 		kUnknow,
 		kCount = kUnknow

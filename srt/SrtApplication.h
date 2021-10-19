@@ -45,6 +45,14 @@ private:
 	bool				m_isPaused { false };
 
 	SceneTraceResult	m_pickResult;
+
+	enum class RenderMode
+	{
+		kSimple = 0,
+		kPBR = 1
+	};
+
+	RenderMode			m_renderMode { RenderMode::kPBR };
 };
 
 }

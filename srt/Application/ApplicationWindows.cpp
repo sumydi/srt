@@ -52,6 +52,11 @@ namespace srt
 			// Numpad 0 - 9
 			keyCode = (KeyCode)( ( wParam - VK_NUMPAD0 ) + (WPARAM)KeyCode::k0 );
 		}
+		else if( wParam >= VK_F1 && wParam < VK_F10 )
+		{
+			// F1 - F10
+			keyCode = (KeyCode)( ( wParam - VK_F1 ) + (WPARAM)KeyCode::kF1 );
+		}
 		else if( wParam >= 0x41 && wParam <= 0x5a )
 		{
 			// A - Z

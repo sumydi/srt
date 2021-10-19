@@ -202,6 +202,15 @@ namespace srt
 			camera->SetPosition( camera->GetPosition( ) - Vec3( 0.0f, 0.0f, 0.2f ) * dt );
 		}
 
+		if( GetKeyState( KeyCode::kF1 ).justPressed )
+		{
+			m_renderMode = RenderMode::kSimple;
+		}
+		else if( GetKeyState( KeyCode::kF2 ).justPressed )
+		{
+			m_renderMode = RenderMode::kPBR;
+		}
+
 		UpdateEditMode( );
 
 
@@ -226,7 +235,20 @@ namespace srt
 
 		// Render!
 		// -------
-		RenderJobPBR	jobs[ kWidthJobsCount * kHeightJobsCount ];
+		
+		// TODO: rewrite this!
+		RenderJobPBR	jobsPBR[ kWidthJobsCount * kHeightJobsCount ];
+		RenderJobSimple	jobsSimple[ kWidthJobsCount * kHeightJobsCount ];
+		RenderJob *		jobs = nullptr;
+		if( m_renderMode==RenderMode::kSimple )
+		{
+			jobs = jobsSimple;
+		}
+		else
+		{
+			jobs = jobsPBR;
+		}
+
 		size_t			jobIdx = 0;
 
 		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
