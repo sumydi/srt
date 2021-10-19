@@ -15,6 +15,7 @@
 #include "Graphic/WMOutputDevice.h"
 #include "Lighting/LightingUtils.h"
 #include "RenderJobPBR.h"
+#include "RenderJobSimple.h"
 
 namespace srt
 {

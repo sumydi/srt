@@ -1,5 +1,5 @@
-#ifndef SRT_RENDERJOB_PBR_H
-#define SRT_RENDERJOB_PBR_H
+#ifndef SRT_RENDERJOB_SIMPLE_H
+#define SRT_RENDERJOB_SIMPLE_H
 
 #include "RenderJob.h"
 
@@ -11,11 +11,11 @@ namespace srt
 	//
 	//
 	// ============================================================================
-	class RenderJobPBR : public RenderJob
+	class RenderJobSimple : public RenderJob
 	{
 	public:
-		RenderJobPBR() : RenderJob{ } { };
-		virtual ~RenderJobPBR() { }
+		RenderJobSimple() : RenderJob{ } { };
+		virtual ~RenderJobSimple() { }
 
 	private:
 		virtual void Execute() final;

@@ -155,6 +155,7 @@
     <ClInclude Include="srt\JobScheduler\JobScheduler.h" />
     <ClInclude Include="srt\RenderJob.h" />
     <ClInclude Include="srt\RenderJobPBR.h" />
+    <ClInclude Include="srt\RenderJobSimple.h" />
     <ClInclude Include="srt\Scene\SceneTraceResult.h" />
     <ClInclude Include="srt\SrtApplication.h" />
     <ClInclude Include="srt\Base.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="srt\JobScheduler\JobScheduler.cpp" />
     <ClCompile Include="srt\RenderJob.cpp" />
     <ClCompile Include="srt\RenderJobPBR.cpp" />
+    <ClCompile Include="srt\RenderJobSimple.cpp" />
     <ClCompile Include="srt\SrtApplication.cpp" />
     <ClCompile Include="srt\Graphic\WMOutputDevice.cpp" />
     <ClCompile Include="srt\Graphic\Image.cpp" />
