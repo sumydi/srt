@@ -123,6 +123,9 @@
     <ClInclude Include="srt\RenderJob.h">
       <Filter>srt</Filter>
     </ClInclude>
+    <ClInclude Include="srt\RenderJobPBR.h">
+      <Filter>srt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -177,6 +180,9 @@
       <Filter>srt\JobScheduler</Filter>
     </ClCompile>
     <ClCompile Include="srt\RenderJob.cpp">
+      <Filter>srt</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\RenderJobPBR.cpp">
       <Filter>srt</Filter>
     </ClCompile>
   </ItemGroup>

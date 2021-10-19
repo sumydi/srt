@@ -14,7 +14,7 @@ namespace srt
 	//
 	//
 	// ============================================================================
-	class RenderJob final : public Job
+	class RenderJob : public Job
 	{
 	public:
 		struct Context
@@ -40,14 +40,15 @@ namespace srt
 		};
 
 		RenderJob() : Job{ } { };
-		~RenderJob() { }
+		virtual ~RenderJob() { }
 
 		void SetContext( const Context & context ) { m_context = context; }
 	
-	private:
-		void Execute( ) final;
-
+	protected:
 		Context		m_context;
+
+	private:
+		virtual void Execute( ) = 0;
 
 	};
 }

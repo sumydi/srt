@@ -14,7 +14,7 @@
 #include "Scene/SceneTraceResult.h"
 #include "Graphic/WMOutputDevice.h"
 #include "Lighting/LightingUtils.h"
-#include "RenderJob.h"
+#include "RenderJobPBR.h"
 
 namespace srt
 {
@@ -225,8 +225,8 @@ namespace srt
 
 		// Render!
 		// -------
-		RenderJob	jobs[ kWidthJobsCount * kHeightJobsCount ];
-		size_t		jobIdx = 0;
+		RenderJobPBR	jobs[ kWidthJobsCount * kHeightJobsCount ];
+		size_t			jobIdx = 0;
 
 		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
 		const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
