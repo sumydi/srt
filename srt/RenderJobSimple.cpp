@@ -48,17 +48,14 @@ void RenderJobSimple::Execute( )
 		uint32_t * line = reinterpret_cast< uint32_t * >( surfPixels + ( m_context.y + y ) * surfPitch ) + m_context.x;
 		for( uint32_t x = 0; x < m_context.width; ++x )
 		{
-			Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
-			{
-				const float nx = ( (float)( x + m_context.x ) / surfWidth );
-				const float ny = ( (float)( y + m_context.y ) / surfHeight );
+			Vec3 resultColor;
+			const float nx = ( (float)( x + m_context.x ) / surfWidth );
+			const float ny = ( (float)( y + m_context.y ) / surfHeight );
 
-				// make a ray from the origin to the current normalized pixel
-				const Ray ray = m_context.camera->GenerateRay( nx, ny );
+			// make a ray from the origin to the current normalized pixel
+			const Ray ray = m_context.camera->GenerateRay( nx, ny );
 
-				resultColor += ComputeColor( *m_context.scene, ray );
-			}
-			resultColor /= (float)m_context.sampleCount;
+			resultColor = ComputeColor( *m_context.scene, ray );
 
 			// Basic tone mapping
 			resultColor = resultColor / ( resultColor + 1.0f );
