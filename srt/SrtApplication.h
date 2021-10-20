@@ -49,7 +49,8 @@ private:
 	enum class RenderMode
 	{
 		kSimple = 0,
-		kPBR = 1
+		kPBR,
+		kFullRT
 	};
 
 	RenderMode			m_renderMode { RenderMode::kPBR };

@@ -129,6 +129,9 @@
     <ClInclude Include="srt\RenderJobSimple.h">
       <Filter>srt</Filter>
     </ClInclude>
+    <ClInclude Include="srt\RenderJobFullRT.h">
+      <Filter>srt</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -189,6 +192,9 @@
       <Filter>srt</Filter>
     </ClCompile>
     <ClCompile Include="srt\RenderJobSimple.cpp">
+      <Filter>srt</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\RenderJobFullRT.cpp">
       <Filter>srt</Filter>
     </ClCompile>
   </ItemGroup>

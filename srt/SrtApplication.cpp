@@ -16,6 +16,7 @@
 #include "Lighting/LightingUtils.h"
 #include "RenderJobPBR.h"
 #include "RenderJobSimple.h"
+#include "RenderJobFullRT.h"
 
 namespace srt
 {
@@ -145,7 +146,7 @@ namespace srt
 		const size_t threadCount = m_jobScheduler->GetThreadCount( );
 		for( size_t threadIdx = 0; threadIdx < threadCount; ++threadIdx )
 		{
-			m_outputDev->PushText( "Thread%zu: %u", threadIdx, m_jobScheduler->GetThreadStat( threadIdx ).jobProcessed );
+			m_outputDev->PushText( "Thread%zu jobs: %u", threadIdx, m_jobScheduler->GetThreadStat( threadIdx ).jobProcessed );
 		}
 	#endif
 
@@ -210,6 +211,10 @@ namespace srt
 		{
 			m_renderMode = RenderMode::kPBR;
 		}
+		else if( GetKeyState( KeyCode::kF3 ).justPressed )
+		{
+			m_renderMode = RenderMode::kFullRT;
+		}
 
 		UpdateEditMode( );
 
@@ -239,14 +244,25 @@ namespace srt
 		// TODO: rewrite this!
 		RenderJobPBR	jobsPBR[ kWidthJobsCount * kHeightJobsCount ];
 		RenderJobSimple	jobsSimple[ kWidthJobsCount * kHeightJobsCount ];
+		RenderJobFullRT	jobsFullRT[ kWidthJobsCount * kHeightJobsCount ];
 		RenderJob *		jobs = nullptr;
-		if( m_renderMode==RenderMode::kSimple )
+
+		switch( m_renderMode )
 		{
-			jobs = jobsSimple;
-		}
-		else
-		{
-			jobs = jobsPBR;
+			case RenderMode::kSimple:
+				jobs = jobsSimple;
+				break;
+
+			case RenderMode::kPBR:
+				jobs = jobsPBR;
+				break;
+
+			case RenderMode::kFullRT:
+				jobs = jobsFullRT;
+				break;
+
+			default:
+				return;
 		}
 
 		size_t			jobIdx = 0;
