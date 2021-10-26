@@ -273,7 +273,7 @@ namespace srt
 		RenderJob::Context context{ m_backBuffer, m_scene, camera };
 		context.width = ( bbWidth / kWidthJobsCount );
 		context.height = ( bbHeight / kHeightJobsCount );
-		//context.sampleCount = 16;
+		context.sampleCount = 1;
 
 		for( uint32_t heightJob = 0; heightJob < kHeightJobsCount; ++heightJob )
 		{
