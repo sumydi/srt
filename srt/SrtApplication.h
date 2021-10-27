@@ -42,6 +42,7 @@ private:
 	Image *				m_backBuffer { nullptr };
 	OutputDevice *		m_outputDev { nullptr };
 
+	uint32_t			m_sampleCount { 1 };
 	bool				m_isPaused { false };
 
 	SceneTraceResult	m_pickResult;

@@ -152,6 +152,7 @@ namespace srt
 	#endif
 
 		m_outputDev->PushText( "Focal: %.02f°", m_scene->GetCamera( 0 )->GetFOV( ) );
+		m_outputDev->PushText( "Samples: %u", m_sampleCount );
 
 		const MousePos & mousePos = GetMousePos( );
 		m_outputDev->PushText( "Mouse: %d, %d", mousePos.posX, mousePos.posY );
@@ -217,6 +218,17 @@ namespace srt
 			m_renderMode = RenderMode::kFullRT;
 		}
 
+		if( GetKeyState( KeyCode::kAdd ).justPressed )
+		{
+			if( m_sampleCount < 32 )
+				m_sampleCount++;
+		}
+		else if( GetKeyState( KeyCode::kSubtract ).justPressed )
+		{
+			if( m_sampleCount > 1 )
+				m_sampleCount--;
+		}
+
 		UpdateEditMode( );
 
 
@@ -274,7 +286,7 @@ namespace srt
 		RenderJob::Context context{ m_backBuffer, m_scene, camera };
 		context.width = ( bbWidth / kWidthJobsCount );
 		context.height = ( bbHeight / kHeightJobsCount );
-		context.sampleCount = 1;
+		context.sampleCount = m_sampleCount;
 
 		Halton halton( context.sampleCount );
 		context.halton = &halton;
