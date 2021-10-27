@@ -132,6 +132,12 @@
     <ClInclude Include="srt\RenderJobFullRT.h">
       <Filter>srt</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Math\Halton.h">
+      <Filter>srt\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="srt\Math\Vector2.h">
+      <Filter>srt\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -196,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="srt\RenderJobFullRT.cpp">
       <Filter>srt</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Math\Halton.cpp">
+      <Filter>srt\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@ namespace srt
 	class Image;
 	class Scene;
 	class Camera;
+	class Halton;
 
 	// ============================================================================
 	//
@@ -20,17 +21,11 @@ namespace srt
 		struct Context
 		{
 			Context() = default;
-			Context( const Image * image, const Scene * scene, const Camera * camera )
-			: image{ image }
-			, scene{ scene }
-			, camera{ camera }
-			{
-
-			}
 
 			const Image *		image { nullptr };
 			const Scene *		scene { nullptr };
 			const Camera *		camera { nullptr };
+			const Halton *		halton { nullptr };
 
 			uint32_t			x { 0 };
 			uint32_t			y { 0 };

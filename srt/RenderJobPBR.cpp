@@ -1,6 +1,7 @@
 #include "RenderJobPBR.h"
 #include "Math/Random.h"
 #include "Math/Ray.h"
+#include "Math/Halton.h"
 #include "Graphic/Image.h"
 #include "Graphic/Material.h"
 #include "Scene/Scene.h"
@@ -94,8 +95,9 @@ void RenderJobPBR::Execute( )
 			for( uint32_t sampleIdx = 0; sampleIdx < m_context.sampleCount; ++sampleIdx )
 			{
 				// transform coordinates to "normalized" coordinates
-				const float nx = ( ( (float)( x + m_context.x ) + RandomFloat() * jitteringFactor ) / surfWidth );
-				const float ny = ( ( (float)( y + m_context.y ) + RandomFloat() * jitteringFactor ) / surfHeight );
+				Vec2 jitter = m_context.halton->GetValue( sampleIdx );
+				const float nx = ( ( (float)( x + m_context.x ) + jitter.X() * jitteringFactor ) / surfWidth );
+				const float ny = ( ( (float)( y + m_context.y ) + jitter.Y() * jitteringFactor ) / surfHeight );
 
 				// make a ray from the origin to the current normalized pixel
 				const Ray ray = m_context.camera->GenerateRay( nx, ny );

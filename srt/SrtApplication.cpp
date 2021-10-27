@@ -7,6 +7,7 @@
 #include "Math/Ray.h"
 #include "Math/Random.h"
 #include "Math/RayHitTest.h"
+#include "Math/Halton.h"
 #include "Scene/Scene.h"
 #include "Scene/Sphere.h"
 #include "Scene/Light.h"
@@ -274,6 +275,9 @@ namespace srt
 		context.width = ( bbWidth / kWidthJobsCount );
 		context.height = ( bbHeight / kHeightJobsCount );
 		context.sampleCount = 1;
+
+		Halton halton( context.sampleCount );
+		context.halton = &halton;
 
 		for( uint32_t heightJob = 0; heightJob < kHeightJobsCount; ++heightJob )
 		{
