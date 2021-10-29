@@ -38,8 +38,8 @@ static Vec3 ComputeColor( const Scene & scene, const Ray & ray )
 // ------------------------------------------------------------------------
 void RenderJobSimple::Execute( )
 {
-	const float surfWidth = static_cast< float >( m_context.image->GetMipDesc( 0 ).width );
-	const float surfHeight = static_cast< float >( m_context.image->GetMipDesc( 0 ).height );
+	const float surfWidth = static_cast< float >( m_context.image->GetMipDesc( 0 ).width - 1 );
+	const float surfHeight = static_cast< float >( m_context.image->GetMipDesc( 0 ).height - 1 );
 	const uint32_t surfPitch = m_context.image->GetMipDesc( 0 ).pitch;
 	uint8_t * surfPixels = reinterpret_cast< uint8_t * >( m_context.image->LockMipSurface( 0 ) );
 
