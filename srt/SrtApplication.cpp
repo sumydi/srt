@@ -157,6 +157,9 @@ namespace srt
 		const MousePos & mousePos = GetMousePos( );
 		m_outputDev->PushText( "Mouse: %d, %d", mousePos.x, mousePos.y );
 
+		const MousePos & mousePosDelta = GetMousePosDelta( );
+		m_outputDev->PushText( "MouseDelta: %d, %d", mousePosDelta.x, mousePosDelta.y );
+
 		if( m_pickResult.hitResult.hitTime >= 0.0f )
 		{
 			m_outputDev->PushText( "HIT", m_pickResult.material->GetName( ) );
@@ -215,6 +218,17 @@ namespace srt
 		{
 			camera->SetPosition( camera->GetPosition( ) + Vec3( 0.2f, 0.0f, 0.0f ) * dt );
 			camera->SetLookAt( camera->GetLookAt( ) + Vec3( 0.2f, 0.0f, 0.0f ) * dt );
+		}
+
+		if( GetKeyState( KeyCode::kMouseMiddleButton).pressed )
+		{
+			const float moveDT = ( 0.25f * ( 1.0f / 60.0f ) ) / dt;	// move is delta time relative: based on 60Hz frame rate
+			const float dx = (float)( -GetMousePosDelta().x ) * moveDT;
+			const float dy = (float)( GetMousePosDelta().y ) * moveDT;
+			const Vec3 camMove { dx * dt, dy * dt, 0.0f };
+
+			camera->SetPosition( camera->GetPosition( ) + camMove );
+			camera->SetLookAt( camera->GetLookAt( ) + camMove );
 		}
 
 		if( GetKeyState( KeyCode::kF1 ).justPressed )

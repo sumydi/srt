@@ -28,6 +28,8 @@ namespace srt
 
 		while( canContinue )
 		{
+			m_mousePosDelta = MousePos{ 0, 0 };
+
 		#if defined( SRT_PLATFORM_WINDOWS )
 			MSG msg;
 			while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
