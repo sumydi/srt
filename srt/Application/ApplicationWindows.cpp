@@ -37,6 +37,8 @@ namespace srt
 	constexpr size_t kKeyConvertSize = sizeof( g_keyConvert ) / sizeof( KeyConvert );
 
 	// ------------------------------------------------------------------------
+	// See https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
+	// for wParam values
 	// ------------------------------------------------------------------------
 	static KeyCode ConvertToKeyCode( WPARAM wParam )
 	{
@@ -61,6 +63,11 @@ namespace srt
 		{
 			// A - Z
 			keyCode = (KeyCode)( ( wParam - 0x41 ) + (WPARAM)KeyCode::kA );
+		}
+		else if( wParam == VK_SHIFT  )
+		{
+			// Left or rihgt shift
+			keyCode = KeyCode::kShift;
 		}
 		else
 		{

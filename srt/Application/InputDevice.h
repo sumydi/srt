@@ -79,6 +79,8 @@ namespace srt
 		kF9,
 		kF10,
 
+		kShift,
+
 		kMouseLeftButton,
 		kMouseMiddleButton,
 		kMouseRightButton,

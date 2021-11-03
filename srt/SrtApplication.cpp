@@ -220,7 +220,7 @@ namespace srt
 			camera->SetLookAt( camera->GetLookAt( ) + Vec3( 0.2f, 0.0f, 0.0f ) * dt );
 		}
 
-		if( GetKeyState( KeyCode::kMouseMiddleButton).pressed )
+		if( GetKeyState( KeyCode::kMouseMiddleButton).pressed && GetKeyState( KeyCode::kShift ).pressed )
 		{
 			const float moveDT = ( 0.25f * ( 1.0f / 60.0f ) ) / dt;	// move is delta time relative: based on 60Hz frame rate
 			const float dx = (float)( -GetMousePosDelta().x ) * moveDT;
