@@ -103,7 +103,9 @@ namespace srt
 	// ------------------------------------------------------------------------
 	void Application::OnMouseMove( const MousePos & pos )
 	{
-		m_mousePos = pos;	
+		m_mousePosDelta.x = pos.x - m_mousePos.x;
+		m_mousePosDelta.y = pos.y - m_mousePos.y;
+		m_mousePos = pos;
 	}
 
 

@@ -43,6 +43,7 @@ namespace srt
 		const KeyState &	GetKeyState( KeyCode key ) const;
 
 		const MousePos &	GetMousePos( ) const { return m_mousePos; }
+		const MousePos &	GetMousePosDelta( ) const { return m_mousePosDelta; }
 
 	protected:
 
@@ -55,17 +56,17 @@ namespace srt
 		// frameDuration is the time taken to process the current frame in second
 		virtual void	FrameEnd( const float frameDuration ) { };
 
-		void	OnKeyDown( KeyCode key );
-		void	OnKeyUp( KeyCode key );
+		void			OnKeyDown( KeyCode key );
+		void			OnKeyUp( KeyCode key );
 
-		void	OnMouseMove( const MousePos & pos );
+		void			OnMouseMove( const MousePos & pos );
 
 	private:
 		Application( ) = delete;
 		Application operator = ( const Application & other ) = delete;
 
-		void	InitPlatform( const AppContext & context );
-		void	TermPlatform( );
+		void			InitPlatform( const AppContext & context );
+		void			TermPlatform( );
 
 		AppHandle		m_hApp;
 		WindowHandle	m_hWnd;
@@ -73,6 +74,7 @@ namespace srt
 		uint8_t			m_keyPressed[ (size_t)KeyCode::kCount ];
 		KeyState		m_keyState[ (size_t)KeyCode::kCount ];
 		MousePos		m_mousePos;
+		MousePos		m_mousePosDelta;
 
 		#if defined( SRT_PLATFORM_WINDOWS )
 			static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

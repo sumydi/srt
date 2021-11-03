@@ -209,6 +209,12 @@ namespace srt
 		const int wndY = ( GetSystemMetrics( SM_CYSCREEN ) - wndHeight) / 2;
 		m_hWnd = CreateWindow( L"SRTWindowClass", L"SRT", wndStyle, wndX, wndY, wndWidth, wndHeight, NULL, NULL, GetModuleHandle( NULL ), NULL );
 		SetWindowLongPtr( m_hWnd, GWLP_USERDATA, (LONG_PTR)this );
+
+		POINT mousePos;
+		GetCursorPos( &mousePos );
+		ScreenToClient( m_hWnd, &mousePos );
+		m_mousePos.x = mousePos.x;
+		m_mousePos.y = mousePos.y;
 	}
 
 	// ------------------------------------------------------------------------

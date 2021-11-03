@@ -155,7 +155,7 @@ namespace srt
 		m_outputDev->PushText( "Samples: %u", m_sampleCount );
 
 		const MousePos & mousePos = GetMousePos( );
-		m_outputDev->PushText( "Mouse: %d, %d", mousePos.posX, mousePos.posY );
+		m_outputDev->PushText( "Mouse: %d, %d", mousePos.x, mousePos.y );
 
 		if( m_pickResult.hitResult.hitTime >= 0.0f )
 		{
@@ -203,6 +203,18 @@ namespace srt
 		if( GetKeyState( KeyCode::kUp ).pressed )
 		{
 			camera->SetPosition( camera->GetPosition( ) - Vec3( 0.0f, 0.0f, 0.2f ) * dt );
+		}
+
+		if( GetKeyState( KeyCode::kLeft ).pressed )
+		{
+			camera->SetPosition( camera->GetPosition( ) - Vec3( 0.2f, 0.0f, 0.0f ) * dt );
+			camera->SetLookAt( camera->GetLookAt( ) - Vec3( 0.2f, 0.0f, 0.0f ) * dt );
+		}
+
+		if( GetKeyState( KeyCode::kRight ).pressed )
+		{
+			camera->SetPosition( camera->GetPosition( ) + Vec3( 0.2f, 0.0f, 0.0f ) * dt );
+			camera->SetLookAt( camera->GetLookAt( ) + Vec3( 0.2f, 0.0f, 0.0f ) * dt );
 		}
 
 		if( GetKeyState( KeyCode::kF1 ).justPressed )
@@ -309,8 +321,8 @@ namespace srt
 		// ----
 		if( GetKeyState( KeyCode::kMouseLeftButton ).justPressed )
 		{
-			const float nx = (float)GetMousePos().posX / (float)bbWidth;
-			const float ny = (float)GetMousePos().posY / (float)bbHeight;
+			const float nx = (float)GetMousePos().x / (float)bbWidth;
+			const float ny = (float)GetMousePos().y / (float)bbHeight;
 			const Ray ray = camera->GenerateRay( nx, ny );
 
 			SceneTraceResult	traceResult;

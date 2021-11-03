@@ -28,6 +28,9 @@ namespace srt
 		const Vec3 &	GetPosition( ) const { return m_position; }
 		void			SetPosition( const Vec3 & pos );
 
+		const Vec3 &	GetLookAt( ) const { return m_lookAt; }
+		void			SetLookAt( const Vec3 & lookAt );
+
 		float			GetFOV( ) const { return m_fov; }
 		void			SetFOV( const float fov);
 
