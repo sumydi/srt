@@ -80,6 +80,7 @@ namespace srt
 		kF10,
 
 		kShift,
+		kControl,
 
 		kMouseLeftButton,
 		kMouseMiddleButton,

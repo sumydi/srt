@@ -220,15 +220,24 @@ namespace srt
 			camera->SetLookAt( camera->GetLookAt( ) + Vec3( 0.2f, 0.0f, 0.0f ) * dt );
 		}
 
-		if( GetKeyState( KeyCode::kMouseMiddleButton).pressed && GetKeyState( KeyCode::kShift ).pressed )
+		if( GetKeyState( KeyCode::kMouseMiddleButton).pressed )
 		{
 			const float moveDT = ( 0.25f * ( 1.0f / 60.0f ) ) / dt;	// move is delta time relative: based on 60Hz frame rate
-			const float dx = (float)( -GetMousePosDelta().x ) * moveDT;
-			const float dy = (float)( GetMousePosDelta().y ) * moveDT;
-			const Vec3 camMove { dx * dt, dy * dt, 0.0f };
 
-			camera->SetPosition( camera->GetPosition( ) + camMove );
-			camera->SetLookAt( camera->GetLookAt( ) + camMove );
+			if( GetKeyState( KeyCode::kShift ).pressed )
+			{
+				const float dx = (float)( -GetMousePosDelta().x ) * moveDT;
+				const float dy = (float)( GetMousePosDelta().y ) * moveDT;
+				const Vec3 camMove { dx * dt, dy * dt, 0.0f };
+				camera->SetPosition( camera->GetPosition( ) + camMove );
+				camera->SetLookAt( camera->GetLookAt( ) + camMove );
+			}
+			else if( GetKeyState( KeyCode::kControl ).pressed )
+			{
+				//Vec3 viewDir = camera->GetLookAt() - camera->GetPosition();
+				//viewDir = Normalize( viewDir );
+				//camera->SetPosition( camera->GetPosition( ) + camMove );
+			}
 		}
 
 		if( GetKeyState( KeyCode::kF1 ).justPressed )

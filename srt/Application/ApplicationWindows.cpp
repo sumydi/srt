@@ -66,8 +66,13 @@ namespace srt
 		}
 		else if( wParam == VK_SHIFT  )
 		{
-			// Left or rihgt shift
+			// Left or rihgt shift key
 			keyCode = KeyCode::kShift;
+		}
+		else if( wParam == VK_CONTROL  )
+		{
+			// Left or rihgt control key
+			keyCode = KeyCode::kControl;
 		}
 		else
 		{
