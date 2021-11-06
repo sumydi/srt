@@ -193,6 +193,11 @@ namespace srt
 	{
 		Camera * camera = m_scene->GetCamera( 0 );
 
+		if( GetKeyState( KeyCode::kP ).justPressed )
+		{
+			m_isPaused = !m_isPaused;
+		}
+
 		if( GetKeyState( KeyCode::kMouseMiddleButton).pressed )
 		{
 			constexpr float moveDT { 0.004f };
