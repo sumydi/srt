@@ -65,4 +65,13 @@ namespace srt
 		m_ppUpAxis				= vUp * ppHeight;
 		m_ppBottomLeft			= m_position - m_ppRightAxis / 2.0f - m_ppUpAxis / 2.0f - vDir;
 	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Camera::BuildBasis( Vec3 & right, Vec3 & front, Vec3 & up )
+	{
+		front	= Normalize( m_lookAt - m_position );
+		right	= Normalize( Cross( front, Vec3( 0.0f, 1.0f, 0.0f ) ) );
+		up		= Cross( right, front );
+	}
 }

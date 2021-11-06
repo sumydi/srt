@@ -222,21 +222,26 @@ namespace srt
 
 		if( GetKeyState( KeyCode::kMouseMiddleButton).pressed )
 		{
-			const float moveDT = ( 0.25f * ( 1.0f / 60.0f ) ) / dt;	// move is delta time relative: based on 60Hz frame rate
+			constexpr float moveDT { 0.004f };
+			const float dx = (float)( GetMousePosDelta().x ) * moveDT;
+			const float dy = (float)( GetMousePosDelta().y ) * moveDT;
+
+			Vec3 right, front, up;
+			camera->BuildBasis( right, front, up );
 
 			if( GetKeyState( KeyCode::kShift ).pressed )
 			{
-				const float dx = (float)( -GetMousePosDelta().x ) * moveDT;
-				const float dy = (float)( GetMousePosDelta().y ) * moveDT;
-				const Vec3 camMove { dx * dt, dy * dt, 0.0f };
+				const Vec3 camMove = right * -dx + up * dy;
 				camera->SetPosition( camera->GetPosition( ) + camMove );
 				camera->SetLookAt( camera->GetLookAt( ) + camMove );
 			}
 			else if( GetKeyState( KeyCode::kControl ).pressed )
 			{
-				//Vec3 viewDir = camera->GetLookAt() - camera->GetPosition();
-				//viewDir = Normalize( viewDir );
-				//camera->SetPosition( camera->GetPosition( ) + camMove );
+				if( Length( camera->GetLookAt() - camera->GetPosition() ) > 0.01f )
+				{
+					const Vec3 camMove = front * -dy;
+					camera->SetPosition( camera->GetPosition( ) + camMove );
+				}
 			}
 		}
 

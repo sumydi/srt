@@ -36,6 +36,9 @@ namespace srt
 
 		Ray				GenerateRay( const float x, const float y ) const;
 
+		// Build an orthogonal from the current camera position & target
+		void			BuildBasis( Vec3 & right, Vec3 & front, Vec3 & up );
+
 	private:
 		void	UpdateProjectionPlane( );
 
@@ -50,7 +53,6 @@ namespace srt
 		Vec3	m_ppBottomLeft;
 	
 	};
-
 }
 
 #endif
