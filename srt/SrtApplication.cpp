@@ -193,33 +193,6 @@ namespace srt
 	{
 		Camera * camera = m_scene->GetCamera( 0 );
 
-		if( GetKeyState( KeyCode::kP ).justPressed )
-		{
-			m_isPaused = !m_isPaused;
-		}
-
-		if( GetKeyState( KeyCode::kDown ).pressed )
-		{
-			camera->SetPosition( camera->GetPosition( ) + Vec3( 0.0f, 0.0f, 0.2f ) * dt );
-		}
-
-		if( GetKeyState( KeyCode::kUp ).pressed )
-		{
-			camera->SetPosition( camera->GetPosition( ) - Vec3( 0.0f, 0.0f, 0.2f ) * dt );
-		}
-
-		if( GetKeyState( KeyCode::kLeft ).pressed )
-		{
-			camera->SetPosition( camera->GetPosition( ) - Vec3( 0.2f, 0.0f, 0.0f ) * dt );
-			camera->SetLookAt( camera->GetLookAt( ) - Vec3( 0.2f, 0.0f, 0.0f ) * dt );
-		}
-
-		if( GetKeyState( KeyCode::kRight ).pressed )
-		{
-			camera->SetPosition( camera->GetPosition( ) + Vec3( 0.2f, 0.0f, 0.0f ) * dt );
-			camera->SetLookAt( camera->GetLookAt( ) + Vec3( 0.2f, 0.0f, 0.0f ) * dt );
-		}
-
 		if( GetKeyState( KeyCode::kMouseMiddleButton).pressed )
 		{
 			constexpr float moveDT { 0.004f };
@@ -231,17 +204,26 @@ namespace srt
 
 			if( GetKeyState( KeyCode::kShift ).pressed )
 			{
+				// Camera panning
 				const Vec3 camMove = right * -dx + up * dy;
 				camera->SetPosition( camera->GetPosition( ) + camMove );
 				camera->SetLookAt( camera->GetLookAt( ) + camMove );
 			}
 			else if( GetKeyState( KeyCode::kControl ).pressed )
 			{
-				if( Length( camera->GetLookAt() - camera->GetPosition() ) > 0.01f )
+				// Camera zoom in/out: stop the zoom if too near to lookAt position
+				const Vec3 camMove = front * -dy;
+				if( Length( camera->GetLookAt() - ( camera->GetPosition() + camMove ) ) > 0.01f )
 				{
-					const Vec3 camMove = front * -dy;
 					camera->SetPosition( camera->GetPosition( ) + camMove );
 				}
+			}
+			else
+			{
+				// Camera rotation
+				const Vec3 camMove = right * -dx + up * dy;
+				camera->SetPosition( camera->GetPosition( ) + camMove );
+
 			}
 		}
 
@@ -323,9 +305,11 @@ namespace srt
 		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
 		const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
 
+		// Compute remaining pixel to process if job count is not multiple of width or height
+		const uint32_t lastPixWidth = bbWidth % kWidthJobsCount;
+		const uint32_t lastPixHeight = bbHeight % kHeightJobsCount;
+
 		RenderJob::Context context{ m_backBuffer, m_scene, camera };
-		context.width = ( bbWidth / kWidthJobsCount );
-		context.height = ( bbHeight / kHeightJobsCount );
 		context.sampleCount = m_sampleCount;
 
 		Halton halton( context.sampleCount );
@@ -334,9 +318,15 @@ namespace srt
 		for( uint32_t heightJob = 0; heightJob < kHeightJobsCount; ++heightJob )
 		{
 			context.y = ( bbHeight / kHeightJobsCount ) * heightJob;
+			context.height = ( bbHeight / kHeightJobsCount );
+			context.height += ( heightJob == kHeightJobsCount - 1 ) ? lastPixHeight : 0;
+
 			for( uint32_t widthJob = 0; widthJob < kWidthJobsCount; ++widthJob )
 			{
 				context.x = ( bbWidth / kWidthJobsCount ) * widthJob;
+				context.width = ( bbWidth / kWidthJobsCount );
+				context.width += ( widthJob == kWidthJobsCount - 1 ) ? lastPixWidth : 0;
+
 				jobs[ jobIdx ].SetContext( context );
 				m_jobScheduler->PushJob( &jobs[ jobIdx ] );
 				++jobIdx;
