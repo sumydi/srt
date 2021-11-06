@@ -198,6 +198,7 @@ namespace srt
 			m_isPaused = !m_isPaused;
 		}
 
+		// Camera
 		if( GetKeyState( KeyCode::kMouseMiddleButton).pressed )
 		{
 			constexpr float moveDT { 0.004f };
@@ -232,6 +233,17 @@ namespace srt
 			}
 		}
 
+		if( GetKeyState( KeyCode::kC ).justPressed && ( m_pickResult.hitResult.hitTime > 0.0f ) )
+		{
+			// Center camera on picked position
+			const Vec3 camDir { camera->GetLookAt() - camera->GetPosition() };
+			const Vec3 newLookAt { m_pickResult.hitResult.position };
+			const Vec3 newCamPos { newLookAt - camDir };
+			camera->SetPosition( newCamPos );
+			camera->SetLookAt( newLookAt );
+		}
+
+		// Rendering mode
 		if( GetKeyState( KeyCode::kF1 ).justPressed )
 		{
 			m_renderMode = RenderMode::kSimple;
@@ -245,6 +257,7 @@ namespace srt
 			m_renderMode = RenderMode::kFullRT;
 		}
 
+		// Number of samples
 		if( GetKeyState( KeyCode::kAdd ).justPressed )
 		{
 			if( m_sampleCount < 32 )
@@ -305,7 +318,6 @@ namespace srt
 				return;
 		}
 
-		size_t			jobIdx = 0;
 
 		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
 		const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
@@ -319,6 +331,8 @@ namespace srt
 
 		Halton halton( context.sampleCount );
 		context.halton = &halton;
+
+		size_t			jobIdx = 0;
 
 		for( uint32_t heightJob = 0; heightJob < kHeightJobsCount; ++heightJob )
 		{
