@@ -18,6 +18,7 @@
 #include "RenderJobPBR.h"
 #include "RenderJobSimple.h"
 #include "RenderJobFullRT.h"
+#include <assert.h>
 
 namespace srt
 {
@@ -298,26 +299,6 @@ namespace srt
 		RenderJobPBR	jobsPBR[ kWidthJobsCount * kHeightJobsCount ];
 		RenderJobSimple	jobsSimple[ kWidthJobsCount * kHeightJobsCount ];
 		RenderJobFullRT	jobsFullRT[ kWidthJobsCount * kHeightJobsCount ];
-		RenderJob *		jobs = nullptr;
-
-		switch( m_renderMode )
-		{
-			case RenderMode::kSimple:
-				jobs = jobsSimple;
-				break;
-
-			case RenderMode::kPBR:
-				jobs = jobsPBR;
-				break;
-
-			case RenderMode::kFullRT:
-				jobs = jobsFullRT;
-				break;
-
-			default:
-				return;
-		}
-
 
 		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
 		const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
@@ -346,8 +327,24 @@ namespace srt
 				context.width = ( bbWidth / kWidthJobsCount );
 				context.width += ( widthJob == kWidthJobsCount - 1 ) ? lastPixWidth : 0;
 
-				jobs[ jobIdx ].SetContext( context );
-				m_jobScheduler->PushJob( &jobs[ jobIdx ] );
+				RenderJob * job { nullptr };
+				if( m_renderMode==RenderMode::kSimple )
+				{
+					job = m_freeAllAllocator.Allocate< RenderJobSimple >( );
+				}
+				else if( m_renderMode==RenderMode::kPBR )
+				{
+					job = m_freeAllAllocator.Allocate< RenderJobPBR >( );
+				}
+				else if( m_renderMode==RenderMode::kFullRT )
+				{
+					job = m_freeAllAllocator.Allocate< RenderJobFullRT >( );
+				}
+
+				assert( job!=nullptr );
+
+				job->SetContext( context );
+				m_jobScheduler->PushJob( job );
 				++jobIdx;
 			}
 		}
@@ -366,6 +363,8 @@ namespace srt
 			m_scene->TraceRay( ray, 0.01f, FLT_MAX, traceResult );
 			m_pickResult = traceResult;
 		}
+
+		m_freeAllAllocator.FreeAll();
 	}
 
 

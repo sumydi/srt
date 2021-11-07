@@ -3,6 +3,7 @@
 
 #include "Application/Application.h"
 #include "Scene/SceneTraceResult.h"
+#include "Memory/FreeAllAllocator.h"
 
 #include <chrono>
 
@@ -41,6 +42,8 @@ private:
 	Scene *				m_scene { nullptr };
 	Image *				m_backBuffer { nullptr };
 	OutputDevice *		m_outputDev { nullptr };
+
+	FreeAllAllocator	m_freeAllAllocator;
 
 	uint32_t			m_sampleCount { 1 };
 	bool				m_isPaused { false };
