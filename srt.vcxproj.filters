@@ -37,6 +37,9 @@
     <Filter Include="srt\JobScheduler">
       <UniqueIdentifier>{70eac0b0-aee2-403e-b734-9466ccc99633}</UniqueIdentifier>
     </Filter>
+    <Filter Include="srt\Memory">
+      <UniqueIdentifier>{bef6cc9d-63e5-484c-9d00-55652defa04a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -138,6 +141,9 @@
     <ClInclude Include="srt\Math\Vector2.h">
       <Filter>srt\Math</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Memory\FreeAllAllocator.h">
+      <Filter>srt\Memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -205,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="srt\Math\Halton.cpp">
       <Filter>srt\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Memory\FreeAllAllocator.cpp">
+      <Filter>srt\Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
