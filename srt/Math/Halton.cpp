@@ -5,7 +5,7 @@ namespace srt
 
 	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
-	float GenerateHalton( uint32_t index, uint32_t base )
+	static float GenerateHalton( uint32_t index, uint32_t base )
 	{
 		float result = 0.0f;
 		float invBase = 1.0f / (float)base;

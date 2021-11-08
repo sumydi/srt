@@ -7,8 +7,15 @@
 
 namespace srt
 {
-	float GenerateHalton( uint32_t index, uint32_t base );
 
+	// ============================================================================
+	// Class used to generate and use an Halton sequence
+	// Ref: https://en.wikipedia.org/wiki/Halton_sequence
+	// 
+	// You must provide a size of the Halton sequence in the ctor. The distribution
+	// is based on this size, so it makes no sense to use only a part of a sequence.
+	//
+	// ============================================================================
 	class Halton final
 	{
 	public:

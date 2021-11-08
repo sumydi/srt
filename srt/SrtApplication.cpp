@@ -19,6 +19,7 @@
 #include "RenderJobSimple.h"
 #include "RenderJobFullRT.h"
 #include <assert.h>
+#include <cmath>
 
 namespace srt
 {
@@ -76,7 +77,7 @@ namespace srt
 
 		Vec3 v{ x, y, z };
 		v = Normalize( v );
-		const float t = RandomFloat( );
+		const float t = std::cbrt( RandomFloat( ) );	// use cube root for more uniform distribution
 		v *= t;
 
 		return v;
