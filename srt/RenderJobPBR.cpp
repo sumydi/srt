@@ -9,6 +9,7 @@
 #include "Scene/Light.h"
 #include "Scene/SceneTraceResult.h"
 #include "Lighting/LightingUtils.h"
+#include "Graphic/Color.h"
 
 namespace srt
 {
@@ -110,13 +111,8 @@ void RenderJobPBR::Execute( )
 			resultColor = resultColor / ( resultColor + 1.0f );
 
 			// convert from (normalized) linear to sRGB
-			const uint32_t r = (uint32_t)( sqrtf( resultColor.X() ) * 255.0f );
-			const uint32_t g = (uint32_t)( sqrtf( resultColor.Y() ) * 255.0f );
-			const uint32_t b = (uint32_t)( sqrtf( resultColor.Z() ) * 255.0f );
-
-			const uint32_t color = ( r << 16 ) | ( g << 8 ) | ( b );
-
-			*line = color;
+			Vec3 srgbColor = LinearTosRGB( resultColor );
+			*line = MakeRGB( srgbColor );
 			++line;
 		}
 	}

@@ -1,5 +1,6 @@
 #include "RenderJobFullRT.h"
 #include "Math/Ray.h"
+#include "Graphic/Color.h"
 #include "Graphic/Image.h"
 #include "Graphic/Material.h"
 #include "Scene/Scene.h"
@@ -25,9 +26,10 @@ static Vec3 ComputeColor( const Scene & scene, const Ray & ray )
 	else
 	{
 		// hit nothing
-		resultColor = Vec3{ 0.5f, 0.5f, 0.5f };
+		const float t = 0.5f * ray.Direction().Y() + 1.0f;
+		resultColor = Lerp( Vec3{ 1.0f, 1.0f, 1.0f }, Vec3{ 0.5f, 0.7f, 1.0f }, t );
 	}
-
+	
 	return resultColor;
 }
 
@@ -56,14 +58,16 @@ void RenderJobFullRT::Execute( )
 			resultColor = ComputeColor( *m_context.scene, ray );
 
 			// Basic tone mapping
-			resultColor = resultColor / ( resultColor + 1.0f );
+			//resultColor = resultColor / ( resultColor + 1.0f );
 
 			// convert from (normalized) linear to sRGB
-			const uint32_t r = (uint32_t)( sqrtf( resultColor.X() ) * 255.0f );
-			const uint32_t g = (uint32_t)( sqrtf( resultColor.Y() ) * 255.0f );
-			const uint32_t b = (uint32_t)( sqrtf( resultColor.Z() ) * 255.0f );
+			//const uint32_t r = (uint32_t)( sqrtf( resultColor.X() ) * 255.0f );
+			//const uint32_t g = (uint32_t)( sqrtf( resultColor.Y() ) * 255.0f );
+			//const uint32_t b = (uint32_t)( sqrtf( resultColor.Z() ) * 255.0f );
 
-			const uint32_t color = ( r << 16 ) | ( g << 8 ) | ( b );
+			//const uint32_t color = ( r << 16 ) | ( g << 8 ) | ( b );
+
+			const uint32_t color = MakeRGB( resultColor );
 
 			*line = color;
 			++line;
