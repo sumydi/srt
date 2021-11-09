@@ -144,6 +144,9 @@
     <ClInclude Include="srt\Memory\FreeAllAllocator.h">
       <Filter>srt\Memory</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Graphic\Color.h">
+      <Filter>srt\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
