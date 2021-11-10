@@ -30,8 +30,8 @@ static Vec3 ComputeColor( const Scene & scene, const Ray & ray, uint32_t rayIdx 
 
 	if( hit.hitResult.hitTime >= 0.0f )
 	{
-		Vec3 target = hit.hitResult.position + hit.hitResult.normal + RandomInUnitSphere();
-		return 0.5f * ComputeColor( scene, Ray( hit.hitResult.position, Normalize( target - hit.hitResult.position ) ), rayIdx - 1 );
+		Vec3 target = hit.hitResult.position + hit.hitResult.normal + Normalize( RandomInUnitSphere() );
+		resultColor =  0.5f * ComputeColor( scene, Ray{ hit.hitResult.position, Normalize( target - hit.hitResult.position ) }, rayIdx - 1 );
 	}
 	else
 	{
