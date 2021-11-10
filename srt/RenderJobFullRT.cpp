@@ -1,27 +1,37 @@
 #include "RenderJobFullRT.h"
 #include "Math/Ray.h"
+#include "Math/Random.h"
 #include "Graphic/Color.h"
 #include "Graphic/Image.h"
 #include "Graphic/Material.h"
 #include "Scene/Scene.h"
 #include "Scene/Camera.h"
 #include "Scene/SceneTraceResult.h"
+#include "Graphic/Color.h"
 
 namespace srt
 {
 
+static constexpr uint32_t kRayCount = 32;
+
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
-static Vec3 ComputeColor( const Scene & scene, const Ray & ray )
+static Vec3 ComputeColor( const Scene & scene, const Ray & ray, uint32_t rayIdx )
 {
 	Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
 
-	SceneTraceResult primaryResult;
-	scene.TraceRay( ray, 0.001f, FLT_MAX, primaryResult );
-
-	if( primaryResult.hitResult.hitTime >= 0.0f )
+	if( rayIdx == 0 )
 	{
-		resultColor = Vec3{ 1.0f, 0.0f, 0.0f };
+		return resultColor;
+	}
+
+	SceneTraceResult hit;
+	scene.TraceRay( ray, 0.001f, FLT_MAX, hit );
+
+	if( hit.hitResult.hitTime >= 0.0f )
+	{
+		Vec3 target = hit.hitResult.position + hit.hitResult.normal + RandomInUnitSphere();
+		return 0.5f * ComputeColor( scene, Ray( hit.hitResult.position, Normalize( target - hit.hitResult.position ) ), rayIdx - 1 );
 	}
 	else
 	{
@@ -55,18 +65,12 @@ void RenderJobFullRT::Execute( )
 			// make a ray from the origin to the current normalized pixel
 			const Ray ray = m_context.camera->GenerateRay( nx, ny );
 
-			resultColor = ComputeColor( *m_context.scene, ray );
+			resultColor = ComputeColor( *m_context.scene, ray, kRayCount );
 
 			// Basic tone mapping
 			//resultColor = resultColor / ( resultColor + 1.0f );
 
-			// convert from (normalized) linear to sRGB
-			//const uint32_t r = (uint32_t)( sqrtf( resultColor.X() ) * 255.0f );
-			//const uint32_t g = (uint32_t)( sqrtf( resultColor.Y() ) * 255.0f );
-			//const uint32_t b = (uint32_t)( sqrtf( resultColor.Z() ) * 255.0f );
-
-			//const uint32_t color = ( r << 16 ) | ( g << 8 ) | ( b );
-
+			resultColor = LinearTosRGB( resultColor );
 			const uint32_t color = MakeRGB( resultColor );
 
 			*line = color;

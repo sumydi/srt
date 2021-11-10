@@ -67,21 +67,7 @@ namespace srt
 		delete m_jobScheduler;
 	}
 
-	// ------------------------------------------------------------------------
-	// ------------------------------------------------------------------------
-	static Vec3 RandomInUnitSphere( )
-	{
-		const float x = RandomFloat( -1.0f, 1.0f );
-		const float y = RandomFloat( -1.0f, 1.0f );
-		const float z = RandomFloat( -1.0f, 1.0f );
 
-		Vec3 v{ x, y, z };
-		v = Normalize( v );
-		const float t = std::cbrt( RandomFloat( ) );	// use cube root for more uniform distribution
-		v *= t;
-
-		return v;
-	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
