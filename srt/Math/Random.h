@@ -1,6 +1,8 @@
 #ifndef SRT_RANDOM_H
 #define SRT_RANDOM_H
 
+#include "Vector3.h"
+
 namespace srt
 {
 	// ------------------------------------------------------------------------
@@ -13,7 +15,10 @@ namespace srt
 	// ------------------------------------------------------------------------
 	float	RandomFloat( float min, float max );
 
-
+	// ------------------------------------------------------------------------
+	// Returns a random position in an unit sphere
+	// ------------------------------------------------------------------------
+	Vec3 RandomInUnitSphere( );
 }
 
 #endif
