@@ -27,9 +27,9 @@ namespace srt
 	// ----------------------------------------------------------------------------
 	inline Vec3 LinearTosRGB( const Vec3 & v )
 	{
+		// note: sqrt( x ) = pow( x, 1 / 2 )
 		Vec3 tmp { sqrtf( v.X() ), sqrtf( v.Y() ), sqrtf( v.Z() ) };
 		return tmp;
-
 	}
 
 }
