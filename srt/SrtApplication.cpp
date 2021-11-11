@@ -270,7 +270,7 @@ namespace srt
 		const float si = sinf( t );
 
 		SceneObject * obj = m_scene->GetObject( 1 );
-		Vec3 objPos = Vec3{ 0.0f, 0.5f, -1.0f } + Vec3{ cs * 0.8f, cs * 0.3f, si * 1.0f };
+		Vec3 objPos = Vec3{ 0.0f, 0.5f, -1.0f } + Vec3{ cs * 0.8f, cs * 0.8f, si * 1.0f };
 		obj->SetPosition( objPos );
 
 //		Light * light = m_scene->GetLight( 0 );
