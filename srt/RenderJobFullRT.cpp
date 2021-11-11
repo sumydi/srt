@@ -13,7 +13,7 @@
 namespace srt
 {
 
-static constexpr uint32_t kRayCount = 8;
+static constexpr uint32_t kRayCount = 32;
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
@@ -31,8 +31,12 @@ static Vec3 ComputeColor( const Scene & scene, const Ray & ray, uint32_t rayIdx 
 
 	if( hit.hitResult.hitTime >= 0.0f )
 	{
-		Vec3 target = hit.hitResult.position + hit.hitResult.normal + Normalize( RandomInUnitSphere() );
-		resultColor =  0.5f * ComputeColor( scene, Ray{ hit.hitResult.position, Normalize( target - hit.hitResult.position ) }, rayIdx - 1 );
+		Vec3 scatter = hit.hitResult.normal + Normalize( RandomInUnitSphere() );
+		if( Length( scatter ) < 0.0001f )
+		{
+			scatter = hit.hitResult.normal;
+		}
+		resultColor =  hit.material->GetAlbedo() * ComputeColor( scene, Ray{ hit.hitResult.position, scatter }, rayIdx - 1 );
 	}
 	else
 	{
