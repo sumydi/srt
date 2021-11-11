@@ -1,5 +1,6 @@
 #include "RenderJobFullRT.h"
 #include "Math/Ray.h"
+#include "Math/Halton.h"
 #include "Math/Random.h"
 #include "Graphic/Color.h"
 #include "Graphic/Image.h"
@@ -12,7 +13,7 @@
 namespace srt
 {
 
-static constexpr uint32_t kRayCount = 32;
+static constexpr uint32_t kRayCount = 8;
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
@@ -48,6 +49,9 @@ static Vec3 ComputeColor( const Scene & scene, const Ray & ray, uint32_t rayIdx 
 // ------------------------------------------------------------------------
 void RenderJobFullRT::Execute( )
 {
+	// do not apply jitterring on the camera when kSamplecount==1 to avoid wobling picture
+	const float jitteringFactor = m_context.sampleCount > 1 ? 1.0f : 0.0f;
+
 	const float surfWidth = static_cast< float >( m_context.image->GetMipDesc( 0 ).width - 1 );
 	const float surfHeight = static_cast< float >( m_context.image->GetMipDesc( 0 ).height - 1 );
 	const uint32_t surfPitch = m_context.image->GetMipDesc( 0 ).pitch;
@@ -58,14 +62,20 @@ void RenderJobFullRT::Execute( )
 		uint32_t * line = reinterpret_cast< uint32_t * >( surfPixels + ( m_context.y + y ) * surfPitch ) + m_context.x;
 		for( uint32_t x = 0; x < m_context.width; ++x )
 		{
-			Vec3 resultColor;
-			const float nx = ( (float)( x + m_context.x ) / surfWidth );
-			const float ny = ( (float)( y + m_context.y ) / surfHeight );
+			Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
+			for( uint32_t sampleIdx = 0; sampleIdx < m_context.sampleCount; ++sampleIdx )
+			{
+				// transform coordinates to "normalized" coordinates
+				Vec2 jitter = m_context.halton->GetValue( sampleIdx );
+				const float nx = ( ( (float)( x + m_context.x ) + jitter.X() * jitteringFactor ) / surfWidth );
+				const float ny = ( ( (float)( y + m_context.y ) + jitter.Y() * jitteringFactor ) / surfHeight );
 
-			// make a ray from the origin to the current normalized pixel
-			const Ray ray = m_context.camera->GenerateRay( nx, ny );
+				// make a ray from the origin to the current normalized pixel
+				const Ray ray = m_context.camera->GenerateRay( nx, ny );
 
-			resultColor = ComputeColor( *m_context.scene, ray, kRayCount );
+				resultColor += ComputeColor( *m_context.scene, ray, kRayCount );
+			}
+			resultColor /= (float)m_context.sampleCount;
 
 			// Basic tone mapping
 			//resultColor = resultColor / ( resultColor + 1.0f );
