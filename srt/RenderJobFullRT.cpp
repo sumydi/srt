@@ -13,11 +13,11 @@
 namespace srt
 {
 
-static constexpr uint32_t kRayCount = 32;
+static constexpr uint32_t kRayCount = 8;
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
-static Vec3 ComputeColor( const Scene & scene, const Ray & ray, uint32_t rayIdx )
+Vec3 RenderJobFullRT::ComputeColor( const Ray & ray, uint32_t rayIdx )
 {
 	Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
 
@@ -27,16 +27,16 @@ static Vec3 ComputeColor( const Scene & scene, const Ray & ray, uint32_t rayIdx 
 	}
 
 	SceneTraceResult hit;
-	scene.TraceRay( ray, 0.001f, FLT_MAX, hit );
+	m_context.scene->TraceRay( ray, 0.001f, FLT_MAX, hit );
 
 	if( hit.hitResult.hitTime >= 0.0f )
 	{
-		Vec3 scatter = hit.hitResult.normal + Normalize( RandomInUnitSphere() );
-		if( Length( scatter ) < 0.0001f )
+		Vec3 scatter = hit.hitResult.normal + Normalize( RandomInUnitSphere( m_rndGenerator ) );
+		if( Length( scatter ) < 0.001f )
 		{
 			scatter = hit.hitResult.normal;
 		}
-		resultColor =  hit.material->GetAlbedo() * ComputeColor( scene, Ray{ hit.hitResult.position, scatter }, rayIdx - 1 );
+		resultColor =  hit.material->GetAlbedo() * ComputeColor( Ray{ hit.hitResult.position, scatter }, rayIdx - 1 );
 	}
 	else
 	{
@@ -77,7 +77,7 @@ void RenderJobFullRT::Execute( )
 				// make a ray from the origin to the current normalized pixel
 				const Ray ray = m_context.camera->GenerateRay( nx, ny );
 
-				resultColor += ComputeColor( *m_context.scene, ray, kRayCount );
+				resultColor += ComputeColor( ray, kRayCount );
 			}
 			resultColor /= (float)m_context.sampleCount;
 

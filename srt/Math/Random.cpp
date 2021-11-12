@@ -4,42 +4,48 @@
 namespace srt
 {
 	// ----------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------
+	StandardRandom::StandardRandom( int32_t seed )
+	{
+		std::srand( (unsigned int )seed );
+	}
+
+	// ----------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------
+	int32_t FastRandom::Rand( )
+	{
+		m_value = 1664525 * m_value + 1013904223;
+		return m_value;
+	}
+
+	// ----------------------------------------------------------------------------
 	// returns a random number in the range [0;1)
 	// ----------------------------------------------------------------------------
-	float RandomFloat( )
+	float RandomFloat( RandomGenerator & generator )
 	{
-		// NOTE
-		//  std::mt19937 generator is "slow", replaced by std::rand()
-		//  allowed to have around 2x speedup
-		//  BUT I'm aware that std::rand() is a bad PRNG
-		//
-
-		//static std::uniform_real_distribution< float >	distribution( 0.0f, 1.0f );
-		//static std::mt19937 generator;
-		//return distribution( generator );
-		
-		return (float)std::rand() / ( (float)RAND_MAX + 1.0f );
+	
+		return (float)generator.Rand() / ( (float)RandomGenerator::kMaxValue + 1.0f );
 	}
 
 	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
-	float RandomFloat( float min, float max )
+	float RandomFloat( RandomGenerator & generator, float min, float max )
 	{
-		return min + ( max - min ) * RandomFloat( );
+		return min + ( max - min ) * RandomFloat( generator );
 	}
 
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	Vec3 RandomInUnitSphere( )
+	Vec3 RandomInUnitSphere( RandomGenerator & generator )
 	{
-		const float x = RandomFloat( -1.0f, 1.0f );
-		const float y = RandomFloat( -1.0f, 1.0f );
-		const float z = RandomFloat( -1.0f, 1.0f );
+		const float x = RandomFloat( generator, -1.0f, 1.0f );
+		const float y = RandomFloat( generator, -1.0f, 1.0f );
+		const float z = RandomFloat( generator, -1.0f, 1.0f );
 
 		Vec3 v{ x, y, z };
 		v = Normalize( v );
-		const float t = std::cbrt( RandomFloat( ) );	// use cube root for more uniform distribution
+		const float t = std::cbrt( RandomFloat( generator ) );	// use cube root for more uniform distribution
 		v *= t;
 
 		return v;
