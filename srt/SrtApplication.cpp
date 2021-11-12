@@ -282,11 +282,6 @@ namespace srt
 		// Render!
 		// -------
 		
-		// TODO: rewrite this!
-		RenderJobPBR	jobsPBR[ kWidthJobsCount * kHeightJobsCount ];
-		RenderJobSimple	jobsSimple[ kWidthJobsCount * kHeightJobsCount ];
-		RenderJobFullRT	jobsFullRT[ kWidthJobsCount * kHeightJobsCount ];
-
 		const uint32_t bbWidth = m_backBuffer->GetMipDesc( 0 ).width;
 		const uint32_t bbHeight = m_backBuffer->GetMipDesc( 0 ).height;
 
