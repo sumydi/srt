@@ -2,6 +2,7 @@
 #define SRT_RENDERJOB_H
 
 #include "JobScheduler/JobScheduler.h"
+#include "Math/Random.h"
 
 namespace srt
 {
@@ -40,7 +41,8 @@ namespace srt
 		void SetContext( const Context & context ) { m_context = context; }
 	
 	protected:
-		Context		m_context;
+		Context			m_context;
+		RandomGenerator	m_rndGenerator;
 
 	private:
 		virtual void Execute( ) = 0;

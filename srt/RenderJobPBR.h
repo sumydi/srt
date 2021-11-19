@@ -5,6 +5,7 @@
 
 namespace srt
 {
+	class Ray;
 
 	// ============================================================================
 	//
@@ -18,7 +19,8 @@ namespace srt
 		virtual ~RenderJobPBR() { }
 
 	private:
-		virtual void Execute() final;
+		virtual void	Execute() final;
+		Vec3			ComputeColor( const Ray & ray, uint32_t rayIdx );
 	};
 }
 #endif

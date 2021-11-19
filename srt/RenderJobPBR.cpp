@@ -18,26 +18,26 @@ static constexpr uint32_t kRayCount = 2;
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
-static Vec3 ComputeColor( const Scene & scene, const Ray & ray, uint32_t rayIdx )
+Vec3 RenderJobPBR::ComputeColor( const Ray & ray, uint32_t rayIdx )
 {
 	Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
 
 	if( rayIdx > 0 )
 	{
 		SceneTraceResult primaryResult;
-		scene.TraceRay( ray, 0.001f, FLT_MAX, primaryResult );
+		m_context.scene->TraceRay( ray, 0.001f, FLT_MAX, primaryResult );
 
 		if( primaryResult.hitResult.hitTime >= 0.0f )
 		{
 			// Hit an object: compute lightings for all lights
-			for( size_t lightIdx = 0; lightIdx < scene.GetLightCount(); ++lightIdx )
+			for( size_t lightIdx = 0; lightIdx < m_context.scene->GetLightCount(); ++lightIdx )
 			{
-				Light * light = scene.GetLight( lightIdx );
+				Light * light = m_context.scene->GetLight( lightIdx );
 
 				// shadow ray
 				Ray shadowRay{ primaryResult.hitResult.position, Normalize( light->GetPosition() - primaryResult.hitResult.position ) };
 				SceneTraceResult shadowResult;
-				scene.TraceRay( shadowRay, 0.01f, FLT_MAX, shadowResult );
+				m_context.scene->TraceRay( shadowRay, 0.01f, FLT_MAX, shadowResult );
 				if( shadowResult.hitResult.hitTime < 0.0f )
 				{
 					// Direct lighting
@@ -46,15 +46,19 @@ static Vec3 ComputeColor( const Scene & scene, const Ray & ray, uint32_t rayIdx 
 				}
 			}
 
+			//Vec3 scatter = primaryResult.hitResult.normal + Normalize( RandomInUnitSphere( m_rndGenerator ) );
+			//resultColor += ComputeColor(  Ray{ primaryResult.hitResult.position, scatter }, rayIdx - 1 );
 			//
+			
 			if( primaryResult.material->GetMetalness() > 0.8f )
 			{
 				const Vec3 reflect = Reflect( ray.Direction(), primaryResult.hitResult.normal );
 				const Ray reflectRay { primaryResult.hitResult.position, reflect };
-				const Vec3 indirectColor = ComputeColor( scene, reflectRay, rayIdx - 1 );
+				const Vec3 indirectColor = ComputeColor( reflectRay, rayIdx - 1 );
 				LightSource lightSource{ -reflectRay.Direction(), indirectColor };
 				resultColor += ComputeBRDF( reflectRay.Origin(), primaryResult, lightSource );
 			}
+			
 
 			// GI diffuse
 			// Vec3 target = primaryResult.hitResult.position + primaryResult.hitResult.normal + RandomUnitVector( );
@@ -103,7 +107,7 @@ void RenderJobPBR::Execute( )
 				// make a ray from the origin to the current normalized pixel
 				const Ray ray = m_context.camera->GenerateRay( nx, ny );
 
-				resultColor += ComputeColor( *m_context.scene, ray, kRayCount );
+				resultColor += ComputeColor( ray, kRayCount );
 			}
 			resultColor /= (float)m_context.sampleCount;
 
