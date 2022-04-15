@@ -13,13 +13,11 @@
 namespace srt
 {
 
-static constexpr uint32_t kRayCount = 8;
-
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
 Vec3 RenderJobFullRT::ComputeColor( const Ray & ray, uint32_t rayIdx )
 {
-	Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
+	Vec3 resultColor{ 1.0f, 1.0f, 1.0f };
 
 	if( rayIdx == 0 )
 	{
@@ -77,14 +75,14 @@ void RenderJobFullRT::Execute( )
 				// make a ray from the origin to the current normalized pixel
 				const Ray ray = m_context.camera->GenerateRay( nx, ny );
 
-				resultColor += ComputeColor( ray, kRayCount );
+				resultColor += ComputeColor( ray, m_context.rayCount );
 			}
 			resultColor /= (float)m_context.sampleCount;
 
 			// Basic tone mapping
 			//resultColor = resultColor / ( resultColor + 1.0f );
 
-			resultColor = LinearTosRGB( resultColor );
+			//resultColor = LinearTosRGB( resultColor );
 			const uint32_t color = MakeRGB( resultColor );
 
 			*line = color;

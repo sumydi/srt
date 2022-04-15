@@ -46,6 +46,7 @@ private:
 	FreeAllAllocator	m_freeAllAllocator;
 
 	uint32_t			m_sampleCount { 1 };
+	uint32_t			m_rayCount { 3 };
 	bool				m_isPaused { false };
 
 	SceneTraceResult	m_pickResult;

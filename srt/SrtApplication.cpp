@@ -125,13 +125,14 @@ namespace srt
 	#endif
 
 		m_outputDev->PushText( "Focal: %.02f°", m_scene->GetCamera( 0 )->GetFOV( ) );
+		m_outputDev->PushText( "Rays: %u", m_rayCount );
 		m_outputDev->PushText( "Samples: %u", m_sampleCount );
 
-		const MousePos & mousePos = GetMousePos( );
-		m_outputDev->PushText( "Mouse: %d, %d", mousePos.x, mousePos.y );
+		//const MousePos & mousePos = GetMousePos( );
+		//m_outputDev->PushText( "Mouse: %d, %d", mousePos.x, mousePos.y );
 
-		const MousePos & mousePosDelta = GetMousePosDelta( );
-		m_outputDev->PushText( "MouseDelta: %d, %d", mousePosDelta.x, mousePosDelta.y );
+		//const MousePos & mousePosDelta = GetMousePosDelta( );
+		//m_outputDev->PushText( "MouseDelta: %d, %d", mousePosDelta.x, mousePosDelta.y );
 
 		if( m_pickResult.hitResult.hitTime >= 0.0f )
 		{
@@ -230,13 +231,25 @@ namespace srt
 			m_renderMode = RenderMode::kFullRT;
 		}
 
-		// Number of samples
+		// Number of rays
 		if( GetKeyState( KeyCode::kAdd ).justPressed )
+		{
+			if( m_rayCount < 32 )
+				m_rayCount++;
+		}
+		else if( GetKeyState( KeyCode::kSubtract ).justPressed )
+		{
+			if( m_rayCount > 1 )
+				m_rayCount--;
+		}
+
+		// Number of samples
+		if( GetKeyState( KeyCode::kMultiply ).justPressed )
 		{
 			if( m_sampleCount < 32 )
 				m_sampleCount++;
 		}
-		else if( GetKeyState( KeyCode::kSubtract ).justPressed )
+		else if( GetKeyState( KeyCode::kDivide ).justPressed )
 		{
 			if( m_sampleCount > 1 )
 				m_sampleCount--;
@@ -276,6 +289,7 @@ namespace srt
 
 		RenderJob::Context context{ m_backBuffer, m_scene, camera };
 		context.sampleCount = m_sampleCount;
+		context.rayCount = m_rayCount;
 
 		Halton halton( context.sampleCount );
 		context.halton = &halton;

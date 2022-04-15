@@ -33,6 +33,7 @@ namespace srt
 			uint32_t			width { 0 };
 			uint32_t			height { 0 };
 			uint32_t			sampleCount { 1 };
+			uint32_t			rayCount { 1 };
 		};
 
 		RenderJob() : Job{ } { };
