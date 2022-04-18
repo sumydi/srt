@@ -246,7 +246,7 @@ namespace srt
 		// Number of samples
 		if( GetKeyState( KeyCode::kMultiply ).justPressed )
 		{
-			if( m_sampleCount < 32 )
+			if( m_sampleCount < 50 )
 				m_sampleCount++;
 		}
 		else if( GetKeyState( KeyCode::kDivide ).justPressed )

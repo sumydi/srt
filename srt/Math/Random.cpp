@@ -39,6 +39,19 @@ namespace srt
 	// ------------------------------------------------------------------------
 	Vec3 RandomInUnitSphere( RandomGenerator & generator )
 	{
+		Vec3 v{ 10.0f, 10.0f, 10.0f };
+
+		while( SquaredLength( v ) >= 1.0f )
+		{
+			const float x = RandomFloat( generator, -1.0f, 1.0f );
+			const float y = RandomFloat( generator, -1.0f, 1.0f );
+			const float z = RandomFloat( generator, -1.0f, 1.0f );
+
+			v = Vec3{ x,y,z };
+		}
+
+		return v;
+		/*
 		const float x = RandomFloat( generator, -1.0f, 1.0f );
 		const float y = RandomFloat( generator, -1.0f, 1.0f );
 		const float z = RandomFloat( generator, -1.0f, 1.0f );
@@ -49,5 +62,26 @@ namespace srt
 		v *= t;
 
 		return v;
+		*/
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	Vec3 RandomInHemiSphere( RandomGenerator & generator, const Vec3 & normal )
+	{
+		Vec3 inUnitSphere = RandomInUnitSphere( generator );
+		if( Dot( inUnitSphere, normal ) > 0.0f )
+		{
+			return inUnitSphere;
+		}
+
+		return -inUnitSphere;
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	Vec3 RandomUnitVector( RandomGenerator& generator )
+	{
+		return Normalize( RandomInUnitSphere( generator ) );
 	}
 }

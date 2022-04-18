@@ -183,6 +183,11 @@ namespace srt
 		return v1.X() * v2.X() + v1.Y() * v2.Y() + v1.Z() * v2.Z();
 	}
 
+	inline float SquaredLength(const Vec3& v)
+	{
+		return Dot( v, v );
+	}
+
 	inline float Length( const Vec3 & v )
 	{
 		return sqrtf( Dot( v, v ) );

@@ -17,7 +17,7 @@ namespace srt
 // ------------------------------------------------------------------------
 Vec3 RenderJobFullRT::ComputeColor( const Ray & ray, uint32_t rayIdx )
 {
-	Vec3 resultColor{ 1.0f, 1.0f, 1.0f };
+	Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
 
 	if( rayIdx == 0 )
 	{
@@ -29,11 +29,13 @@ Vec3 RenderJobFullRT::ComputeColor( const Ray & ray, uint32_t rayIdx )
 
 	if( hit.hitResult.hitTime >= 0.0f )
 	{
-		Vec3 scatter = hit.hitResult.normal + Normalize( RandomInUnitSphere( m_rndGenerator ) );
-		if( Length( scatter ) < 0.001f )
+		// Uses Lambertian distribution
+		Vec3 scatter = hit.hitResult.normal + RandomUnitVector( m_rndGenerator );
+		if( SquaredLength( scatter ) < 0.0001f )
 		{
 			scatter = hit.hitResult.normal;
 		}
+
 		resultColor =  hit.material->GetAlbedo() * ComputeColor( Ray{ hit.hitResult.position, scatter }, rayIdx - 1 );
 	}
 	else

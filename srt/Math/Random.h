@@ -47,7 +47,7 @@ namespace srt
 		int32_t		m_value;
 	};
 
-	using RandomGenerator = StandardRandom;
+	using RandomGenerator = FastRandom;
 
 	// ------------------------------------------------------------------------
 	// Returns a random number between [0; 1(
@@ -63,6 +63,16 @@ namespace srt
 	// Returns a random position in an unit sphere
 	// ------------------------------------------------------------------------
 	Vec3	RandomInUnitSphere( RandomGenerator & generator );
+
+	// ------------------------------------------------------------------------
+	// Returns a random position in a hemi sphere
+	// ------------------------------------------------------------------------
+	Vec3	RandomInHemiSphere( RandomGenerator & generator, const Vec3 & normal );
+
+	// ------------------------------------------------------------------------
+	// Returns a random unit vector
+	// ------------------------------------------------------------------------
+	Vec3	RandomUnitVector( RandomGenerator & generator );
 }
 
 #endif
