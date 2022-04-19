@@ -12,6 +12,33 @@
 
 namespace srt
 {
+// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+bool RenderJobFullRT::Scatter( const Ray & ray, const SceneTraceResult & traceResult, Vec3 & scattered, Vec3 & attenuation )
+{
+	if( traceResult.material->GetMetalness() > 0.9f )
+	{
+		// Metal material
+		scattered = Reflect( Normalize( ray.Direction( ) ), traceResult.hitResult.normal );
+		attenuation = traceResult.material->GetAlbedo( );
+
+		// Check if the scattered vector does not go inside the surface
+		return ( Dot( scattered, traceResult.hitResult.normal ) > 0.0f );
+	}
+	else
+	{
+		// Lambertian material
+		scattered = traceResult.hitResult.normal + RandomUnitVector( m_rndGenerator );
+
+		// Checks for near zero length scaterred vector
+		if( SquaredLength( scattered ) < 0.0001f )
+		{
+			scattered = traceResult.hitResult.normal;
+		}
+		attenuation = traceResult.material->GetAlbedo( );
+	}
+	return true;
+}
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
@@ -30,13 +57,12 @@ Vec3 RenderJobFullRT::ComputeColor( const Ray & ray, uint32_t rayIdx )
 	if( hit.hitResult.hitTime >= 0.0f )
 	{
 		// Uses Lambertian distribution
-		Vec3 scatter = hit.hitResult.normal + RandomUnitVector( m_rndGenerator );
-		if( SquaredLength( scatter ) < 0.0001f )
+		Vec3	scattered;
+		Vec3	attenuation;
+		if( Scatter( ray, hit, scattered, attenuation ) )
 		{
-			scatter = hit.hitResult.normal;
+			resultColor = attenuation * ComputeColor( Ray{ hit.hitResult.position, scattered }, rayIdx - 1);
 		}
-
-		resultColor =  hit.material->GetAlbedo() * ComputeColor( Ray{ hit.hitResult.position, scatter }, rayIdx - 1 );
 	}
 	else
 	{
@@ -47,7 +73,6 @@ Vec3 RenderJobFullRT::ComputeColor( const Ray & ray, uint32_t rayIdx )
 	
 	return resultColor;
 }
-
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
