@@ -3,7 +3,6 @@
 
 namespace srt
 {
-
 	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
 	void RaySphereHit( const Ray & ray, const Vec3 & sphereCenter, const float sphereRadius, float tMin, float tMax, RayHitResult & result )
@@ -33,7 +32,8 @@ namespace srt
 
 			result.hitTime = root;
 			result.position = ray.Origin( ) + ray.Direction( ) * result.hitTime;
-			result.normal = ( result.position - sphereCenter ) / sphereRadius;
+			const Vec3 normal = ( result.position - sphereCenter ) / sphereRadius;
+			result.SetNormal( ray, normal );
 		}
 	}
 }
