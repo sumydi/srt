@@ -38,9 +38,6 @@ namespace srt
 	{
 		while( js->m_exit==false )
 		{
-			// The semaphore is used to tell us that there's something to do
-			js->m_sem.Acquire();
-
 			// Process job if any
 			Job * job = js->PopJob( );
 			if( job )
@@ -83,7 +80,6 @@ namespace srt
 			it->join( );
 			delete it;
 		}
-
 	}
 
 	// ------------------------------------------------------------------------
@@ -114,6 +110,9 @@ namespace srt
 	// ------------------------------------------------------------------------
 	Job * JobScheduler::PopJob( )
 	{
+		// The semaphore is used to tell us that there's something to do
+		m_sem.Acquire();
+
 		Job * job = nullptr;
 
 		std::unique_lock < std::mutex > lock( m_jobsMutex );
