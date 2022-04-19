@@ -20,6 +20,7 @@ bool RenderJobFullRT::Scatter( const Ray & ray, const SceneTraceResult & traceRe
 	{
 		// Metal material
 		scattered = Reflect( Normalize( ray.Direction( ) ), traceResult.hitResult.normal );
+		scattered += traceResult.material->GetRoughness( ) * RandomInUnitSphere( m_rndGenerator );
 		attenuation = traceResult.material->GetAlbedo( );
 
 		// Check if the scattered vector does not go inside the surface

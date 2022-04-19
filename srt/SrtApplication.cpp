@@ -76,22 +76,22 @@ namespace srt
 		{
 			if( GetKeyState( KeyCode::kM ).pressed  )
 			{
-				if( GetKeyState( KeyCode::kAdd ).pressed )
+				if( GetKeyState( KeyCode::kPageUp ).justPressed )
 				{
 					m_pickResult.material->SetMetalness( m_pickResult.material->GetMetalness( ) + 0.05f );
 				}
-				else if( GetKeyState( KeyCode::kSubtract ).pressed )
+				else if( GetKeyState( KeyCode::kPageDown ).justPressed )
 				{
 					m_pickResult.material->SetMetalness( m_pickResult.material->GetMetalness( ) - 0.05f );
 				}
 			}
 			else if( GetKeyState( KeyCode::kR ).pressed )
 			{
-				if( GetKeyState( KeyCode::kAdd ).pressed )
+				if( GetKeyState( KeyCode::kPageUp ).justPressed )
 				{
 					m_pickResult.material->SetRoughness( m_pickResult.material->GetRoughness( ) + 0.05f );
 				}
-				else if( GetKeyState( KeyCode::kSubtract ).pressed )
+				else if( GetKeyState( KeyCode::kPageDown ).justPressed )
 				{
 					m_pickResult.material->SetRoughness( m_pickResult.material->GetRoughness( ) - 0.05f );
 				}
