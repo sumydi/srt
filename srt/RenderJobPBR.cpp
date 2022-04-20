@@ -14,8 +14,6 @@
 namespace srt
 {
 
-static constexpr uint32_t kRayCount = 2;
-
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
 Vec3 RenderJobPBR::ComputeColor( const Ray & ray, uint32_t rayIdx )
@@ -107,7 +105,7 @@ void RenderJobPBR::Execute( )
 				// make a ray from the origin to the current normalized pixel
 				const Ray ray = m_context.camera->GenerateRay( nx, ny );
 
-				resultColor += ComputeColor( ray, kRayCount );
+				resultColor += ComputeColor( ray, m_context.rayCount );
 			}
 			resultColor /= (float)m_context.sampleCount;
 
