@@ -37,7 +37,7 @@ namespace srt
 
 		m_scene = new Scene;
 
-		Material * mat1 = new Material{ "White Metal", Vec3{ 1.0f, 1.0f, 1.0f }, 0.5f, 1.0f };
+		Material * mat1 = new Material{ "White Metal", Vec3{ 1.0f, 1.0f, 1.0f }, 0.4f, 1.0f };
 		m_scene->AddObject( new Sphere{ "Sphere0", Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
 
 		Material * mat2 = new Material{ "Red", Vec3{ 1.0f, 0.2f, 0.2f }, 0.2f, 0.0f };
