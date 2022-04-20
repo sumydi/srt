@@ -235,6 +235,17 @@ namespace srt
 	{
 		return v - 2.0f * Dot( v, n ) * n;
 	}
+
+	// ------------------------------------------------------------------------
+	// Computes a refracted vector of v (incident ray) depending on n (normal) and refRatio.
+	// ------------------------------------------------------------------------
+	inline Vec3 Refract( const Vec3 v, const Vec3& n, const float refRatio )
+	{
+		const float cosTheta = std::min( Dot( -v, n ), 1.0f );
+		const Vec3 outPerp =  refRatio * ( v + cosTheta * n );
+		const Vec3 outParallel = -sqrtf( fabsf( 1.0f - SquaredLength( outPerp ) ) ) * n;
+		return outPerp + outParallel;
+	}
 }
 
 #endif
