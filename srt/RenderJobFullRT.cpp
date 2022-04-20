@@ -28,15 +28,30 @@ bool RenderJobFullRT::Scatter( const Ray & ray, const SceneTraceResult & traceRe
 	}
 	else
 	{
-		// Lambertian material
-		scattered = traceResult.hitResult.normal + RandomUnitVector( m_rndGenerator );
-
-		// Checks for near zero length scaterred vector
-		if( SquaredLength( scattered ) < 0.0001f )
+		if( traceResult.material->GetIOR( ) <= 1.0f )
 		{
-			scattered = traceResult.hitResult.normal;
+			// Lambertian material
+			scattered = traceResult.hitResult.normal + RandomUnitVector( m_rndGenerator );
+
+			// Checks for near zero length scaterred vector
+			if( SquaredLength( scattered ) < 0.0001f )
+			{
+				scattered = traceResult.hitResult.normal;
+			}
+			attenuation = traceResult.material->GetAlbedo( );
 		}
-		attenuation = traceResult.material->GetAlbedo( );
+		else
+		{
+			// Glass or other dieletric material
+			attenuation = Vec3{ 1.0f, 1.0f, 1.0f };
+
+			const float refRatio = traceResult.hitResult.frontFace ? ( 1.0f / traceResult.material->GetIOR() ) : traceResult.material->GetIOR();
+
+			const Vec3 unitDir = Normalize( ray.Direction() );
+			const Vec3 refracted = Refract(unitDir, traceResult.hitResult.normal, refRatio );
+
+			scattered = refracted;
+		}
 	}
 	return true;
 }
