@@ -20,11 +20,12 @@ namespace srt
 	public:
 		Material( ) = default;
 
-		Material( const char * name, const Vec3 & diffuse, const float roughness, const float metalness ) 
+		Material( const char * name, const Vec3 & diffuse, const float roughness, const float metalness, const float ior = 1.0f ) 
 		: m_name{ name }
 		, m_albedo{ diffuse }
 		, m_roughness{ roughness }
 		, m_metalness{ metalness }
+		, m_ior{ ior }
 		{
 		
 		}
@@ -37,16 +38,20 @@ namespace srt
 		void			SetAlbedo( const Vec3 & albedo ) { m_albedo = albedo; }
 
 		float			GetRoughness( ) const { return m_roughness; }
-		void			SetRoughness( const float roughness ) { m_roughness = std::max( 0.02f, std::min( 1.0f, roughness ) ); }
+		void			SetRoughness( const float roughness ) { m_roughness = std::max( 0.01f, std::min( 1.0f, roughness ) ); }
 
 		float			GetMetalness( ) const { return m_metalness; }
 		void			SetMetalness( const float metalness ) { m_metalness = std::max( 0.0f, std::min( 1.0f, metalness ) ); }
+
+		float			GetIOR( ) const { return m_ior; }
+		void			SetIOR( const float ior ) { m_ior = ior; }
 	
 	private:
 		std::string		m_name;
 		Vec3			m_albedo;
 		float			m_roughness { 0.5f };
 		float			m_metalness { 0.0f };
+		float			m_ior { 1.0f };
 	
 	};
 
