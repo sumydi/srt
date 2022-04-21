@@ -53,8 +53,10 @@ bool RenderJobFullRT::Scatter( const Ray & ray, const SceneTraceResult & traceRe
 
 			const float cosTheta = std::min( Dot( -unitDir, traceResult.hitResult.normal ), 1.0f );
 			const float sinTheta = sqrtf( 1.0f - cosTheta * cosTheta );
+			const bool canNotRefract = ( refRatio * sinTheta > 1.0f );
+			const float f0 = ( 1.0f - refRatio ) / ( 1.0f + refRatio );
 
-			if( ( refRatio * sinTheta ) > 1.0f )
+			if( canNotRefract /* || FresnelSchlick(cosTheta, f0 * f0) > RandomFloat(m_rndGenerator) */)
 			{
 				scattered = Reflect( unitDir, traceResult.hitResult.normal );
 			}
