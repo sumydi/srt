@@ -37,17 +37,15 @@ namespace srt
 
 		m_scene = new Scene;
 
-		Material * mat1 = new Material{ "White Metal", Vec3{ 1.0f, 1.0f, 1.0f }, 0.01f, 1.0f };
-		m_scene->AddObject( new Sphere{ "Metallic Sphere", Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *mat1 } );
+		Material * whiteMetal = new Material{ "White Metal", Vec3{ 0.8f, 0.6f, 0.2f }, 0.01f, 1.0f };
+		Material * grayDiffuse = new Material{ "Gray Diffuse", Vec3{ 0.7f, 0.4f, 0.4f }, 0.2f, 0.0f };
+		Material * blueDiffuse = new Material{ "Blue Diffuse", Vec3{ 0.4f, 0.4f, 1.0f }, 0.7f, 0.0f };
+		Material * glass = new Material{ "Glass", Vec3{ 0.5f, 0.5f, 0.5f }, 0.2f, 0.0f, 1.5f };
 
-		Material * mat2 = new Material{ "Red Diffuse", Vec3{ 1.0f, 0.2f, 0.2f }, 0.2f, 0.0f };
-		m_scene->AddObject( new Sphere{ "Small Sphere", Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *mat2 } );
-
-		Material * mat3 = new Material{ "Blue Diffuse", Vec3{ 0.4f, 0.4f, 1.0f }, 0.7f, 0.0f };
-		m_scene->AddObject( new Sphere{ "Big Sphere", Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *mat3 } );
-
-		Material * mat4 = new Material{ "Glass", Vec3{ 0.5f, 0.5f, 0.5f }, 0.2f, 0.0f, 1.3f };
-		m_scene->AddObject( new Sphere{ "Glass Sphere", Vec3{ 1.5f, 0.0f, -1.0f }, 0.5f, *mat4 } );
+		m_scene->AddObject( new Sphere{ "Sphere", Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *grayDiffuse } );
+		m_scene->AddObject( new Sphere{ "Moving Sphere", Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *whiteMetal } );
+		m_scene->AddObject( new Sphere{ "Big Sphere", Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *blueDiffuse  } );
+		m_scene->AddObject( new Sphere{ "Glass Sphere", Vec3{ 1.5f, 0.0f, -1.0f }, 0.5f, *glass } );
 
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ -1.0f, 2.0f, -3.0f }, Vec3{ 1.0f, -1.0f, 1.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 2.0f, 1.5f, 2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );

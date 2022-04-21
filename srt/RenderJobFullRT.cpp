@@ -45,12 +45,22 @@ bool RenderJobFullRT::Scatter( const Ray & ray, const SceneTraceResult & traceRe
 			// Glass or other dieletric material
 			attenuation = Vec3{ 1.0f, 1.0f, 1.0f };
 
+			// The refraction ratio dependent if we are going in the volume or out of the volume
 			const float refRatio = traceResult.hitResult.frontFace ? ( 1.0f / traceResult.material->GetIOR() ) : traceResult.material->GetIOR();
 
 			const Vec3 unitDir = Normalize( ray.Direction() );
-			const Vec3 refracted = Refract(unitDir, traceResult.hitResult.normal, refRatio );
 
-			scattered = refracted;
+			const float cosTheta = std::min( Dot( -unitDir, traceResult.hitResult.normal ), 1.0f );
+			const float sinTheta = sqrtf( 1.0f - cosTheta * cosTheta );
+
+			if( ( refRatio * sinTheta ) > 1.0f )
+			{
+				scattered = Reflect( unitDir, traceResult.hitResult.normal );
+			}
+			else
+			{
+				scattered = Refract( unitDir, traceResult.hitResult.normal, refRatio );
+			}
 		}
 	}
 	return true;
@@ -82,7 +92,7 @@ Vec3 RenderJobFullRT::ComputeColor( const Ray & ray, uint32_t rayIdx )
 	}
 	else
 	{
-		// hit nothing
+		// Hit nothing
 		const float t = 0.5f * ray.Direction().Y() + 1.0f;
 		resultColor = Lerp( Vec3{ 1.0f, 1.0f, 1.0f }, Vec3{ 0.5f, 0.7f, 1.0f }, t );
 	}
@@ -94,7 +104,7 @@ Vec3 RenderJobFullRT::ComputeColor( const Ray & ray, uint32_t rayIdx )
 // ------------------------------------------------------------------------
 void RenderJobFullRT::Execute( )
 {
-	// do not apply jitterring on the camera when kSamplecount==1 to avoid wobling picture
+	// do not apply jitterring on the camera when samplecount==1 to avoid wobling picture
 	const float jitteringFactor = m_context.sampleCount > 1 ? 1.0f : 0.0f;
 
 	const float surfWidth = static_cast< float >( m_context.image->GetMipDesc( 0 ).width - 1 );
