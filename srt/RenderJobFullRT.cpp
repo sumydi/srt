@@ -2,6 +2,7 @@
 #include "Math/Ray.h"
 #include "Math/Halton.h"
 #include "Math/Random.h"
+#include "Lighting/LightingUtils.h"
 #include "Graphic/Color.h"
 #include "Graphic/Image.h"
 #include "Graphic/Material.h"

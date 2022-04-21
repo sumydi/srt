@@ -44,16 +44,6 @@ namespace srt
 	//
 	// ========================================================================
 
-	// ------------------------------------------------------------------------
-	// Computes fresnel term.
-	//
-	//	cosTheta	: dot product between light & view vetors
-	//	F0			: reflective value when directly looking at the surface
-	// ------------------------------------------------------------------------
-	inline Vec3 FresnelSchlick( float cosTheta, const Vec3 & f0 )
-	{
-		return f0 + ( 1.0f - f0 ) * powf( 1.0f - cosTheta, 5.0f );
-	}
 
 	// ------------------------------------------------------------------------
 	//
