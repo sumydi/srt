@@ -51,7 +51,7 @@ bool RenderJobFullRT::Scatter( const Ray & ray, const SceneTraceResult & traceRe
 
 			const Vec3 unitDir = Normalize( ray.Direction() );
 
-			const float cosTheta = std::min( Dot( -unitDir, traceResult.hitResult.normal ), 1.0f );
+			const float cosTheta = Dot( -unitDir, traceResult.hitResult.normal );
 			const float sinTheta = sqrtf( 1.0f - cosTheta * cosTheta );
 			const bool canNotRefract = ( refRatio * sinTheta > 1.0f );
 			const float f0 = ( 1.0f - refRatio ) / ( 1.0f + refRatio );

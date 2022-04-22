@@ -45,8 +45,8 @@ private:
 
 	FreeAllAllocator	m_freeAllAllocator;
 
-	uint32_t			m_sampleCount { 1 };
-	uint32_t			m_rayCount { 3 };
+	uint32_t			m_sampleCount { 8 };
+	uint32_t			m_rayCount { 5 };
 	bool				m_isPaused { false };
 
 	SceneTraceResult	m_pickResult;
@@ -58,7 +58,7 @@ private:
 		kFullRT
 	};
 
-	RenderMode			m_renderMode { RenderMode::kPBR };
+	RenderMode			m_renderMode { RenderMode::kFullRT };
 };
 
 }

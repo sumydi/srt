@@ -49,16 +49,18 @@ namespace srt
 	// ------------------------------------------------------------------------
 	// Computes a refracted vector.
 	// 
+	// All vectors must be normalized.
+	// 
 	//  v			: incident direction.
 	//	n			: normal.
 	//	refRatio	: refraction ratio. It's the ratio of the ior of incoming matter on the ior of outcoming matter. 
 	// ------------------------------------------------------------------------
 	inline Vec3 Refract( const Vec3 v, const Vec3& n, const float refRatio )
 	{
-		const float cosTheta = std::min( Dot( -v, n ), 1.0f );
-		const Vec3 outPerp =  refRatio * ( v + cosTheta * n );
-		const Vec3 outParallel = -sqrtf( fabsf( 1.0f - SquaredLength( outPerp ) ) ) * n;
-		return outPerp + outParallel;
+		const float cosTheta = Dot( -v, n );
+		const Vec3 outPerpendicular =  refRatio * ( v + cosTheta * n );
+		const Vec3 outParallel = -sqrtf( fabsf( 1.0f - SquaredLength( outPerpendicular ) ) ) * n;
+		return outPerpendicular + outParallel;
 	}
 
 
