@@ -55,8 +55,12 @@ private:
 	{
 		kSimple = 0,
 		kPBR,
-		kFullRT
+		kFullRT,
+
+		kRenderModeCount
 	};
+
+	static const char * ms_renderModeName[ (size_t)RenderMode::kRenderModeCount ];
 
 	RenderMode			m_renderMode { RenderMode::kFullRT };
 };

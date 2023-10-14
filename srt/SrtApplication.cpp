@@ -26,6 +26,13 @@ namespace srt
 	static constexpr uint32_t kJobSchedulerThreadCount = 6;
 	static constexpr uint32_t kWidthJobsCount = 16;
 	static constexpr uint32_t kHeightJobsCount = 8;
+	
+	const char * SrtApplication::ms_renderModeName[ (size_t)RenderMode::kRenderModeCount ] =
+	{
+		{ "Simple" },
+		{ "PBR" },
+		{ "FullRT" }
+	};
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
@@ -116,6 +123,8 @@ namespace srt
 		m_outputDev->SetTextColor( 0, 0, 0 );
 		m_outputDev->SetTextPosition( 10, 10 );
 		m_outputDev->PushText( "FrameDuration: %.4f ms (%u fps)", frameDuration * 1000.0f, ( uint32_t )( 1000.0f / ( frameDuration * 1000.0f ) ) );
+
+		m_outputDev->PushText( "Render mode: %s", ms_renderModeName[ (size_t)m_renderMode ] );
 
 	#if defined( SRT_JOBSCHEDULER_STATS )
 		const size_t threadCount = m_jobScheduler->GetThreadCount( );
