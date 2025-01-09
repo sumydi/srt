@@ -1,4 +1,5 @@
 #include "FreeAllAllocator.h"
+#include <assert.h>
 
 namespace srt
 {
@@ -52,5 +53,7 @@ namespace srt
 		{
 			page->used = 0;
 		}
+		m_currentPage = m_pages[ 0 ];
+		assert( m_currentPage!=nullptr );
 	}
 }
