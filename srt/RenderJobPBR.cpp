@@ -53,10 +53,8 @@ Vec3 RenderJobPBR::ComputeColor( const Ray & ray, uint32_t rayIdx )
 				const Vec3 reflect = Reflect( ray.Direction(), primaryResult.hitResult.normal );
 				const Ray reflectRay { primaryResult.hitResult.position, reflect };
 				const Vec3 indirectColor = ComputeColor( reflectRay, rayIdx - 1 );
-				LightSource lightSource{ -reflectRay.Direction(), indirectColor };
-				resultColor += ComputeBRDF( reflectRay.Origin(), primaryResult, lightSource );
+				resultColor += indirectColor; // missing roughness here
 			}
-			
 
 			// GI diffuse
 			// Vec3 target = primaryResult.hitResult.position + primaryResult.hitResult.normal + RandomUnitVector( );
