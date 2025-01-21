@@ -22,26 +22,47 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	FreeAllAllocator::Page * FreeAllAllocator::CreatePage()
+	size_t FreeAllAllocator::CreatePage()
 	{
 		Page * page = new Page;
 		page->buffer = malloc( kPageSize );
 		page->used = 0;
 		m_pages.push_back( page );
-		return page;
+		return m_pages.size() - 1;
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	size_t FreeAllAllocator::FindPage( size_t allocSize )
+	{
+		const size_t pageCount = m_pages.size();
+		size_t pageIdx = m_currentPage;
+
+		while( pageIdx < pageCount )
+		{
+			const Page * page = m_pages[ pageIdx ];
+			if( allocSize <= (kPageSize - page->used) )
+			{
+				break;
+			}
+			++pageIdx;
+		}
+
+		return pageIdx;
 	}
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	void * FreeAllAllocator::Allocate( size_t size )
 	{
-		const size_t remainingSize = kPageSize - m_currentPage->used;
-		if( size > remainingSize )
+		m_currentPage = FindPage( size );
+		if( m_currentPage==m_pages.size() )
 		{
-			m_currentPage = CreatePage( );
+			m_currentPage = CreatePage();
 		}
-		void * mem = (void *)( (uint8_t *)(m_currentPage->buffer) + m_currentPage->used );
-		m_currentPage->used += size;
+		Page * page = m_pages[ m_currentPage ];
+		void * mem = (void *)( (uint8_t *)(page->buffer) + page->used );
+		page->used += size;
 		return mem;
 	}
 
@@ -53,7 +74,7 @@ namespace srt
 		{
 			page->used = 0;
 		}
-		m_currentPage = m_pages[ 0 ];
+		m_currentPage = 0;
 		assert( m_currentPage!=nullptr );
 	}
 }

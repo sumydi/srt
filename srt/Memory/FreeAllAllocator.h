@@ -36,7 +36,6 @@ namespace srt
 		void	FreeAll();
 
 	private:
-
 		static constexpr size_t kPageSize = 1 * 1024 * 1024;
 
 		struct Page
@@ -48,10 +47,11 @@ namespace srt
 		using PageList = std::vector< Page * >;
 
 		PageList	m_pages;
-		Page *		m_currentPage { nullptr };
+		size_t 		m_currentPage { 0 };
 
-		void *	Allocate( size_t size );
-		Page *	CreatePage( ); 
+		size_t FindPage( size_t allocSize );
+		void * Allocate( size_t size );
+		size_t CreatePage( ); 
 
 	};
 }
