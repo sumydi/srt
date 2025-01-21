@@ -1,5 +1,5 @@
-#ifndef SRT_RENDERJOB_FULLRT_H
-#define SRT_RENDERJOB_FULLRT_H
+#ifndef SRT_RENDERJOB_PATHTRACING_H
+#define SRT_RENDERJOB_PATHTRACING_H
 
 #include "RenderJob.h"
 
@@ -14,11 +14,11 @@ struct SceneTraceResult;
 //
 //
 // ============================================================================
-class RenderJobFullRT : public RenderJob
+class RenderJobPathTracing : public RenderJob
 {
 public:
-	RenderJobFullRT() : RenderJob{ } { };
-	virtual ~RenderJobFullRT() { }
+	RenderJobPathTracing() : RenderJob{ } { };
+	virtual ~RenderJobPathTracing() { }
 
 private:
 	virtual void	Execute() final;

@@ -325,11 +325,11 @@ namespace srt
 				}
 				else if( m_renderMode==RenderMode::kPBR )
 				{
-					job = m_freeAllAllocator.Allocate< RenderJobPBR >( );
+					job = m_freeAllAllocator.Allocate< RenderJobRayTracing >( );
 				}
 				else if( m_renderMode==RenderMode::kFullRT )
 				{
-					job = m_freeAllAllocator.Allocate< RenderJobFullRT >( );
+					job = m_freeAllAllocator.Allocate< RenderJobPathTracing >( );
 				}
 
 				assert( job!=nullptr );

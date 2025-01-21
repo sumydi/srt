@@ -1,5 +1,5 @@
-#ifndef SRT_RENDERJOB_PBR_H
-#define SRT_RENDERJOB_PBR_H
+#ifndef SRT_RENDERJOB_RAYTRACING_H
+#define SRT_RENDERJOB_RAYTRACING_H
 
 #include "RenderJob.h"
 
@@ -12,11 +12,11 @@ namespace srt
 	//
 	//
 	// ============================================================================
-	class RenderJobPBR : public RenderJob
+	class RenderJobRayTracing : public RenderJob
 	{
 	public:
-		RenderJobPBR() : RenderJob{ } { };
-		virtual ~RenderJobPBR() { }
+		RenderJobRayTracing() : RenderJob{ } { };
+		virtual ~RenderJobRayTracing() { }
 
 	private:
 		virtual void	Execute() final;

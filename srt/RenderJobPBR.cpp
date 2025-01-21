@@ -16,7 +16,7 @@ namespace srt
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
-Vec3 RenderJobPBR::ComputeColor( const Ray & ray, uint32_t rayIdx )
+Vec3 RenderJobRayTracing::ComputeColor( const Ray & ray, uint32_t rayIdx )
 {
 	Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
 
@@ -77,7 +77,7 @@ Vec3 RenderJobPBR::ComputeColor( const Ray & ray, uint32_t rayIdx )
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
-void RenderJobPBR::Execute( )
+void RenderJobRayTracing::Execute( )
 {
 	// do not apply jitterring on the camera when kSamplecount==1 to avoid wobling picture
 	const float jitteringFactor = m_context.sampleCount > 1 ? 1.0f : 0.0f;

@@ -15,7 +15,7 @@ namespace srt
 {
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
-bool RenderJobFullRT::Scatter( const Ray & ray, const SceneTraceResult & traceResult, Vec3 & scattered, Vec3 & attenuation )
+bool RenderJobPathTracing::Scatter( const Ray & ray, const SceneTraceResult & traceResult, Vec3 & scattered, Vec3 & attenuation )
 {
 	if( traceResult.material->GetMetalness() > 0.9f )
 	{
@@ -71,7 +71,7 @@ bool RenderJobFullRT::Scatter( const Ray & ray, const SceneTraceResult & traceRe
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
-Vec3 RenderJobFullRT::ComputeColor( const Ray & ray, uint32_t rayIdx )
+Vec3 RenderJobPathTracing::ComputeColor( const Ray & ray, uint32_t rayIdx )
 {
 	Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
 
@@ -105,7 +105,7 @@ Vec3 RenderJobFullRT::ComputeColor( const Ray & ray, uint32_t rayIdx )
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
-void RenderJobFullRT::Execute( )
+void RenderJobPathTracing::Execute( )
 {
 	// do not apply jitterring on the camera when samplecount==1 to avoid wobling picture
 	const float jitteringFactor = m_context.sampleCount > 1 ? 1.0f : 0.0f;
