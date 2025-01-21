@@ -30,8 +30,8 @@ namespace srt
 	const char * SrtApplication::ms_renderModeName[ (size_t)RenderMode::kRenderModeCount ] =
 	{
 		{ "Simple" },
-		{ "PBR" },
-		{ "FullRT" }
+		{ "Ray Tracing" },
+		{ "Path Tracing" }
 	};
 
 	// ------------------------------------------------------------------------
@@ -155,7 +155,7 @@ namespace srt
 				m_outputDev->SetTextColor( 255, 0, 0 );
 			else
 				m_outputDev->SetTextColor( 0, 0, 0 );
-			m_outputDev->PushText( "    Rougness  : %.2f", m_pickResult.material->GetRoughness() );
+			m_outputDev->PushText( "    Rougthness: %.2f", m_pickResult.material->GetRoughness() );
 
 			if( GetKeyState( KeyCode::kM ).pressed )
 				m_outputDev->SetTextColor( 255, 0, 0 );
