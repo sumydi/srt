@@ -160,8 +160,8 @@
     <ClInclude Include="srt\Math\Vector2.h" />
     <ClInclude Include="srt\Memory\FreeAllAllocator.h" />
     <ClInclude Include="srt\RenderJob.h" />
-    <ClInclude Include="srt\RenderJobFullRT.h" />
-    <ClInclude Include="srt\RenderJobPBR.h" />
+    <ClInclude Include="srt\RenderJobPathTracing.h" />
+    <ClInclude Include="srt\RenderJobRT.h" />
     <ClInclude Include="srt\RenderJobSimple.h" />
     <ClInclude Include="srt\Scene\SceneTraceResult.h" />
     <ClInclude Include="srt\SrtApplication.h" />
@@ -194,8 +194,8 @@
     <ClCompile Include="srt\Math\Halton.cpp" />
     <ClCompile Include="srt\Memory\FreeAllAllocator.cpp" />
     <ClCompile Include="srt\RenderJob.cpp" />
-    <ClCompile Include="srt\RenderJobFullRT.cpp" />
-    <ClCompile Include="srt\RenderJobPBR.cpp" />
+    <ClCompile Include="srt\RenderJobPathTracing.cpp" />
+    <ClCompile Include="srt\RenderJobRT.cpp" />
     <ClCompile Include="srt\RenderJobSimple.cpp" />
     <ClCompile Include="srt\SrtApplication.cpp" />
     <ClCompile Include="srt\Graphic\WMOutputDevice.cpp" />

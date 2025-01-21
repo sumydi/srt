@@ -1,4 +1,4 @@
-#include "RenderJobFullRT.h"
+#include "RenderJobPathTracing.h"
 #include "Math/Ray.h"
 #include "Math/Halton.h"
 #include "Math/Random.h"

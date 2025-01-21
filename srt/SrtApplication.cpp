@@ -15,9 +15,9 @@
 #include "Scene/SceneTraceResult.h"
 #include "Graphic/WMOutputDevice.h"
 #include "Lighting/LightingUtils.h"
-#include "RenderJobPBR.h"
+#include "RenderJobRT.h"
 #include "RenderJobSimple.h"
-#include "RenderJobFullRT.h"
+#include "RenderJobPathTracing.h"
 #include <assert.h>
 #include <cmath>
 

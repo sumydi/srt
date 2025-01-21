@@ -126,13 +126,7 @@
     <ClInclude Include="srt\RenderJob.h">
       <Filter>srt</Filter>
     </ClInclude>
-    <ClInclude Include="srt\RenderJobPBR.h">
-      <Filter>srt</Filter>
-    </ClInclude>
     <ClInclude Include="srt\RenderJobSimple.h">
-      <Filter>srt</Filter>
-    </ClInclude>
-    <ClInclude Include="srt\RenderJobFullRT.h">
       <Filter>srt</Filter>
     </ClInclude>
     <ClInclude Include="srt\Math\Halton.h">
@@ -146,6 +140,12 @@
     </ClInclude>
     <ClInclude Include="srt\Graphic\Color.h">
       <Filter>srt\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="srt\RenderJobPathTracing.h">
+      <Filter>srt</Filter>
+    </ClInclude>
+    <ClInclude Include="srt\RenderJobRT.h">
+      <Filter>srt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -203,13 +203,7 @@
     <ClCompile Include="srt\RenderJob.cpp">
       <Filter>srt</Filter>
     </ClCompile>
-    <ClCompile Include="srt\RenderJobPBR.cpp">
-      <Filter>srt</Filter>
-    </ClCompile>
     <ClCompile Include="srt\RenderJobSimple.cpp">
-      <Filter>srt</Filter>
-    </ClCompile>
-    <ClCompile Include="srt\RenderJobFullRT.cpp">
       <Filter>srt</Filter>
     </ClCompile>
     <ClCompile Include="srt\Math\Halton.cpp">
@@ -217,6 +211,12 @@
     </ClCompile>
     <ClCompile Include="srt\Memory\FreeAllAllocator.cpp">
       <Filter>srt\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\RenderJobPathTracing.cpp">
+      <Filter>srt</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\RenderJobRT.cpp">
+      <Filter>srt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
