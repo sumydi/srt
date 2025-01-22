@@ -66,9 +66,8 @@ Vec3 RenderJobRayTracing::ComputeColor( const Ray & ray, uint32_t rayIdx )
 		else
 		{
 			// hit nothing: sky
-			const float t = 0.5f * ( ray.Direction().Y() + 1.0f );
-			resultColor = ( 1.0f - t ) * Vec3{ 1.0f, 1.0f, 1.0f } + t * Vec3{ 0.5f, 0.7f, 1.0f };
-			resultColor *= 10.0f;
+			const float t = 0.5f * ray.Direction().Y() + 1.0f;
+			resultColor = Lerp( Vec3{ 1.0f, 1.0f, 1.0f }, Vec3{ 0.5f, 0.7f, 1.0f }, t );
 		}
 	}
 
@@ -79,7 +78,7 @@ Vec3 RenderJobRayTracing::ComputeColor( const Ray & ray, uint32_t rayIdx )
 // ------------------------------------------------------------------------
 void RenderJobRayTracing::Execute( )
 {
-	// do not apply jitterring on the camera when kSamplecount==1 to avoid wobling picture
+	// do not apply jitterring on the camera when samplecount==1 to avoid wobling picture
 	const float jitteringFactor = m_context.sampleCount > 1 ? 1.0f : 0.0f;
 
 	const float surfWidth = static_cast< float >( m_context.image->GetMipDesc( 0 ).width - 1 );
