@@ -22,10 +22,10 @@ Vec3 RenderJobRayTracing::ComputeColor( const Ray & ray, uint32_t rayIdx )
 
 	if( rayIdx > 0 )
 	{
-		SceneTraceResult primaryResult;
-		m_context.scene->TraceRay( ray, 0.001f, FLT_MAX, primaryResult );
+		SceneTraceResult traceResult;
+		m_context.scene->TraceRay( ray, 0.001f, FLT_MAX, traceResult );
 
-		if( primaryResult.hitResult.hitTime >= 0.0f )
+		if( traceResult.hitResult.hitTime >= 0.0f )
 		{
 			// Hit an object: compute lightings for all lights
 			for( size_t lightIdx = 0; lightIdx < m_context.scene->GetLightCount(); ++lightIdx )
@@ -33,34 +33,52 @@ Vec3 RenderJobRayTracing::ComputeColor( const Ray & ray, uint32_t rayIdx )
 				Light * light = m_context.scene->GetLight( lightIdx );
 
 				// shadow ray
-				Ray shadowRay{ primaryResult.hitResult.position, Normalize( light->GetPosition() - primaryResult.hitResult.position ) };
+				Ray shadowRay{ traceResult.hitResult.position, Normalize( light->GetPosition() - traceResult.hitResult.position ) };
 				SceneTraceResult shadowResult;
 				m_context.scene->TraceRay( shadowRay, 0.01f, FLT_MAX, shadowResult );
 				if( shadowResult.hitResult.hitTime < 0.0f )
 				{
 					// Direct lighting
-					LightSource	lightSource{ primaryResult, *light };
-					resultColor += ComputeBRDF( ray.Origin(), primaryResult, lightSource );
+					LightSource	lightSource{ traceResult, *light };
+					resultColor += ComputeBRDF( ray.Origin(), traceResult, lightSource );
 				}
 			}
 
-			//Vec3 scatter = primaryResult.hitResult.normal + Normalize( RandomInUnitSphere( m_rndGenerator ) );
-			//resultColor += ComputeColor(  Ray{ primaryResult.hitResult.position, scatter }, rayIdx - 1 );
-			//
-			
-			if( primaryResult.material->GetMetalness() > 0.8f )
+			if( traceResult.material->GetMetalness() > 0.8f )
 			{
-				const Vec3 reflect = Reflect( ray.Direction(), primaryResult.hitResult.normal ) + RandomUnitVector( m_rndGenerator ) * primaryResult.material->GetRoughness();
-				const Ray reflectRay { primaryResult.hitResult.position, reflect };
-				const Vec3 indirectColor = ComputeColor( reflectRay, rayIdx - 1 );
-				resultColor += indirectColor;
+
+				const Vec3 reflect = Reflect( ray.Direction(), traceResult.hitResult.normal ) + RandomUnitVector( m_rndGenerator ) * traceResult.material->GetRoughness();
+				const Ray reflectRay { traceResult.hitResult.position, reflect };
+				resultColor += ComputeColor( reflectRay, rayIdx - 1 );;
 			}
+			else
+			{
+				if( traceResult.material->GetIOR( ) > 1.0f )
+				{
+					// Glass material
+					// The refraction ratio dependent if we are going in the volume or out of the volume
+					const float refRatio = traceResult.hitResult.frontFace ? ( 1.0f / traceResult.material->GetIOR() ) : traceResult.material->GetIOR();
 
-			// GI diffuse
-			// Vec3 target = primaryResult.hitResult.position + primaryResult.hitResult.normal + RandomUnitVector( );
-			// resultColor += 0.5f * ComputeColor( scene, Ray{ primaryResult.hitResult.position, Normalize( target - primaryResult.hitResult.position ) }, rayIdx + 1 );
+					const Vec3 unitDir = Normalize( ray.Direction() );
 
-			//resultColor = Clamp( resultColor, 0.0f, 1.0f );
+					const float cosTheta = Dot( -unitDir, traceResult.hitResult.normal );
+					const float sinTheta = sqrtf( 1.0f - cosTheta * cosTheta );
+					const bool canNotRefract = ( refRatio * sinTheta > 1.0f );
+					const float f0 = ( 1.0f - refRatio ) / ( 1.0f + refRatio );
+
+					Vec3 scattered;
+
+					if( canNotRefract /* || FresnelSchlick(cosTheta, f0 * f0) > RandomFloat(m_rndGenerator) */)
+					{
+						scattered = Reflect( unitDir, traceResult.hitResult.normal );
+					}
+					else
+					{
+						scattered = Refract( unitDir, traceResult.hitResult.normal, refRatio );
+					}
+					resultColor += ComputeColor( Ray{ traceResult.hitResult.position, scattered }, rayIdx - 1);
+				}
+			}
 
 		}
 		else
