@@ -50,10 +50,10 @@ Vec3 RenderJobRayTracing::ComputeColor( const Ray & ray, uint32_t rayIdx )
 			
 			if( primaryResult.material->GetMetalness() > 0.8f )
 			{
-				const Vec3 reflect = Reflect( ray.Direction(), primaryResult.hitResult.normal );
+				const Vec3 reflect = Reflect( ray.Direction(), primaryResult.hitResult.normal ) + RandomUnitVector( m_rndGenerator ) * primaryResult.material->GetRoughness();
 				const Ray reflectRay { primaryResult.hitResult.position, reflect };
 				const Vec3 indirectColor = ComputeColor( reflectRay, rayIdx - 1 );
-				resultColor += indirectColor; // missing roughness here
+				resultColor += indirectColor;
 			}
 
 			// GI diffuse
