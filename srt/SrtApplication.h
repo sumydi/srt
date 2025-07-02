@@ -41,10 +41,12 @@ private:
 	 
 	Scene *				m_scene { nullptr };
 	Image *				m_backBuffer { nullptr };
+	Image *				m_result { nullptr };
 	OutputDevice *		m_outputDev { nullptr };
 
 	FreeAllAllocator	m_freeAllAllocator;
 
+	uint32_t			m_frameIndex { 0 };
 	uint32_t			m_sampleCount { 8 };
 	uint32_t			m_rayCount { 5 };
 	bool				m_isPaused { false };

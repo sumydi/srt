@@ -61,6 +61,7 @@ namespace srt
 		m_scene->AddCamera( new Camera{ Vec3{ 0.0f, 0.0f, 1.0f }, Vec3{ 0.0f, 0.0f, -1.0f }, 70.0f, (float)context.width / (float)context.height } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
+		m_result = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 
 		m_outputDev = new WMOutputDevice( this->GetWindowHandle() );
 	}	
@@ -71,6 +72,7 @@ namespace srt
 	{
 		delete m_scene;
 		delete m_backBuffer;
+		delete m_result;
 		delete m_outputDev;
 		delete m_jobScheduler;
 	}
@@ -169,6 +171,7 @@ namespace srt
 		}
 
 		m_outputDev->Present( );
+		++m_frameIndex;
 	}
 
 	// ------------------------------------------------------------------------
@@ -213,8 +216,8 @@ namespace srt
 				// Camera rotation
 				const Vec3 camMove = right * -dx + up * dy;
 				camera->SetPosition( camera->GetPosition( ) + camMove );
-
 			}
+			m_frameIndex = 0;
 		}
 
 		if( GetKeyState( KeyCode::kC ).justPressed && ( m_pickResult.hitResult.hitTime > 0.0f ) )
@@ -225,20 +228,24 @@ namespace srt
 			const Vec3 newCamPos { newLookAt - camDir };
 			camera->SetPosition( newCamPos );
 			camera->SetLookAt( newLookAt );
+			m_frameIndex = 0;
 		}
 
 		// Rendering mode
 		if( GetKeyState( KeyCode::kF1 ).justPressed )
 		{
 			m_renderMode = RenderMode::kSimple;
+			m_frameIndex = 0;
 		}
 		else if( GetKeyState( KeyCode::kF2 ).justPressed )
 		{
 			m_renderMode = RenderMode::kPBR;
+			m_frameIndex = 0;
 		}
 		else if( GetKeyState( KeyCode::kF3 ).justPressed )
 		{
 			m_renderMode = RenderMode::kFullRT;
+			m_frameIndex = 0;
 		}
 
 		// Number of rays
@@ -267,13 +274,17 @@ namespace srt
 
 		UpdateEditMode( );
 
+		if( m_frameIndex == 0 )
+		{
+			m_result->ClearMipSurface( 0, Vec4( 0.0f, 0.0f, 0.0f, 1.0f ) );
+		}
 
 		dt = m_isPaused ? 0.0f : dt;
 
 		// Let's move some scene object
 		// -----------------------------
 		static float t = 0.0f;
-		t += dt;
+//		t += dt;
 		const float cs = cosf( t );
 		const float si = sinf( t );
 
@@ -297,9 +308,15 @@ namespace srt
 		const uint32_t lastPixWidth = bbWidth % kWidthJobsCount;
 		const uint32_t lastPixHeight = bbHeight % kHeightJobsCount;
 
-		RenderJob::Context context{ m_backBuffer, m_scene, camera };
+		RenderJob::Context context;
+		context.backBuffer = m_backBuffer;
+		context.scene = m_scene;
+		context.camera = camera;
+		context.prevResult = m_result;
+		context.curResult = m_result;
 		context.sampleCount = m_sampleCount;
 		context.rayCount = m_rayCount;
+		context.frameIndex = m_frameIndex;
 
 		Halton halton( context.sampleCount );
 		context.halton = &halton;
