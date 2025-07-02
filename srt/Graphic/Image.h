@@ -5,6 +5,8 @@
 
 namespace srt
 {
+	class Vec4;
+
 	// ============================================================================
 	//
 	// Class image holds all informations about an image:
@@ -32,6 +34,8 @@ namespace srt
 		const void *				GetMipSurface( uint32_t mipIdx ) const;
 		void *						LockMipSurface( uint32_t mipIdx ) const;
 		void						UnlockMipSurface( uint32_t mipIdx ) const;
+
+		void						ClearMipSurface( uint32_t mipIdx, const Vec4 & color );
 
 	private:
 		PixelFormat		m_pixelFormat;

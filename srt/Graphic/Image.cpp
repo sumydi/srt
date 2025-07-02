@@ -1,6 +1,8 @@
 #include "Image.h"
 #include <algorithm>
 #include <assert.h>
+#include "Graphic/Color.h"
+#include "Math/Vector4.h"
 
 namespace srt
 {
@@ -101,6 +103,30 @@ namespace srt
 	void Image::UnlockMipSurface( uint32_t mipIdx ) const
 	{
 		assert( mipIdx < m_mipCount );
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Image::ClearMipSurface( uint32_t mipIdx, const Vec4 & color )
+	{
+		if( mipIdx < m_mipCount )
+		{
+			// Note: currently manage only 32 bits pixel formats
+			const PixelSurface::Desc & mipDesc	= GetMipDesc( mipIdx );
+			uint32_t * mipSurface				= reinterpret_cast< uint32_t * >( LockMipSurface( mipIdx ) );
+			const uint32_t finalColor			= MakeRGBA( color );
+			
+			for( uint32_t y = 0; y < mipDesc.height; ++y )
+			{
+				uint32_t * line = mipSurface + ( y * mipDesc.pitch / 4 );
+				for( uint32_t x = 0; x < mipDesc.width; ++x )
+				{
+					line[ x ] = finalColor;
+				}
+			}
+
+			UnlockMipSurface( mipIdx );
+		}
 	}
 
 	// ------------------------------------------------------------------------
