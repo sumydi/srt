@@ -47,7 +47,7 @@ private:
 	FreeAllAllocator	m_freeAllAllocator;
 
 	uint32_t			m_frameIndex { 0 };
-	uint32_t			m_sampleCount { 8 };
+	uint32_t			m_sampleCount { 4 };
 	uint32_t			m_rayCount { 5 };
 	bool				m_isPaused { false };
 

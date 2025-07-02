@@ -1,6 +1,7 @@
 #ifndef SRT_MATHUTILS_H
 #define SRT_MATHUTILS_H
 
+#include "Base.h"
 #include <algorithm>
 
 namespace srt
