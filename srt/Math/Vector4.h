@@ -175,6 +175,11 @@ namespace srt
 		return Vec4( v1.X() / v2.X(), v1.Y() / v2.Y(), v1.Z() / v2.Z(), v1.W() / v2.W() );
 	}
 
+	inline Vec4 Lerp( const Vec4 & v1, const Vec4 & v2, const float t )
+	{
+		return v1 + t * ( v2 - v1 );
+	}
+
 }
 
 #endif
