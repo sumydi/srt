@@ -38,7 +38,7 @@ namespace srt
 	public:
 		static constexpr int32_t kMaxValue = 0x7fffffff;
 
-		FastRandom( ) : m_value{ 1 } { }
+		FastRandom( );
 		FastRandom( int32_t seed ) : m_value{ seed } { }
 
 		int32_t	Rand( );

@@ -1,5 +1,6 @@
 #include "Random.h"
 #include <random>
+#include <chrono>
 
 namespace srt
 {
@@ -8,6 +9,14 @@ namespace srt
 	StandardRandom::StandardRandom( int32_t seed )
 	{
 		std::srand( (unsigned int )seed );
+	}
+
+	// ----------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------
+	FastRandom::FastRandom()
+	{
+		// use current time as seed
+		m_value = static_cast<int32_t>( std::chrono::system_clock::now().time_since_epoch().count() );
 	}
 
 	// ----------------------------------------------------------------------------
