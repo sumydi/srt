@@ -147,6 +147,9 @@
     <ClInclude Include="srt\RenderJobRT.h">
       <Filter>srt</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Graphic\ToneMapping.h">
+      <Filter>srt\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -217,6 +220,9 @@
     </ClCompile>
     <ClCompile Include="srt\RenderJobRT.cpp">
       <Filter>srt</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Graphic\ToneMapping.cpp">
+      <Filter>srt\Graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
