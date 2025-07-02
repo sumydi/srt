@@ -27,6 +27,8 @@ namespace srt
 			const Scene *		scene { nullptr };
 			const Camera *		camera { nullptr };
 			const Halton *		halton { nullptr };
+			const Image *		prevResult { nullptr };
+			const Image *		curResult { nullptr };
 
 			uint32_t			x { 0 };
 			uint32_t			y { 0 };
@@ -34,6 +36,7 @@ namespace srt
 			uint32_t			height { 0 };
 			uint32_t			sampleCount { 1 };
 			uint32_t			rayCount { 1 };
+			uint32_t			frameIndex { 0 };
 		};
 
 		RenderJob() : Job{ } { };
