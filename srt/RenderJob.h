@@ -23,7 +23,7 @@ namespace srt
 		{
 			Context() = default;
 
-			const Image *		image { nullptr };
+			const Image *		backBuffer { nullptr };
 			const Scene *		scene { nullptr };
 			const Camera *		camera { nullptr };
 			const Halton *		halton { nullptr };
