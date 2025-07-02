@@ -10,6 +10,7 @@
 #include "Scene/Camera.h"
 #include "Scene/SceneTraceResult.h"
 #include "Graphic/Color.h"
+#include "Graphic/ToneMapping.h"
 
 namespace srt
 {
@@ -90,7 +91,7 @@ Vec3 RenderJobPathTracing::ComputeColor( const Ray & ray, uint32_t rayIdx )
 		Vec3	attenuation;
 		if( Scatter( ray, hit, scattered, attenuation ) )
 		{
-			resultColor = attenuation * ComputeColor( Ray{ hit.hitResult.position, scattered }, rayIdx - 1);
+			resultColor = attenuation * ComputeColor( Ray{ hit.hitResult.position, scattered }, rayIdx - 1 );
 		}
 	}
 	else
@@ -128,7 +129,8 @@ void RenderJobPathTracing::Execute( )
 			for( uint32_t sampleIdx = 0; sampleIdx < m_context.sampleCount; ++sampleIdx )
 			{
 				// transform coordinates to "normalized" coordinates
-				Vec2 jitter = m_context.halton->GetValue( sampleIdx );
+				//Vec2 jitter = m_context.halton->GetValue( sampleIdx );
+				const Vec2 jitter = Vec2{ RandomFloat( m_rndGenerator ), RandomFloat( m_rndGenerator ) } - 0.5f;// = m_context.halton->GetValue( sampleIdx );
 				const float nx = ( ( (float)( x + m_context.x ) + jitter.X() * jitteringFactor ) / surfWidth );
 				const float ny = ( ( (float)( y + m_context.y ) + jitter.Y() * jitteringFactor ) / surfHeight );
 
@@ -144,10 +146,10 @@ void RenderJobPathTracing::Execute( )
 			resultColor = Lerp( prevColor, resultColor, 1.0f / (float)( m_context.frameIndex + 1 ) );
 			*lineCur = MakeRGB( resultColor );
 
-			// Basic tone mapping
-			//resultColor = resultColor / ( resultColor + 1.0f );
+			// Tone mapping
+			resultColor = ACESFilm( resultColor );
 
-			//resultColor = LinearTosRGB( resultColor );
+			resultColor = LinearTosRGB( resultColor );
 			const uint32_t color = MakeRGB( resultColor );
 
 			*lineBB = color;
