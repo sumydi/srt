@@ -99,7 +99,7 @@ Vec3 RenderJobPathTracing::ComputeColor( const Ray & initialRay )
 		{
 			// Hit nothing
 			const float t = 0.5f * ray.Direction().Y() + 1.0f;
-			resultColor += Lerp( Vec3{ 0.8f, 0.0f, 0.8f }, Vec3{ 0.5f, 0.7f, 1.0f }, t ) * throughput;
+			resultColor += Lerp( Vec3{ 0.8f, 0.8f, 0.8f }, Vec3{ 0.5f, 0.7f, 0.8f }, t ) * throughput;
 			break;
 		}
 	}	
