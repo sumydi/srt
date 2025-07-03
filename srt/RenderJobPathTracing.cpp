@@ -90,6 +90,7 @@ Vec3 RenderJobPathTracing::ComputeColor( const Ray & initialRay )
 			if( Scatter( ray, hit, scattered, attenuation ) )
 			{
 				// TODO: manage emissive by adding it to resultColor
+				resultColor += hit.material->GetEmissive() * throughput;
 				throughput *= attenuation;
 
 				ray = Ray{ hit.hitResult.position, scattered };
