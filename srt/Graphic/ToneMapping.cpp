@@ -3,6 +3,7 @@
 namespace srt
 {
     // ------------------------------------------------------------------------
+    // //https://knarkowicz.wordpress.com/2016/01/06/aces-filmic-tone-mapping-curve/
     // ------------------------------------------------------------------------
     Vec3 ACESFilm( const Vec3 & v )
     {
