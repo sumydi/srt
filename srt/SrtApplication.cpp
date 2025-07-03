@@ -45,9 +45,9 @@ namespace srt
 		m_scene = new Scene;
 
 		Material * metal = new Material{ "Metal", Vec3{ 0.8f, 0.6f, 0.2f }, 0.01f, 1.0f };
-		Material * grayDiffuse = new Material{ "Gray Diffuse", Vec3{ 0.7f, 0.4f, 0.4f }, 0.2f, 0.0f };
-		Material * ground = new Material{ "Ground", Vec3{ 0.8f, 0.8f, 0.0f }, 0.7f, 0.0f };
-		Material * glass = new Material{ "Glass", Vec3{ 0.5f, 0.5f, 0.5f }, 0.2f, 0.0f, 1.5f };
+		Material * grayDiffuse = new Material{ "Green Plastic", Vec3{ 0.4f, 0.8f, 0.4f }, 0.2f, 0.0f };
+		Material * ground = new Material{ "Ground", Vec3{ 0.8f, 0.4f, 0.2f }, 0.7f, 0.0f };
+		Material * glass = new Material{ "Glass", Vec3{ 0.5f, 0.5f, 0.5f }, 0.2f, 0.0f, 2.2f };
 
 		m_scene->AddObject( new Sphere{ "Sphere", Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *grayDiffuse } );
 		m_scene->AddObject( new Sphere{ "Moving Sphere", Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *metal } );
@@ -157,7 +157,7 @@ namespace srt
 				m_outputDev->SetTextColor( 255, 0, 0 );
 			else
 				m_outputDev->SetTextColor( 0, 0, 0 );
-			m_outputDev->PushText( "    Rougthness: %.2f", m_pickResult.material->GetRoughness() );
+			m_outputDev->PushText( "    Roughness: %.2f", m_pickResult.material->GetRoughness() );
 
 			if( GetKeyState( KeyCode::kM ).pressed )
 				m_outputDev->SetTextColor( 255, 0, 0 );
@@ -166,6 +166,8 @@ namespace srt
 			m_outputDev->PushText( "    Metalness : %.2f", m_pickResult.material->GetMetalness() );
 
 			m_outputDev->SetTextColor( 0, 0, 0 );
+			m_outputDev->PushText( "    IOR       : %.2f", m_pickResult.material->GetIOR() );
+
 			const Vec3 f0 = ComputeF0( m_pickResult.material->GetAlbedo(), m_pickResult.material->GetMetalness() );
 			m_outputDev->PushText( "    F0        : %.2f, %.2f, %.2f", f0.X(), f0.Y(), f0.Z() );
 		}
