@@ -164,6 +164,7 @@
     <ClInclude Include="srt\RenderJobPathTracing.h" />
     <ClInclude Include="srt\RenderJobRT.h" />
     <ClInclude Include="srt\RenderJobSimple.h" />
+    <ClInclude Include="srt\Scene\Quad.h" />
     <ClInclude Include="srt\Scene\SceneTraceResult.h" />
     <ClInclude Include="srt\SrtApplication.h" />
     <ClInclude Include="srt\Base.h" />
@@ -199,6 +200,7 @@
     <ClCompile Include="srt\RenderJobPathTracing.cpp" />
     <ClCompile Include="srt\RenderJobRT.cpp" />
     <ClCompile Include="srt\RenderJobSimple.cpp" />
+    <ClCompile Include="srt\Scene\Quad.cpp" />
     <ClCompile Include="srt\SrtApplication.cpp" />
     <ClCompile Include="srt\Graphic\WMOutputDevice.cpp" />
     <ClCompile Include="srt\Graphic\Image.cpp" />

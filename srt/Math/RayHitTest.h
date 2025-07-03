@@ -25,11 +25,15 @@ namespace srt
 	};
 
 	class Ray;
-	class Sphere;
 
 	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
 	void RaySphereHit( const Ray & ray, const Vec3 & sphereCenter, const float sphereRadius, float tMin, float tMax, RayHitResult & result );
+
+	// ----------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------
+	void RayQuadHit( const Ray & ray, const Vec3 & quadPos, const Vec3 & quadNormal, const Vec3 & quadWidth, const Vec3 & quadHeight, float tMin, float tMax, RayHitResult & result );
+
 
 }
 

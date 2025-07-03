@@ -150,6 +150,9 @@
     <ClInclude Include="srt\Graphic\ToneMapping.h">
       <Filter>srt\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="srt\Scene\Quad.h">
+      <Filter>srt\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="srt.cpp">
@@ -223,6 +226,9 @@
     </ClCompile>
     <ClCompile Include="srt\Graphic\ToneMapping.cpp">
       <Filter>srt\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="srt\Scene\Quad.cpp">
+      <Filter>srt\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
