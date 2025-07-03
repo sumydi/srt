@@ -72,35 +72,37 @@ bool RenderJobPathTracing::Scatter( const Ray & ray, const SceneTraceResult & tr
 
 // ------------------------------------------------------------------------
 // ------------------------------------------------------------------------
-Vec3 RenderJobPathTracing::ComputeColor( const Ray & ray, uint32_t rayIdx )
+Vec3 RenderJobPathTracing::ComputeColor( const Ray & initialRay )
 {
 	Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
+	Vec3 throughput{ 1.0f, 1.0f, 1.0f };
+	Ray ray = initialRay;
 
-	if( rayIdx == 0 )
+	for( uint32_t rayIdx = 0; rayIdx <= m_context.rayCount; ++rayIdx )
 	{
-		return resultColor;
-	}
+		SceneTraceResult hit;
+		m_context.scene->TraceRay( ray, 0.001f, FLT_MAX, hit );
 
-	SceneTraceResult hit;
-	m_context.scene->TraceRay( ray, 0.001f, FLT_MAX, hit );
-
-	if( hit.hitResult.hitTime >= 0.0f )
-	{
-		// Uses Lambertian distribution
-		Vec3	scattered;
-		Vec3	attenuation;
-		if( Scatter( ray, hit, scattered, attenuation ) )
+		if( hit.hitResult.hitTime >= 0.0f )
 		{
-			resultColor = attenuation * ComputeColor( Ray{ hit.hitResult.position, scattered }, rayIdx - 1 );
+			Vec3	scattered;
+			Vec3	attenuation;
+			if( Scatter( ray, hit, scattered, attenuation ) )
+			{
+				// TODO: manage emissive by adding it to resultColor
+				throughput *= attenuation;
+
+				ray = Ray{ hit.hitResult.position, scattered };
+			}
 		}
-	}
-	else
-	{
-		// Hit nothing
-		const float t = 0.5f * ray.Direction().Y() + 1.0f;
-		resultColor = Lerp( Vec3{ 1.0f, 1.0f, 1.0f }, Vec3{ 0.5f, 0.7f, 1.0f }, t );
-	}
-	
+		else
+		{
+			// Hit nothing
+			const float t = 0.5f * ray.Direction().Y() + 1.0f;
+			resultColor += Lerp( Vec3{ 0.8f, 0.0f, 0.8f }, Vec3{ 0.5f, 0.7f, 1.0f }, t ) * throughput;
+			break;
+		}
+	}	
 	return resultColor;
 }
 
@@ -137,7 +139,7 @@ void RenderJobPathTracing::Execute( )
 				// make a ray from the origin to the current normalized pixel
 				const Ray ray = m_context.camera->GenerateRay( nx, ny );
 
-				resultColor += ComputeColor( ray, m_context.rayCount );
+				resultColor += ComputeColor( ray );
 			}
 			resultColor /= (float)m_context.sampleCount;
 

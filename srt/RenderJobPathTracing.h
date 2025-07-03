@@ -22,7 +22,7 @@ public:
 
 private:
 	virtual void	Execute() final;
-	Vec3			ComputeColor( const Ray & ray, uint32_t rayIdx );
+	Vec3			ComputeColor( const Ray & intialRay );
 	bool			Scatter( const Ray & ray, const SceneTraceResult & traceResult, Vec3 & scattered, Vec3 & attenuation );
 };
 }
