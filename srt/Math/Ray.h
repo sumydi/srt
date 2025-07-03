@@ -31,6 +31,7 @@ namespace srt
 	{
 		m_origin = other.m_origin;
 		m_direction = other.m_direction;
+		return *this;
 	}
 
 }
