@@ -75,6 +75,5 @@ namespace srt
 			page->used = 0;
 		}
 		m_currentPage = 0;
-		assert( m_currentPage!=nullptr );
 	}
 }
