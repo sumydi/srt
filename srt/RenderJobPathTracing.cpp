@@ -152,9 +152,8 @@ void RenderJobPathTracing::Execute( )
 			resultColor = ACESFilm( resultColor );
 
 			resultColor = LinearTosRGB( resultColor );
-			const uint32_t color = MakeRGB( resultColor );
+			*lineBB = MakeRGB( resultColor );
 
-			*lineBB = color;
 			++lineBB;
 			++linePrev;
 			++lineCur;

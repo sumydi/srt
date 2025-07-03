@@ -200,6 +200,7 @@ namespace srt
 		}
 
 		// Camera
+		bool cameraChanged = false;
 		if( GetKeyState( KeyCode::kMouseMiddleButton).pressed )
 		{
 			constexpr float moveDT { 0.004f };
@@ -232,6 +233,7 @@ namespace srt
 				camera->SetPosition( camera->GetPosition( ) + camMove );
 			}
 			m_frameIndex = 0;
+			cameraChanged = true;
 		}
 
 		if( GetKeyState( KeyCode::kC ).justPressed && ( m_pickResult.hitResult.hitTime > 0.0f ) )
@@ -350,7 +352,7 @@ namespace srt
 				context.width += ( widthJob == kWidthJobsCount - 1 ) ? lastPixWidth : 0;
 
 				RenderJob * job { nullptr };
-				if( m_renderMode==RenderMode::kSimple )
+				if( m_renderMode==RenderMode::kSimple || cameraChanged )
 				{
 					job = m_freeAllAllocator.Allocate< RenderJobSimple >( );
 				}
