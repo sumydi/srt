@@ -15,8 +15,8 @@ namespace srt
 	// ----------------------------------------------------------------------------
 	FastRandom::FastRandom()
 	{
-		// use current time as seed
-		m_value = static_cast<int32_t>( std::chrono::system_clock::now().time_since_epoch().count() );
+		// use standard random value as seed
+		m_value = std::rand();
 	}
 
 	// ----------------------------------------------------------------------------
