@@ -45,13 +45,26 @@ namespace srt
 
 		m_scene = new Scene;
 
-		Material * metal = new Material{ "Metal", Vec3{ 0.8f, 0.6f, 0.2f }, 0.01f, 1.0f };
-		Material * grayPlastic = new Material{ "Gray Plastic", Vec3{ 0.8f, 0.8f, 0.8f }, 0.2f, 0.0f };
-		Material * greenPlastic = new Material{ "Green Plastic", Vec3{ 0.4f, 0.8f, 0.4f }, 0.2f, 0.0f };
-		Material * redPlastic = new Material{ "Red Plastic", Vec3{ 0.8f, 0.2f, 0.2f }, 0.2f, 0.0f };
-		Material * bluePlastic = new Material{ "Blue Plastic", Vec3{ 0.2f, 0.2f, 0.8f }, 0.2f, 0.0f };
-		Material * ground = new Material{ "Ground", Vec3{ 0.8f, 0.4f, 0.2f }, 0.7f, 0.0f };
-		Material * glass = new Material{ "Glass", Vec3{ 0.5f, 0.5f, 0.5f }, 0.2f, 0.0f, 2.2f };
+		Material *	metal = new Material{ "Metal" };
+					metal->SetAlbedo( Vec3{ 0.8f, 0.6f, 0.2f } ).SetRoughness( 0.01f ).SetMetalness( 1.0f );
+
+		Material *	grayPlastic = new Material{ "Gray Plastic" };
+					grayPlastic->SetAlbedo( Vec3{ 0.8f, 0.8f, 0.8f } ).SetRoughness( 0.2f ).SetMetalness( 0.0f );
+
+		Material *	greenPlastic = new Material{ "Green Plastic" };
+					greenPlastic->SetAlbedo( Vec3{ 0.4f, 0.8f, 0.4f } ).SetRoughness( 0.2f ).SetMetalness( 0.0f );
+
+		Material *	redPlastic = new Material{ "Red Plastic" };
+					redPlastic->SetAlbedo( Vec3{ 0.8f, 0.2f, 0.2f } ).SetRoughness( 0.2f ).SetMetalness( 0.0f );
+
+		Material *	bluePlastic = new Material{ "Blue Plastic" };
+					bluePlastic->SetAlbedo( Vec3{ 0.2f, 0.2f, 0.8f } ).SetRoughness( 0.2f ).SetMetalness( 0.0f );
+
+		Material *	ground = new Material{ "Ground" };
+					ground->SetAlbedo( Vec3{ 0.8f, 0.4f, 0.2f } ).SetRoughness( 0.7f ).SetMetalness( 0.0f );
+
+		Material *	glass = new Material{ "Glass" };
+					glass->SetAlbedo( Vec3{ 0.5f, 0.5f, 0.5f } ).SetRoughness( 0.2f ).SetMetalness( 0.0f ).SetIOR( 2.2f );
 
 		m_scene->AddObject( new Sphere{ "Sphere", Vec3{ -0.5f, 0.25f, -1.0f }, 0.25f, *grayPlastic } );
 		m_scene->AddObject( new Sphere{ "Moving Sphere", Vec3{ 0.5f, 0.3f, -1.0f }, 0.3f, *metal } );
