@@ -66,23 +66,27 @@ namespace srt
 		Material *	glass = new Material{ "Glass" };
 					glass->SetAlbedo( Vec3{ 0.5f, 0.5f, 0.5f } ).SetRoughness( 0.2f ).SetMetalness( 0.0f ).SetIOR( 2.2f );
 
+		Material *	emissive = new Material{ "Emissive" };
+					emissive->SetAlbedo( Vec3{ 0.0f, 0.0f, 0.0f } ).SetEmissive( Vec3{ 1.0f, 1.0f, 1.0f } );
+
 		m_scene->AddObject( new Sphere{ "Sphere", Vec3{ -0.5f, 0.25f, -1.0f }, 0.25f, *grayPlastic } );
 		m_scene->AddObject( new Sphere{ "Moving Sphere", Vec3{ 0.5f, 0.3f, -1.0f }, 0.3f, *metal } );
 		//m_scene->AddObject( new Sphere{ "Ground", Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *ground  } );
 		m_scene->AddObject( new Quad{ "Ground", Vec3{ -40.0f, 0.0f, 40.0f }, Vec3{ 0.0f, 1.0f, 0.0 }, 80.0f, 80.0f, *ground } );
 		m_scene->AddObject( new Sphere{ "Glass Sphere", Vec3{ 2.0f, 1.0f, -1.0f }, 0.5f, *glass } );
 
-		m_scene->AddObject( new Quad{ "Left Wall", Vec3{ -1.0f, 0.0f, -0.5f }, Vec3{ 1.0f, 0.0f, 0.0 }, 2.0f, 3.0f, *redPlastic } );
-		m_scene->AddObject( new Quad{ "Right Wall", Vec3{ 1.0f, 0.0f, -0.5f }, Vec3{ 1.0f, 0.0f, 0.0 }, 2.0f, 3.0f, *greenPlastic } );
-		m_scene->AddObject( new Quad{ "Top Wall", Vec3{ -1.0f, 3.0f, -2.5f }, Vec3{ 0.0f, -1.0f, 0.0 }, 2.0f, 2.0f, *grayPlastic } );
+		m_scene->AddObject( new Quad{ "Left Wall", Vec3{ -1.0f, 0.0f, -0.5f }, Vec3{ 1.0f, 0.0f, 0.0 }, 2.0f, 2.5f, *redPlastic } );
+		m_scene->AddObject( new Quad{ "Right Wall", Vec3{ 1.0f, 0.0f, -0.5f }, Vec3{ 1.0f, 0.0f, 0.0 }, 2.0f, 2.5f, *greenPlastic } );
+		m_scene->AddObject( new Quad{ "Top Wall", Vec3{ -1.0f, 2.5f, -2.5f }, Vec3{ 0.0f, -1.0f, 0.0 }, 2.0f, 2.0f, *grayPlastic } );
 		m_scene->AddObject( new Quad{ "Bottom Wall", Vec3{ -1.0f, 0.0f, -0.5f }, Vec3{ 0.0f, 1.0f, 0.0 }, 2.0f, 2.0f, *grayPlastic } );
-		m_scene->AddObject( new Quad{ "Back Wall", Vec3{ -1.0f, 0.0f, -2.5f }, Vec3{ 0.0f, 0.0f, 1.0 }, 2.0f, 3.0f, *grayPlastic } );
+		m_scene->AddObject( new Quad{ "Back Wall", Vec3{ -1.0f, 0.0f, -2.5f }, Vec3{ 0.0f, 0.0f, 1.0 }, 2.0f, 2.5f, *grayPlastic } );
+		m_scene->AddObject( new Quad{ "Emissive Light", Vec3{ -0.25f, 2.45f, -1.5f }, Vec3{ 0.0f, -1.0f, 0.0 }, 0.5f, 0.5f, *emissive } );
 
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ -1.0f, 2.0f, -3.0f }, Vec3{ 1.0f, -1.0f, 1.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 2.0f, 1.5f, 2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 4.0f, 4.0f, -2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
 
-		m_scene->AddCamera( new Camera{ Vec3{ 0.0f, 0.0f, 1.0f }, Vec3{ 0.0f, 0.0f, -1.0f }, 70.0f, (float)context.width / (float)context.height } );
+		m_scene->AddCamera( new Camera{ Vec3{ 0.0f, 1.0f, 1.0f }, Vec3{ 0.0f, 1.0f, -1.0f }, 70.0f, (float)context.width / (float)context.height } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 		m_result = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
