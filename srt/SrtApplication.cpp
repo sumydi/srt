@@ -10,6 +10,7 @@
 #include "Math/Halton.h"
 #include "Scene/Scene.h"
 #include "Scene/Sphere.h"
+#include "Scene/Quad.h"
 #include "Scene/Light.h"
 #include "Scene/Camera.h"
 #include "Scene/SceneTraceResult.h"
@@ -45,14 +46,24 @@ namespace srt
 		m_scene = new Scene;
 
 		Material * metal = new Material{ "Metal", Vec3{ 0.8f, 0.6f, 0.2f }, 0.01f, 1.0f };
-		Material * grayDiffuse = new Material{ "Green Plastic", Vec3{ 0.4f, 0.8f, 0.4f }, 0.2f, 0.0f };
+		Material * grayPlastic = new Material{ "Gray Plastic", Vec3{ 0.8f, 0.8f, 0.8f }, 0.2f, 0.0f };
+		Material * greenPlastic = new Material{ "Green Plastic", Vec3{ 0.4f, 0.8f, 0.4f }, 0.2f, 0.0f };
+		Material * redPlastic = new Material{ "Red Plastic", Vec3{ 0.8f, 0.2f, 0.2f }, 0.2f, 0.0f };
+		Material * bluePlastic = new Material{ "Blue Plastic", Vec3{ 0.2f, 0.2f, 0.8f }, 0.2f, 0.0f };
 		Material * ground = new Material{ "Ground", Vec3{ 0.8f, 0.4f, 0.2f }, 0.7f, 0.0f };
 		Material * glass = new Material{ "Glass", Vec3{ 0.5f, 0.5f, 0.5f }, 0.2f, 0.0f, 2.2f };
 
-		m_scene->AddObject( new Sphere{ "Sphere", Vec3{ 0.0f, 0.0f, -1.0f }, 0.5f, *grayDiffuse } );
-		m_scene->AddObject( new Sphere{ "Moving Sphere", Vec3{ -1.0f, 0.0f, -1.0f }, 0.2f, *metal } );
-		m_scene->AddObject( new Sphere{ "Ground", Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *ground  } );
-		m_scene->AddObject( new Sphere{ "Glass Sphere", Vec3{ 1.5f, 0.0f, -1.0f }, 0.5f, *glass } );
+		m_scene->AddObject( new Sphere{ "Sphere", Vec3{ -0.5f, 0.25f, -1.0f }, 0.25f, *grayPlastic } );
+		m_scene->AddObject( new Sphere{ "Moving Sphere", Vec3{ 0.5f, 0.3f, -1.0f }, 0.3f, *metal } );
+		//m_scene->AddObject( new Sphere{ "Ground", Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *ground  } );
+		m_scene->AddObject( new Quad{ "Ground", Vec3{ -40.0f, 0.0f, 40.0f }, Vec3{ 0.0f, 1.0f, 0.0 }, 80.0f, 80.0f, *ground } );
+		m_scene->AddObject( new Sphere{ "Glass Sphere", Vec3{ 2.0f, 1.0f, -1.0f }, 0.5f, *glass } );
+
+		m_scene->AddObject( new Quad{ "Left Wall", Vec3{ -1.0f, 0.0f, -0.5f }, Vec3{ 1.0f, 0.0f, 0.0 }, 2.0f, 3.0f, *redPlastic } );
+		m_scene->AddObject( new Quad{ "Right Wall", Vec3{ 1.0f, 0.0f, -0.5f }, Vec3{ 1.0f, 0.0f, 0.0 }, 2.0f, 3.0f, *greenPlastic } );
+		m_scene->AddObject( new Quad{ "Top Wall", Vec3{ -1.0f, 3.0f, -2.5f }, Vec3{ 0.0f, -1.0f, 0.0 }, 2.0f, 2.0f, *grayPlastic } );
+		m_scene->AddObject( new Quad{ "Bottom Wall", Vec3{ -1.0f, 0.0f, -0.5f }, Vec3{ 0.0f, 1.0f, 0.0 }, 2.0f, 2.0f, *grayPlastic } );
+		m_scene->AddObject( new Quad{ "Back Wall", Vec3{ -1.0f, 0.0f, -2.5f }, Vec3{ 0.0f, 0.0f, 1.0 }, 2.0f, 3.0f, *grayPlastic } );
 
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ -1.0f, 2.0f, -3.0f }, Vec3{ 1.0f, -1.0f, 1.0f }, Vec3{ 5.0f, 5.0f, 5.0f } } );
 		m_scene->AddLight( new Light{ Light::Type::kOmni, Vec3{ 2.0f, 1.5f, 2.0f }, Vec3{ 0.0f, 0.0f, 0.0f }, Vec3{ 5.0f, 5.0f, 4.0f } } );
@@ -151,6 +162,7 @@ namespace srt
 			m_outputDev->PushText( "HIT", m_pickResult.material->GetName( ) );
 			m_outputDev->PushText( "  Object %s", m_pickResult.object->GetName( ) );
 			m_outputDev->PushText( "  Material %s", m_pickResult.material->GetName( ) );
+			m_outputDev->PushText( "    Position  : %.3f, %.3f, %.3f", m_pickResult.hitResult.position.X(), m_pickResult.hitResult.position.Y(), m_pickResult.hitResult.position.Z() );
 			m_outputDev->PushText( "    Albedo    : %.3f, %.3f, %.3f", m_pickResult.material->GetAlbedo().X(), m_pickResult.material->GetAlbedo().Y(), m_pickResult.material->GetAlbedo().Z() );
 
 			if( GetKeyState( KeyCode::kR ).pressed )
@@ -286,13 +298,13 @@ namespace srt
 		// Let's move some scene object
 		// -----------------------------
 		static float t = 0.0f;
-//		t += dt;
+		t += dt;
 		const float cs = cosf( t );
 		const float si = sinf( t );
 
 		SceneObject * obj = m_scene->GetObject( 1 );
 		Vec3 objPos = Vec3{ 0.0f, 0.5f, -1.0f } + Vec3{ cs * 0.8f, cs * 0.8f, si * 1.0f };
-		obj->SetPosition( objPos );
+//		obj->SetPosition( objPos );
 
 //		Light * light = m_scene->GetLight( 0 );
 //		Vec3 lightPos = light->GetPosition( );
