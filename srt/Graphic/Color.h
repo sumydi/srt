@@ -24,9 +24,9 @@ namespace srt
 	// ----------------------------------------------------------------------------
 	inline uint32_t MakeRGB( const Vec3 & v )
 	{
-		const uint8_t r = (uint8_t)( v.X() * 255.0f );
-		const uint8_t g = (uint8_t)( v.Y() * 255.0f );
-		const uint8_t b = (uint8_t)( v.Z() * 255.0f );
+		const uint8_t r = (uint8_t)( std::min( v.X() * 255.0f, 255.0f ) );
+		const uint8_t g = (uint8_t)( std::min( v.Y() * 255.0f, 255.0f ) );
+		const uint8_t b = (uint8_t)( std::min( v.Z() * 255.0f, 255.0f ) );
 
 		return MakeRGB( r, g, b );
 	}
