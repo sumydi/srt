@@ -14,12 +14,12 @@ namespace srt
 	class StandardRandom
 	{
 	public:
-		static constexpr int32_t kMaxValue = RAND_MAX;
+		static constexpr uint32_t kMaxValue = RAND_MAX;
 
 		StandardRandom() = default;
-		StandardRandom( int32_t seed );
+		StandardRandom( uint32_t seed );
 
-		int32_t Rand( ) { return std::rand(); }
+		uint32_t Rand( ) { return std::rand(); }
 
 	private:
 	};
@@ -36,15 +36,15 @@ namespace srt
 	class FastRandom
 	{
 	public:
-		static constexpr int32_t kMaxValue = 0x7fffffff;
+		static constexpr uint32_t kMaxValue = 0xffffffff;
 
 		FastRandom( );
-		FastRandom( int32_t seed ) : m_value{ seed } { }
+		FastRandom( uint32_t seed ) : m_value{ seed } { }
 
-		int32_t	Rand( );
+		uint32_t	Rand( );
 
 	private:
-		int32_t		m_value;
+		uint32_t	m_value;
 	};
 
 	using RandomGenerator = FastRandom;

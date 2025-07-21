@@ -6,9 +6,9 @@ namespace srt
 {
 	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
-	StandardRandom::StandardRandom( int32_t seed )
+	StandardRandom::StandardRandom( uint32_t seed )
 	{
-		std::srand( (unsigned int )seed );
+		std::srand( seed );
 	}
 
 	// ----------------------------------------------------------------------------
@@ -16,24 +16,30 @@ namespace srt
 	FastRandom::FastRandom()
 	{
 		// use standard random value as seed
-		m_value = std::rand();
+		m_value = static_cast< uint32_t >( std::rand() );
 	}
 
 	// ----------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------
-	int32_t FastRandom::Rand( )
+	uint32_t FastRandom::Rand( )
 	{
-		m_value = 1664525 * m_value + 1013904223;
+		m_value = (m_value ^ 61) ^ (m_value >> 16);
+		m_value *= 9;
+		m_value = m_value ^ (m_value >> 4);
+		m_value *= 0x27d4eb2d;
+		m_value = m_value ^ (m_value >> 15);
 		return m_value;
+	
+	//	m_value = 1664525 * m_value + 1013904223;
+	//	return m_value;
 	}
 
 	// ----------------------------------------------------------------------------
-	// returns a random number in the range [0;1)
+	// returns a random number in the range [0;1]
 	// ----------------------------------------------------------------------------
 	float RandomFloat( RandomGenerator & generator )
 	{
-	
-		return (float)generator.Rand() / ( (float)RandomGenerator::kMaxValue + 1.0f );
+		return (float)generator.Rand() / ( (float)RandomGenerator::kMaxValue );
 	}
 
 	// ----------------------------------------------------------------------------
@@ -90,7 +96,13 @@ namespace srt
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	Vec3 RandomUnitVector( RandomGenerator& generator )
-	{
-		return Normalize( RandomInUnitSphere( generator ) );
+	{																																											
+		//return Normalize( RandomInUnitSphere( generator ) );
+		float z = RandomFloat( generator, 0.0f, 1.0f ) * 2.0f - 1.0f;
+		float a = RandomFloat( generator, 0.0f, 1.0f ) * 3.14159265359f * 2.0f;
+		float r = sqrt(1.0f - z * z);
+		float x = r * cos(a);
+		float y = r * sin(a);
+		return Vec3( x, y, z );
 	}
 }
