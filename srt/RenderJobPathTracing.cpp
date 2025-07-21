@@ -57,7 +57,9 @@ bool RenderJobPathTracing::Scatter( const Ray & ray, const SceneTraceResult & tr
 			const bool canNotRefract = ( refRatio * sinTheta > 1.0f );
 			const float f0 = ( 1.0f - refRatio ) / ( 1.0f + refRatio );
 
-			if( canNotRefract /* || FresnelSchlick(cosTheta, f0 * f0) > RandomFloat(m_rndGenerator) */)
+			if( canNotRefract 
+			// || FresnelSchlick(cosTheta, f0 * f0) > RandomFloat(m_rndGenerator) 
+			)
 			{
 				scattered = Reflect( unitDir, traceResult.hitResult.normal );
 			}
@@ -74,6 +76,33 @@ bool RenderJobPathTracing::Scatter( const Ray & ray, const SceneTraceResult & tr
 // ------------------------------------------------------------------------
 Vec3 RenderJobPathTracing::ComputeColor( const Ray & initialRay )
 {
+	Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
+	Vec3 throughput{ 1.0f, 1.0f, 1.0f };
+	Ray ray = initialRay;
+
+	for( uint32_t rayIdx = 0; rayIdx <= m_context.rayCount; ++rayIdx )
+	{
+		SceneTraceResult hit;
+		m_context.scene->TraceRay( ray, 0.001f, FLT_MAX, hit );
+		if( hit.hitResult.hitTime >= 0.0f )
+		{
+			Vec3	scattered = Normalize( hit.hitResult.normal + RandomUnitVector( m_rndGenerator ) );
+			ray = Ray{ hit.hitResult.position + hit.hitResult.normal * 0.001f, scattered };
+
+			resultColor += hit.material->GetEmissive() * throughput;
+			throughput *= hit.material->GetAlbedo();
+		}
+		else
+		{
+			// Hit nothing
+			const float t = 0.5f * ray.Direction().Y() + 1.0f;
+			resultColor += Lerp( Vec3{ 0.8f, 0.8f, 0.8f }, Vec3{ 0.5f, 0.7f, 0.8f }, t ) * throughput;
+			break;
+		}
+	}
+	return resultColor;
+
+/*
 	Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
 	Vec3 throughput{ 1.0f, 1.0f, 1.0f };
 	Ray ray = initialRay;
@@ -105,6 +134,7 @@ Vec3 RenderJobPathTracing::ComputeColor( const Ray & initialRay )
 		}
 	}	
 	return resultColor;
+*/
 }
 
 // ------------------------------------------------------------------------
