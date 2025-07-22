@@ -84,13 +84,36 @@ Vec3 RenderJobPathTracing::ComputeColor( const Ray & initialRay )
 	{
 		SceneTraceResult hit;
 		m_context.scene->TraceRay( ray, 0.001f, FLT_MAX, hit );
+
 		if( hit.hitResult.hitTime >= 0.0f )
 		{
-			Vec3	scattered = Normalize( hit.hitResult.normal + RandomUnitVector( m_rndGenerator ) );
-			ray = Ray{ hit.hitResult.position + hit.hitResult.normal * 0.001f, scattered };
+			// Diffuse ray direction
+			Vec3 rayDir = Normalize( hit.hitResult.normal + RandomUnitVector( m_rndGenerator ) );
+
+			const bool doSpecular = RandomFloat( m_rndGenerator, 0.0f, 1.0f ) < hit.material->GetMetalness();
+			if( doSpecular )
+			{
+				// If we've got a metal, reflect the ray based also on the roughness
+				Vec3 specRay = Reflect( ray.Direction(), hit.hitResult.normal );
+				rayDir = Normalize( Lerp( specRay, rayDir, hit.material->GetRoughness() * hit.material->GetRoughness() ) );
+			}
+
+			ray = Ray{ hit.hitResult.position + hit.hitResult.normal * 0.001f, rayDir };
 
 			resultColor += hit.material->GetEmissive() * throughput;
-			throughput *= hit.material->GetAlbedo();
+			throughput *= doSpecular ? hit.material->GetSpecular() : hit.material->GetAlbedo();
+
+			// Russian Roulette
+			// As the throughput gets smaller, the ray is more likely to get terminated early.
+			// Survivors have their value boosted to make up for fewer samples being in the average.
+			{
+        		float p = std::max( throughput.X(), std::max( throughput.Y(), throughput.Z() ) );
+        		if( RandomFloat( m_rndGenerator, 0.0f, 1.0f )  > p )
+            		break;
+
+        		// Add the energy we 'lose' by randomly terminating paths
+        		throughput *= 1.0f / p;
+			}
 		}
 		else
 		{
