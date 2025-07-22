@@ -33,6 +33,9 @@ namespace srt
 		const Vec3 &	GetAlbedo( ) const { return m_albedo; }
 		Material &		SetAlbedo( const Vec3 & albedo ) { m_albedo = albedo; return *this; }
 
+		const Vec3 &	GetSpecular( ) const { return m_specular; }
+		Material &		SetSpecular( const Vec3 & specular ) { m_specular = specular; return *this; }
+
 		const Vec3 &	GetEmissive( ) const { return m_emissive; }
 		Material &		SetEmissive( const Vec3 & emissive ) { m_emissive = emissive; return *this; }
 
@@ -48,6 +51,7 @@ namespace srt
 	private:
 		std::string		m_name;
 		Vec3			m_albedo { 0.8f, 0.8f, 0.8f };
+		Vec3			m_specular{ 0.04f,0.04f,0.04f };
 		Vec3			m_emissive { 0.0f, 0.0f, 0.0f };
 		float			m_roughness { 0.5f };
 		float			m_metalness { 0.0f };

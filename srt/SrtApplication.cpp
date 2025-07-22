@@ -46,7 +46,7 @@ namespace srt
 		m_scene = new Scene;
 
 		Material *	metal = new Material{ "Metal" };
-					metal->SetAlbedo( Vec3{ 0.8f, 0.6f, 0.2f } ).SetRoughness( 0.01f ).SetMetalness( 1.0f );
+					metal->SetAlbedo( Vec3{ 0.8f, 0.6f, 0.2f } ).SetRoughness( 0.3f ).SetMetalness( 1.0f ).SetSpecular( Vec3{ 0.8f, 0.8f, 0.8f } );
 
 		Material *	grayPlastic = new Material{ "Gray Plastic" };
 					grayPlastic->SetAlbedo( Vec3{ 0.8f, 0.8f, 0.8f } ).SetRoughness( 0.2f ).SetMetalness( 0.0f );
@@ -71,7 +71,6 @@ namespace srt
 
 		m_scene->AddObject( new Sphere{ "Sphere", Vec3{ -0.5f, 0.25f, -1.0f }, 0.25f, *grayPlastic } );
 		m_scene->AddObject( new Sphere{ "Moving Sphere", Vec3{ 0.5f, 0.3f, -1.0f }, 0.3f, *metal } );
-		//m_scene->AddObject( new Sphere{ "Ground", Vec3{ 0.0f, -80.5f, -1.0f }, 80.0f, *ground  } );
 		m_scene->AddObject( new Quad{ "Ground", Vec3{ -40.0f, 0.0f, 40.0f }, Vec3{ 0.0f, 1.0f, 0.0 }, 80.0f, 80.0f, *ground } );
 		m_scene->AddObject( new Sphere{ "Glass Sphere", Vec3{ 2.0f, 1.0f, -1.0f }, 0.5f, *glass } );
 
