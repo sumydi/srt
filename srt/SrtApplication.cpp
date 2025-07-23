@@ -67,7 +67,7 @@ namespace srt
 					glass->SetAlbedo( Vec3{ 0.5f, 0.5f, 0.5f } ).SetRoughness( 0.2f ).SetMetalness( 0.0f ).SetIOR( 2.2f );
 
 		Material *	emissive = new Material{ "Emissive" };
-					emissive->SetAlbedo( Vec3{ 0.0f, 0.0f, 0.0f } ).SetEmissive( Vec3{ 1.0f, 0.9f, 0.7f } * 20.0f );
+					emissive->SetAlbedo( Vec3{ 0.0f, 0.0f, 0.0f } ).SetEmissive( Vec3{ 1.0f, 0.9f, 0.7f } * 2.0f );
 
 		m_scene->AddObject( new Sphere{ "Sphere", Vec3{ -0.5f, 0.25f, -1.0f }, 0.25f, *grayPlastic } );
 		m_scene->AddObject( new Sphere{ "Moving Sphere", Vec3{ 0.5f, 0.3f, -1.0f }, 0.3f, *metal } );
