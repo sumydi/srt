@@ -164,9 +164,6 @@ Vec3 RenderJobPathTracing::ComputeColor( const Ray & initialRay )
 // ------------------------------------------------------------------------
 void RenderJobPathTracing::Execute( )
 {
-	// do not apply jitterring on the camera when samplecount==1 to avoid wobling picture
-	const float jitteringFactor = m_context.sampleCount > 1 ? 1.0f : 0.0f;
-
 	const float surfWidth = static_cast< float >( m_context.backBuffer->GetMipDesc( 0 ).width - 1 );
 	const float surfHeight = static_cast< float >( m_context.backBuffer->GetMipDesc( 0 ).height - 1 );
 	const uint32_t surfPitch = m_context.backBuffer->GetMipDesc( 0 ).pitch;
@@ -182,22 +179,24 @@ void RenderJobPathTracing::Execute( )
 		for( uint32_t x = 0; x < m_context.width; ++x )
 		{
 			Vec3 resultColor{ 0.0f, 0.0f, 0.0f };
+
+			// Apply jittering to have temporal AA
+			const Vec2 jitter = ( Vec2{ RandomFloat( m_rndGenerator ), RandomFloat( m_rndGenerator ) } - 0.5f );
+
 			for( uint32_t sampleIdx = 0; sampleIdx < m_context.sampleCount; ++sampleIdx )
 			{
-				// transform coordinates to "normalized" coordinates
-				//Vec2 jitter = m_context.halton->GetValue( sampleIdx );
-				const Vec2 jitter = Vec2{ RandomFloat( m_rndGenerator ), RandomFloat( m_rndGenerator ) } - 0.5f;// = m_context.halton->GetValue( sampleIdx );
-				const float nx = ( ( (float)( x + m_context.x ) + jitter.X() * jitteringFactor ) / surfWidth );
-				const float ny = ( ( (float)( y + m_context.y ) + jitter.Y() * jitteringFactor ) / surfHeight );
-
+				// Transform coordinates to "normalized" coordinates and 
 				// make a ray from the origin to the current normalized pixel
+				const float nx = ( ( (float)( x + m_context.x ) + jitter.X() ) / surfWidth );
+				const float ny = ( ( (float)( y + m_context.y ) + jitter.Y() ) / surfHeight );
+
 				const Ray ray = m_context.camera->GenerateRay( nx, ny );
 
 				resultColor += ComputeColor( ray );
 			}
 			resultColor /= (float)m_context.sampleCount;
 
-			// Acucmulate results
+			// Result temporal accumulation
 			Vec3 prevColor = FromRGB( *linePrev );
 			resultColor = Lerp( prevColor, resultColor, 1.0f / (float)( m_context.frameIndex + 1 ) );
 			*lineCur = MakeRGB( resultColor );
