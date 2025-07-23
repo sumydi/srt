@@ -107,12 +107,14 @@ Vec3 RenderJobPathTracing::ComputeColor( const Ray & initialRay )
 			// As the throughput gets smaller, the ray is more likely to get terminated early.
 			// Survivors have their value boosted to make up for fewer samples being in the average.
 			{
-        		float p = std::max( throughput.X(), std::max( throughput.Y(), throughput.Z() ) );
-        		if( RandomFloat( m_rndGenerator, 0.0f, 1.0f )  > p )
-            		break;
+			/*
+	     		float p = std::max( throughput.X(), std::max( throughput.Y(), throughput.Z() ) );
+	     		if( RandomFloat( m_rndGenerator, 0.0f, 1.0f )  > p )
+	         		break;
 
-        		// Add the energy we 'lose' by randomly terminating paths
-        		throughput *= 1.0f / p;
+	     		// Add the energy we 'lose' by randomly terminating paths
+	     		throughput *= 1.0f / p;
+			*/
 			}
 		}
 		else
