@@ -69,7 +69,7 @@ namespace srt
 		Material *	emissive = new Material{ "Emissive" };
 					emissive->SetAlbedo( Vec3{ 0.0f, 0.0f, 0.0f } ).SetEmissive( Vec3{ 0.8f, 0.8f, 0.7f } * 5.0f );
 
-		m_scene->AddObject( new Sphere{ "Sphere", Vec3{ -0.5f, 0.25f, -1.0f }, 0.25f, *grayPlastic } );
+		m_scene->AddObject( new Sphere{ "Sphere", Vec3{ -0.5f, 0.25f, -1.0f }, 0.3f, *grayPlastic } );
 		m_scene->AddObject( new Sphere{ "Moving Sphere", Vec3{ 0.5f, 0.3f, -1.0f }, 0.3f, *metal } );
 		//m_scene->AddObject( new Quad{ "Ground", Vec3{ -40.0f, 0.0f, 40.0f }, Vec3{ 0.0f, 1.0f, 0.0 }, 80.0f, 80.0f, *ground } );
 		m_scene->AddObject( new Sphere{ "Glass Sphere", Vec3{ 2.0f, 1.0f, -1.0f }, 0.5f, *glass } );
