@@ -271,12 +271,12 @@ namespace srt
 		}
 		else if( GetKeyState( KeyCode::kF2 ).justPressed )
 		{
-			m_renderMode = RenderMode::kPBR;
+			m_renderMode = RenderMode::kRayTracing;
 			m_frameIndex = 0;
 		}
 		else if( GetKeyState( KeyCode::kF3 ).justPressed )
 		{
-			m_renderMode = RenderMode::kFullRT;
+			m_renderMode = RenderMode::kPathTracing;
 			m_frameIndex = 0;
 		}
 
@@ -372,11 +372,11 @@ namespace srt
 				{
 					job = m_freeAllAllocator.Allocate< RenderJobSimple >( );
 				}
-				else if( m_renderMode==RenderMode::kPBR )
+				else if( m_renderMode==RenderMode::kRayTracing )
 				{
 					job = m_freeAllAllocator.Allocate< RenderJobRayTracing >( );
 				}
-				else if( m_renderMode==RenderMode::kFullRT )
+				else if( m_renderMode==RenderMode::kPathTracing )
 				{
 					job = m_freeAllAllocator.Allocate< RenderJobPathTracing >( );
 				}

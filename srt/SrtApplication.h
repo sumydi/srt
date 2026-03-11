@@ -56,15 +56,15 @@ private:
 	enum class RenderMode
 	{
 		kSimple = 0,
-		kPBR,
-		kFullRT,
+		kRayTracing,
+		kPathTracing,
 
 		kRenderModeCount
 	};
 
 	static const char * ms_renderModeName[ (size_t)RenderMode::kRenderModeCount ];
 
-	RenderMode			m_renderMode { RenderMode::kFullRT };
+	RenderMode			m_renderMode { RenderMode::kPathTracing };
 };
 
 }
