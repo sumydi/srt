@@ -88,7 +88,7 @@ namespace srt
 		m_scene->AddCamera( new Camera{ Vec3{ 0.0f, 1.25f, 1.5f }, Vec3{ 0.0f, 1.25f, -1.0f }, 70.0f, (float)context.width / (float)context.height } );
 
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
-		m_result = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
+		m_result = new Image( context.width, context.height, PixelFormat::kRGB_Float );
 
 		m_outputDev = new WMOutputDevice( this->GetWindowHandle() );
 	}	
