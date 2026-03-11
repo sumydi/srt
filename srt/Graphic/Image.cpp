@@ -134,11 +134,11 @@ namespace srt
 				for( uint32_t y = 0; y < mipDesc.height; ++y )
 				{
 					float * line = reinterpret_cast< float * >( mipSurface + ( y * mipDesc.pitch ) );
-					for( uint32_t x = 0; x < mipDesc.width; x+=3 )
+					for( uint32_t x = 0; x < mipDesc.width; ++x )
 					{
-						line[ x + 0 ] = color.X();
-						line[ x + 1 ] = color.Y();
-						line[ x + 2 ] = color.Z();
+						line[ x * 3 + 0 ] = color.X();
+						line[ x * 3 + 1 ] = color.Y();
+						line[ x * 3 + 2 ] = color.Z();
 					}
 				}
 			}
