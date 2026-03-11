@@ -11,6 +11,8 @@ namespace srt
 		kBGRX8_UInt = 0,
 		kBGRA8_UInt,
 
+		kRGB_Float,
+
 		kCount
 	};
 

@@ -113,18 +113,35 @@ namespace srt
 		{
 			// Note: currently manage only 32 bits pixel formats
 			const PixelSurface::Desc & mipDesc	= GetMipDesc( mipIdx );
-			uint32_t * mipSurface				= reinterpret_cast< uint32_t * >( LockMipSurface( mipIdx ) );
-			const uint32_t finalColor			= MakeRGBA( color );
-			
-			for( uint32_t y = 0; y < mipDesc.height; ++y )
+			uint8_t * mipSurface = reinterpret_cast< uint8_t *>( LockMipSurface( mipIdx ) );
+
+			if( m_pixelFormat==PixelFormat::kBGRX8_UInt ||
+				m_pixelFormat==PixelFormat::kBGRA8_UInt )
 			{
-				uint32_t * line = mipSurface + ( y * mipDesc.pitch / 4 );
-				for( uint32_t x = 0; x < mipDesc.width; ++x )
+				const uint32_t finalColor = MakeRGBA( color );
+			
+				for( uint32_t y = 0; y < mipDesc.height; ++y )
 				{
-					line[ x ] = finalColor;
+					uint32_t * line = reinterpret_cast< uint32_t * >( mipSurface + ( y * mipDesc.pitch ) );
+					for( uint32_t x = 0; x < mipDesc.width; ++x )
+					{
+						line[ x ] = finalColor;
+					}
 				}
 			}
-
+			else if( m_pixelFormat==PixelFormat::kRGB_Float )
+			{
+				for( uint32_t y = 0; y < mipDesc.height; ++y )
+				{
+					float * line = reinterpret_cast< float * >( mipSurface + ( y * mipDesc.pitch ) );
+					for( uint32_t x = 0; x < mipDesc.width; x+=3 )
+					{
+						line[ x + 0 ] = color.X();
+						line[ x + 1 ] = color.Y();
+						line[ x + 2 ] = color.Z();
+					}
+				}
+			}
 			UnlockMipSurface( mipIdx );
 		}
 	}
@@ -142,6 +159,10 @@ namespace srt
 
 			case PixelFormat::kBGRA8_UInt:
 				bpp = 32;
+				break;
+
+			case PixelFormat::kRGB_Float:
+				bpp = 3 * sizeof( float ) * 8;
 				break;
 
 			default:
