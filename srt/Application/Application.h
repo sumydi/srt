@@ -73,7 +73,7 @@ namespace srt
 
 		AppHandle		m_hApp;
 		WindowHandle	m_hWnd;
-
+		
 		uint8_t			m_keyPressed[ (size_t)KeyCode::kCount ];
 		KeyState		m_keyState[ (size_t)KeyCode::kCount ];
 		MousePos		m_mousePos;
@@ -81,6 +81,10 @@ namespace srt
 
 		#if defined( SRT_PLATFORM_WINDOWS )
 			static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+		#endif
+		
+		#if defined( SRT_PLATFORM_LINUX )
+			
 		#endif
 	};
 }
