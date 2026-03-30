@@ -1,5 +1,6 @@
 #include "FreeAllAllocator.h"
 #include <assert.h>
+#include <cstdlib>
 
 namespace srt
 {

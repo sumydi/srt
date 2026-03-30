@@ -10,6 +10,7 @@
 #include "InputDevice.h"
 #include <chrono>
 
+
 namespace srt
 {
 	// ============================================================================
@@ -65,8 +66,10 @@ namespace srt
 		Application( ) = delete;
 		Application operator = ( const Application & other ) = delete;
 
+		// To be implemented for each platform
 		void			InitPlatform( const AppContext & context );
 		void			TermPlatform( );
+		bool			UpdatePlatform();
 
 		AppHandle		m_hApp;
 		WindowHandle	m_hWnd;

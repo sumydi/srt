@@ -1,3 +1,9 @@
 .vs/
 x64/
 srt.vcxproj.user
+.codelite/
+Debug/
+Release/
+Makefile
+srt.mk
+srt.txt

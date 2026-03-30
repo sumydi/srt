@@ -233,9 +233,26 @@ namespace srt
 	// ------------------------------------------------------------------------
 	void Application::TermPlatform( )
 	{
-	
+		// TODO: unregister class
 	}
+	
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	bool Application::UpdatePlatform( )
+	{
+		bool canContinue = true;
+		MSG msg;
+		while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
+		{
+			if( LOWORD( msg.message )==WM_QUIT )
+			{
+				canContinue = false;
+			}
+			TranslateMessage( &msg );
+			DispatchMessage( &msg );
+		}
+	}
+	return canContinue;
 }
-
 
 #endif

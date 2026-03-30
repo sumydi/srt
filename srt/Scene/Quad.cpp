@@ -1,6 +1,6 @@
 #include "Quad.h"
 #include "Scene/Scene.h"
-#include "Scene/ScenetraceResult.h"
+#include "Scene/SceneTraceResult.h"
 #include "Graphic/Material.h"
 
 namespace srt

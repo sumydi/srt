@@ -3,10 +3,14 @@
 
 #include "srt/SrtApplication.h"
 
+#if defined( SRT_PLATFORM_WINDOWS )
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
+#elif defined( SRT_PLATFORM_LINUX )
+int main( int argc, char * argv[] )
+#endif
 {
 	srt::AppContext context;
 

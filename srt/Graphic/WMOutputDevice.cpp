@@ -15,8 +15,8 @@ namespace srt
 	WMOutputDevice::WMOutputDevice( WindowHandle hWnd )
 	: OutputDevice( )
 	, m_hWnd{ hWnd }
-	, m_hDC{ nullptr }
 #if defined( SRT_PLATFORM_WINDOWS )
+	, m_hDC{ nullptr }
 	, m_hBitmap{ nullptr }
 	, m_hOldBitmap{nullptr }
 	, m_dcBits{ nullptr }
