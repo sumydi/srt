@@ -3,6 +3,14 @@
 #if defined( SRT_PLATFORM_LINUX )
 namespace srt
 {
+	namespace
+	{
+		static bool g_mustQuit = false;
+		static void OnDestroy( GtkWidget * widget, gpointer userData )
+		{
+			g_mustQuit = true;
+		}
+	}
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	void Application::InitPlatform( const AppContext & context )
@@ -12,6 +20,7 @@ namespace srt
 		m_hWnd = gtk_window_new();
 		gtk_window_set_title( GTK_WINDOW( m_hWnd ), "SRT" );
 		gtk_window_set_default_size( GTK_WINDOW( m_hWnd ), context.width, context.height );
+		g_signal_connect( m_hWnd, "destroy", G_CALLBACK( OnDestroy ), nullptr );
 		gtk_window_present( GTK_WINDOW( m_hWnd ) );
 	}
 	
@@ -27,12 +36,10 @@ namespace srt
 	// ------------------------------------------------------------------------
 	bool Application::UpdatePlatform( )
 	{
-		bool canContinue = true;
-		//while( g_list_model_get_n_items( gtk_window_get_toplevels() ) > 0 )
 		while( g_main_context_pending( NULL ) > 0 )
 			g_main_context_iteration(NULL, TRUE);
 		
-		return canContinue;		
+		return g_mustQuit ? false : true;
 	}
 }
 #endif
