@@ -90,7 +90,7 @@ namespace srt
 		m_backBuffer = new Image( context.width, context.height, PixelFormat::kBGRA8_UInt );
 		m_result = new Image( context.width, context.height, PixelFormat::kRGB_Float );
 
-		m_outputDev = new WMOutputDevice( this->GetWindowHandle() );
+		m_outputDev = new WMOutputDevice( this->GetWindowHandle(), context.width, context.height );
 	}	
 
 	// ------------------------------------------------------------------------
@@ -163,7 +163,7 @@ namespace srt
 		}
 	#endif
 
-		m_outputDev->PushText( "Focal: %.02f°", m_scene->GetCamera( 0 )->GetFOV( ) );
+		m_outputDev->PushText( "Focal: %.02fÂ°", m_scene->GetCamera( 0 )->GetFOV( ) );
 		m_outputDev->PushText( "Rays: %u", m_rayCount );
 		m_outputDev->PushText( "Samples: %u", m_sampleCount );
 

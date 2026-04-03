@@ -28,8 +28,7 @@ namespace srt
 	// ------------------------------------------------------------------------
 	void Application::TermPlatform( )
 	{
-		g_object_unref( m_hApp );
-		m_hApp = nullptr;
+		m_hWnd = nullptr;
 	}
 	
 	// ------------------------------------------------------------------------

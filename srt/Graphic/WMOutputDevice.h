@@ -14,7 +14,7 @@ namespace srt
 	class WMOutputDevice final : public OutputDevice
 	{
 	public:
-		WMOutputDevice( WindowHandle hWnd );
+		WMOutputDevice( WindowHandle hWnd, uint32_t width = 0, uint32_t height = 0 );
 		~WMOutputDevice( ) final;
 
 		int		GetFontHeight( ) const final;
@@ -26,8 +26,8 @@ namespace srt
 		void	SetTextColorImpl( uint8_t r, uint8_t g, uint8_t b ) final;
 		void	OutputTextImpl( int x, int y, const char * text  ) final;
 		
-		int32_t			m_width;
-		int32_t			m_height;
+		uint32_t		m_width;
+		uint32_t		m_height;
 		WindowHandle	m_hWnd;
 
 #if defined( SRT_PLATFORM_WINDOWS )
@@ -37,6 +37,13 @@ namespace srt
 		HGDIOBJ			m_hOldBitmap;
 		HGDIOBJ			m_hOldFont;
 		void *			m_dcBits;
+#endif
+
+#if defined( SRT_PLATFORM_LINUX )
+		GtkWidget *		m_picture { nullptr };
+		GdkTexture *	m_texture { nullptr };
+		GdkPixbuf *		m_pixBuffer { nullptr };
+		
 #endif
 	};
 
