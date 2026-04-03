@@ -251,8 +251,8 @@ namespace srt
 			TranslateMessage( &msg );
 			DispatchMessage( &msg );
 		}
+		return canContinue;
 	}
-	return canContinue;
 }
 
 #endif
