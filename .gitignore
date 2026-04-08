@@ -2,6 +2,7 @@
 x64/
 srt.vcxproj.user
 .codelite/
+.ctagsd/
 Debug/
 Release/
 Makefile

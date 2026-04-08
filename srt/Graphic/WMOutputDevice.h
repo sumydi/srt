@@ -40,9 +40,12 @@ namespace srt
 #endif
 
 #if defined( SRT_PLATFORM_LINUX )
-		GtkWidget *		m_picture { nullptr };
-		GdkTexture *	m_texture { nullptr };
-		GdkPixbuf *		m_pixBuffer { nullptr };
+		static void OnAreaDraw( GtkDrawingArea * area, cairo_t * cr, int width, int height, gpointer userData );
+		
+		GtkWidget *			m_drawingArea { nullptr };
+		cairo_surface_t *	m_surface { nullptr };
+		cairo_t *			m_cr { nullptr };
+		GdkPixbuf *			m_pixBuffer { nullptr };
 		
 #endif
 	};

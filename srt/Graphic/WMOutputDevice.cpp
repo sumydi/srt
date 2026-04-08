@@ -67,6 +67,8 @@ namespace srt
 		// GtkImage
 		// GdkPixbuf
 		//
+		// gtk_drawing_area
+		//
 		// cairo_image_surface_create
 		// cairo_image_surface_get_data 
 		// cairo_surface_flush()
@@ -76,11 +78,13 @@ namespace srt
 		m_height = height; //gtk_widget_get_height( m_hWnd );
 		
 		m_pixBuffer = gdk_pixbuf_new( GdkColorspace::GDK_COLORSPACE_RGB, false, 8, m_width, m_height );
-		m_texture = gdk_texture_new_for_pixbuf( m_pixBuffer );
-		m_picture = gtk_picture_new();
-		gtk_picture_set_content_fit( GTK_PICTURE( m_picture ), GtkContentFit::GTK_CONTENT_FIT_FILL );
-		gtk_window_set_child( GTK_WINDOW( m_hWnd ), m_picture );
+		m_drawingArea = gtk_drawing_area_new( );
+		//g_signal_connect( m_drawingArea, "draw", OnAreaDraw, this );
+		gtk_drawing_area_set_draw_func( GTK_DRAWING_AREA( m_drawingArea ), OnAreaDraw, this, nullptr );
+		gtk_window_set_child( GTK_WINDOW( m_hWnd ), m_drawingArea );
 		
+		m_surface = cairo_image_surface_create( CAIRO_FORMAT_RGB24, m_width, m_height );
+		m_cr = cairo_create( m_surface );
 #endif
 	}
 
@@ -98,7 +102,8 @@ namespace srt
 
 #if defined( SRT_PLATFORM_LINUX )
 		g_object_unref( m_pixBuffer );
-		g_object_unref( m_texture );
+		cairo_destroy( m_cr );
+		cairo_surface_destroy( m_surface );
 #endif
 	}
 
@@ -109,6 +114,18 @@ namespace srt
 		return kFontHeight;
 	}
 
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+#if defined( SRT_PLATFORM_LINUX )
+	void WMOutputDevice::OnAreaDraw( GtkDrawingArea * area, cairo_t * cr, int width, int height, gpointer userData )
+	{
+		WMOutputDevice * dev = reinterpret_cast< WMOutputDevice * >( userData );
+		
+		cairo_set_source_surface( cr, dev->m_surface, 0, 0 );
+		//gdk_cairo_set_source_pixbuf( cr, dev->m_pixBuffer, 0, 0 );
+		cairo_paint( cr );
+	}
+#endif
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
 	void WMOutputDevice::Present( )
@@ -125,8 +142,7 @@ namespace srt
 #endif
 
 #if defined( SRT_PLATFORM_LINUX )
-		gtk_picture_set_paintable( GTK_PICTURE( m_picture ), GDK_PAINTABLE( nullptr ) );
-		gtk_picture_set_paintable( GTK_PICTURE( m_picture ), GDK_PAINTABLE( m_texture ) );
+		gtk_widget_queue_draw( m_drawingArea );
 #endif
 	}
 
@@ -158,6 +174,8 @@ namespace srt
 				srcSurf += 4;
 			}
 		}
+		gdk_cairo_set_source_pixbuf( m_cr, m_pixBuffer, 0, 0 );
+		cairo_paint( m_cr );
 #endif
 	}
 
@@ -168,7 +186,6 @@ namespace srt
 #if defined( SRT_PLATFORM_WINDOWS )
 		COLORREF color = RGB( r, g, b );
 		::SetTextColor( m_hDC, color );
-
 #endif
 	}
 

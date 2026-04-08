@@ -290,7 +290,7 @@ VS_SolutionDir=/home/carl/Projects/srt/
       </Completion>
     </Configuration>
     <Configuration Name="Release_x64" CompilerType="GCC" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-g -Wall -mfpmath=sse -msse -msse2 -pthread" C_Options="" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+      <Compiler Options="-g -Wall -mfpmath=sse -msse -msse2 -pthread -O3" C_Options="" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
         <IncludePath Value="srt"/>
         <IncludePath Value="/usr/include/gtk-4.0"/>
@@ -314,7 +314,7 @@ VS_SolutionDir=/home/carl/Projects/srt/
         <Preprocessor Value="NDEBUG"/>
         <Preprocessor Value="_WINDOWS"/>
       </Compiler>
-      <Linker Options="-O0" Required="yes">
+      <Linker Options="" Required="yes">
         <LibraryPath Value="."/>
         <LibraryPath Value="Debug"/>
         <Library Value="gtk-4"/>
