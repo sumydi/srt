@@ -84,7 +84,8 @@ namespace srt
 		#endif
 		
 		#if defined( SRT_PLATFORM_LINUX )
-			
+			static gboolean OnKeyPressed( GtkEventControllerKey * keyCtl, guint keyVal, guint keyCode, GdkModifierType state, gpointer userData ); 
+			static gboolean OnKeyReleased( GtkEventControllerKey * keyCtl, guint keyVal, guint keyCode, GdkModifierType state, gpointer userData );
 		#endif
 	};
 }
