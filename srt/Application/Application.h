@@ -84,8 +84,15 @@ namespace srt
 		#endif
 		
 		#if defined( SRT_PLATFORM_LINUX )
-			static gboolean OnKeyPressed( GtkEventControllerKey * keyCtl, guint keyVal, guint keyCode, GdkModifierType state, gpointer userData ); 
-			static gboolean OnKeyReleased( GtkEventControllerKey * keyCtl, guint keyVal, guint keyCode, GdkModifierType state, gpointer userData );
+			static gboolean GTKOnKeyPressed( GtkEventControllerKey * keyCtl, guint keyVal, guint keyCode, GdkModifierType state, gpointer userData ); 
+			static gboolean GTKOnKeyReleased( GtkEventControllerKey * keyCtl, guint keyVal, guint keyCode, GdkModifierType state, gpointer userData );
+			static void GTKOnMouseMove( GtkEventControllerMotion * self, double x, double y, gpointer userData );
+			static void GTKOnLMouseButtonUp( GtkGestureClick * self, gint pressCount, gdouble x, gdouble y, gpointer userData );
+			static void GTKOnLMouseButtonDown( GtkGestureClick * self, gint pressCount, gdouble x, gdouble y, gpointer userData );
+			static void GTKOnRMouseButtonUp( GtkGestureClick * self, gint pressCount, gdouble x, gdouble y, gpointer userData );
+			static void GTKOnRMouseButtonDown( GtkGestureClick * self, gint pressCount, gdouble x, gdouble y, gpointer userData );
+			static void GTKOnMMouseButtonUp( GtkGestureClick * self, gint pressCount, gdouble x, gdouble y, gpointer userData );
+			static void GTKOnMMouseButtonDown( GtkGestureClick * self, gint pressCount, gdouble x, gdouble y, gpointer userData );
 		#endif
 	};
 }

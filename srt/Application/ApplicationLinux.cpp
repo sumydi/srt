@@ -88,6 +88,18 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
+	static GtkGesture * NewMouseClickGesture( GtkWidget * parent, guint button )
+	{
+		GtkGesture * gesture = gtk_gesture_click_new();
+		
+		gtk_widget_add_controller( parent, GTK_EVENT_CONTROLLER( gesture ) );
+		gtk_gesture_single_set_button( GTK_GESTURE_SINGLE( gesture ), button );
+		
+		return gesture;
+	}
+	
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	void Application::InitPlatform( const AppContext & context )
 	{
 		m_hApp = nullptr;
@@ -99,10 +111,38 @@ namespace srt
 		
 		g_signal_connect( m_hWnd, "destroy", G_CALLBACK( OnDestroy ), nullptr );
 		
-		GtkEventController * keyCtl = gtk_event_controller_key_new();
-		gtk_widget_add_controller( m_hWnd, keyCtl );
-		g_signal_connect( keyCtl, "key-pressed", G_CALLBACK( OnKeyPressed ), this );
-		g_signal_connect( keyCtl, "key-released", G_CALLBACK( OnKeyReleased ), this );
+		// Keyboard
+		{
+			GtkEventController * ctl = gtk_event_controller_key_new();
+			gtk_widget_add_controller( m_hWnd, ctl );
+			g_signal_connect( ctl, "key-pressed", G_CALLBACK( GTKOnKeyPressed ), this );
+			g_signal_connect( ctl, "key-released", G_CALLBACK( GTKOnKeyReleased ), this );
+		}
+		
+		// Mouse
+		{
+			GtkEventController * ctl = gtk_event_controller_motion_new();
+			gtk_widget_add_controller( m_hWnd, ctl );
+			g_signal_connect( ctl, "motion", G_CALLBACK( GTKOnMouseMove ), this );
+		}
+		
+		{
+			GtkGesture * gesture = NewMouseClickGesture( m_hWnd, GDK_BUTTON_PRIMARY );
+			g_signal_connect( gesture, "pressed", G_CALLBACK( GTKOnLMouseButtonDown ), this );
+			g_signal_connect( gesture, "released", G_CALLBACK( GTKOnLMouseButtonUp ), this );
+		}
+
+		{
+			GtkGesture * gesture = NewMouseClickGesture( m_hWnd, GDK_BUTTON_SECONDARY );
+			g_signal_connect( gesture, "pressed", G_CALLBACK( GTKOnRMouseButtonDown ), this );
+			g_signal_connect( gesture, "released", G_CALLBACK( GTKOnRMouseButtonUp ), this );
+		}
+		
+		{
+			GtkGesture * gesture = NewMouseClickGesture( m_hWnd, GDK_BUTTON_MIDDLE );
+			g_signal_connect( gesture, "pressed", G_CALLBACK( GTKOnMMouseButtonDown ), this );
+			g_signal_connect( gesture, "released", G_CALLBACK( GTKOnMMouseButtonUp ), this );
+		}
 		
 		gtk_window_present( GTK_WINDOW( m_hWnd ) );
 	}
@@ -126,24 +166,87 @@ namespace srt
 
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	gboolean Application::OnKeyPressed( GtkEventControllerKey * keyCtl, guint keyVal, guint keyCode, GdkModifierType state, gpointer userData )
+	gboolean Application::GTKOnKeyPressed( GtkEventControllerKey * keyCtl, guint keyVal, guint keyCode, GdkModifierType state, gpointer userData )
 	{
 		Application * app = reinterpret_cast< Application * >( userData );
 		const KeyCode appKeyCode = ConvertToKeyCode( keyVal );
 		app->OnKeyDown( appKeyCode );
+		
+		if( keyVal==GDK_BUTTON_PRIMARY )
+		{
+			
+			printf( "L Mouse Button\n" );
+		}
 		
 		return true;
 	}
 	
 	// ------------------------------------------------------------------------
 	// ------------------------------------------------------------------------
-	gboolean Application::OnKeyReleased( GtkEventControllerKey * keyCtl, guint keyVal, guint keyCode, GdkModifierType state, gpointer userData )
+	gboolean Application::GTKOnKeyReleased( GtkEventControllerKey * keyCtl, guint keyVal, guint keyCode, GdkModifierType state, gpointer userData )
 	{
 		Application * app = reinterpret_cast< Application * >( userData );
 		const KeyCode appKeyCode = ConvertToKeyCode( keyVal );
 		app->OnKeyUp( appKeyCode );
 		
 		return true;
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Application::GTKOnMouseMove( GtkEventControllerMotion * self, double x, double y, gpointer userData )
+	{
+		Application * app = reinterpret_cast< Application * >( userData );
+		MousePos pos { (int)x, (int)y };
+		app->OnMouseMove( pos );
+	}
+	
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Application::GTKOnLMouseButtonUp( GtkGestureClick * self, gint pressCount, gdouble x, gdouble y, gpointer userData )
+	{
+		Application * app = reinterpret_cast< Application * >( userData );
+		app->OnKeyUp( KeyCode::kMouseLeftButton );
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Application::GTKOnLMouseButtonDown( GtkGestureClick * self, gint pressCount, gdouble x, gdouble y, gpointer userData )
+	{
+		Application * app = reinterpret_cast< Application * >( userData );
+		app->OnKeyDown( KeyCode::kMouseLeftButton );
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Application::GTKOnRMouseButtonUp( GtkGestureClick * self, gint pressCount, gdouble x, gdouble y, gpointer userData )
+	{
+		Application * app = reinterpret_cast< Application * >( userData );
+		app->OnKeyUp( KeyCode::kMouseRightButton );
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Application::GTKOnRMouseButtonDown( GtkGestureClick * self, gint pressCount, gdouble x, gdouble y, gpointer userData )
+	{
+		Application * app = reinterpret_cast< Application * >( userData );
+		app->OnKeyDown( KeyCode::kMouseRightButton );
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Application::GTKOnMMouseButtonUp( GtkGestureClick * self, gint pressCount, gdouble x, gdouble y, gpointer userData )
+	{
+		Application * app = reinterpret_cast< Application * >( userData );
+		app->OnKeyUp( KeyCode::kMouseMiddleButton );
+	}
+
+	// ------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	void Application::GTKOnMMouseButtonDown( GtkGestureClick * self, gint pressCount, gdouble x, gdouble y, gpointer userData )
+	{
+		Application * app = reinterpret_cast< Application * >( userData );
+		app->OnKeyDown( KeyCode::kMouseMiddleButton );
 	}
 }
 #endif
