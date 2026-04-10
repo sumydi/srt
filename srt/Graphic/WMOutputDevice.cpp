@@ -62,29 +62,29 @@ namespace srt
 #endif
 
 #if defined( SRT_PLATFORM_LINUX )
-		// GTK/GDK/Cairo
-		//
-		// GtkImage
-		// GdkPixbuf
-		//
-		// gtk_drawing_area
-		//
-		// cairo_image_surface_create
-		// cairo_image_surface_get_data 
-		// cairo_surface_flush()
-		// cairo_surface_mark_dirty() 
-		// cairo_set_source_surface
-		m_width = width; //gtk_widget_get_width( m_hWnd );
-		m_height = height; //gtk_widget_get_height( m_hWnd );
-		
-		m_pixBuffer = gdk_pixbuf_new( GdkColorspace::GDK_COLORSPACE_RGB, false, 8, m_width, m_height );
+		m_width = width;
+		m_height = height;
+
+		// The drawing area will allow us know where and when we have to display something
 		m_drawingArea = gtk_drawing_area_new( );
-		//g_signal_connect( m_drawingArea, "draw", OnAreaDraw, this );
 		gtk_drawing_area_set_draw_func( GTK_DRAWING_AREA( m_drawingArea ), OnAreaDraw, this, nullptr );
 		gtk_window_set_child( GTK_WINDOW( m_hWnd ), m_drawingArea );
-		
+
+		// The cairo surface & render context will allow us to render into a temporary buffer
+		// that will be copied into the drawing area surface when needed
 		m_surface = cairo_image_surface_create( CAIRO_FORMAT_RGB24, m_width, m_height );
 		m_cr = cairo_create( m_surface );
+		
+		// The pixBuf will be used to blit an Image into the cairo surface
+		m_pixBuffer = gdk_pixbuf_new( GdkColorspace::GDK_COLORSPACE_RGB, false, 8, m_width, m_height );		
+		
+		// Font
+		// Courier 10 Pitch
+		m_pangoLayout = pango_cairo_create_layout( m_cr );
+		
+		PangoFontDescription * fontDesc = pango_font_description_from_string( "Courier 10" );
+		pango_layout_set_font_description( m_pangoLayout, fontDesc );
+		pango_font_description_free( fontDesc );
 #endif
 	}
 
@@ -101,6 +101,7 @@ namespace srt
 #endif
 
 #if defined( SRT_PLATFORM_LINUX )
+		g_object_unref( m_pangoLayout );
 		g_object_unref( m_pixBuffer );
 		cairo_destroy( m_cr );
 		cairo_surface_destroy( m_surface );
@@ -122,7 +123,6 @@ namespace srt
 		WMOutputDevice * dev = reinterpret_cast< WMOutputDevice * >( userData );
 		
 		cairo_set_source_surface( cr, dev->m_surface, 0, 0 );
-		//gdk_cairo_set_source_pixbuf( cr, dev->m_pixBuffer, 0, 0 );
 		cairo_paint( cr );
 	}
 #endif
@@ -187,6 +187,9 @@ namespace srt
 		COLORREF color = RGB( r, g, b );
 		::SetTextColor( m_hDC, color );
 #endif
+#if defined( SRT_PLATFORM_LINUX )
+		cairo_set_source_rgb( m_cr, (float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f );
+#endif
 	}
 
 	// ------------------------------------------------------------------------
@@ -198,6 +201,12 @@ namespace srt
 
 		SetBkMode( m_hDC, TRANSPARENT );
 		TextOutA( m_hDC, x, y, text, strLen );
+#endif
+
+#if defined( SRT_PLATFORM_LINUX )
+		cairo_move_to( m_cr, (double)x, (double)y );
+		pango_layout_set_text( m_pangoLayout, text, -1 );
+		pango_cairo_show_layout( m_cr, m_pangoLayout );
 #endif
 	}
 }

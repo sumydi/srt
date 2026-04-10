@@ -24,7 +24,7 @@
 
 namespace srt
 {
-	static constexpr uint32_t kJobSchedulerThreadCount = 6;
+	static constexpr uint32_t kJobSchedulerThreadCount = 9;
 	static constexpr uint32_t kWidthJobsCount = 16;
 	static constexpr uint32_t kHeightJobsCount = 8;
 	

@@ -3,6 +3,10 @@
 
 #include "OutputDevice.h"
 
+#if defined( SRT_PLATFORM_LINUX )
+	#include <pango/pangocairo.h>
+#endif
+
 namespace srt
 {
 	// ============================================================================
@@ -47,6 +51,7 @@ namespace srt
 		cairo_t *			m_cr { nullptr };
 		GdkPixbuf *			m_pixBuffer { nullptr };
 		
+		PangoLayout *		m_pangoLayout { nullptr };
 #endif
 	};
 
