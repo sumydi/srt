@@ -55,7 +55,7 @@ bool RenderJobPathTracing::Scatter( const Ray & ray, const SceneTraceResult & tr
 			const float cosTheta = Dot( -unitDir, traceResult.hitResult.normal );
 			const float sinTheta = sqrtf( 1.0f - cosTheta * cosTheta );
 			const bool canNotRefract = ( refRatio * sinTheta > 1.0f );
-			const float f0 = ( 1.0f - refRatio ) / ( 1.0f + refRatio );
+			//const float f0 = ( 1.0f - refRatio ) / ( 1.0f + refRatio );
 
 			if( canNotRefract 
 			// || FresnelSchlick(cosTheta, f0 * f0) > RandomFloat(m_rndGenerator) 
@@ -87,22 +87,53 @@ Vec3 RenderJobPathTracing::ComputeColor( const Ray & initialRay )
 
 		if( hit.hitResult.hitTime >= 0.0f )
 		{
-			// Diffuse ray direction
-			Vec3 rayDir = Normalize( hit.hitResult.normal + RandomUnitVector( m_rndGenerator ) );
-
-			const bool doSpecular = RandomFloat( m_rndGenerator, 0.0f, 1.0f ) < hit.material->GetMetalness();
-			if( doSpecular )
+			Vec3 scatterDir;
+			
+			if( hit.material->GetIOR( ) > 1.0f )
 			{
-				// If we've got a metal, reflect the ray based also on the roughness
-				Vec3 specRay = Reflect( ray.Direction(), hit.hitResult.normal );
-				rayDir = Normalize( Lerp( specRay, rayDir, hit.material->GetRoughness() * hit.material->GetRoughness() ) );
+				// Glass or other dieletric material
+				// The refraction ratio dependent if we are going in the volume or out of the volume
+				const float refRatio = hit.hitResult.frontFace ? ( 1.0f / hit.material->GetIOR() ) : hit.material->GetIOR();
+
+				const Vec3 unitDir = Normalize( ray.Direction() );
+				const float cosTheta = Dot( -unitDir, hit.hitResult.normal );
+				const float sinTheta = sqrtf( 1.0f - cosTheta * cosTheta );
+				const bool canNotRefract = ( refRatio * sinTheta > 1.0f );
+				//const float f0 = ( 1.0f - refRatio ) / ( 1.0f + refRatio );
+
+				if( canNotRefract 
+				// || FresnelSchlick(cosTheta, f0 * f0) > RandomFloat(m_rndGenerator) 
+				)
+				{
+					scatterDir = Reflect( unitDir, hit.hitResult.normal );
+				}
+				else
+				{
+					scatterDir = Refract( unitDir, hit.hitResult.normal, refRatio );
+				}
+				resultColor += hit.material->GetEmissive() * throughput;
+				hit.hitResult.normal = -hit.hitResult.normal;
+			}
+			else
+			{
+				// Lambertian or metal material
+				// Compute diffuse ray direction
+				scatterDir = Normalize( hit.hitResult.normal + RandomUnitVector( m_rndGenerator ) );
+
+				const bool isMetal = RandomFloat( m_rndGenerator, 0.0f, 1.0f ) < hit.material->GetMetalness();
+				if( isMetal )
+				{
+					// If we've got a metal, blend between diffuseDir & specularDir depending on the roughness
+					const Vec3 specDir = Reflect( ray.Direction(), hit.hitResult.normal );
+					scatterDir = Normalize( Lerp( specDir, scatterDir, hit.material->GetRoughness() * hit.material->GetRoughness() ) );
+				}
+
+				resultColor += hit.material->GetEmissive() * throughput;
+				throughput *= isMetal ? hit.material->GetSpecular() : hit.material->GetAlbedo();
 			}
 
-			ray = Ray{ hit.hitResult.position + hit.hitResult.normal * 0.001f, rayDir };
-
-			resultColor += hit.material->GetEmissive() * throughput;
-			throughput *= doSpecular ? hit.material->GetSpecular() : hit.material->GetAlbedo();
-
+			ray = Ray{ hit.hitResult.position + hit.hitResult.normal * 0.001f, scatterDir };
+			
 			// Russian Roulette
 			// As the throughput gets smaller, the ray is more likely to get terminated early.
 			// Survivors have their value boosted to make up for fewer samples being in the average.
@@ -177,6 +208,8 @@ void RenderJobPathTracing::Execute( )
 	
 	const uint32_t surfPitchCur = m_context.curResult->GetMipDesc( 0 ).pitch;
 	uint8_t * surfCur = reinterpret_cast< uint8_t * >( m_context.curResult->LockMipSurface( 0 ) );
+	
+	const float resultBlendFactor = ( 1.0f / (float)std::min< uint32_t >( m_context.frameIndex + 1, 200 ) );
 
 	for( uint32_t y = 0; y < m_context.height; ++y )
 	{
@@ -205,7 +238,7 @@ void RenderJobPathTracing::Execute( )
 
 			// Result temporal accumulation
 			Vec3 prevColor = *linePrev;
-			resultColor = Lerp( prevColor, resultColor, 1.0f / (float)( m_context.frameIndex + 1 ) );
+			resultColor = Lerp( prevColor, resultColor, resultBlendFactor );
 			*lineCur = resultColor;
 
 			// Tone mapping

@@ -76,7 +76,7 @@ Vec3 RenderJobRayTracing::ComputeColor( const Ray & ray, uint32_t rayIdx )
 					{
 						scattered = Refract( unitDir, traceResult.hitResult.normal, refRatio );
 					}
-					resultColor += ComputeColor( Ray{ traceResult.hitResult.position, scattered }, rayIdx - 1);
+					resultColor += ComputeColor( Ray{ traceResult.hitResult.position, scattered }, rayIdx - 1 );
 				}
 			}
 

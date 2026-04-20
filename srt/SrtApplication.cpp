@@ -72,7 +72,7 @@ namespace srt
 		m_scene->AddObject( new Sphere{ "Sphere", Vec3{ -0.5f, 0.25f, -1.0f }, 0.3f, *grayPlastic } );
 		m_scene->AddObject( new Sphere{ "Moving Sphere", Vec3{ 0.5f, 0.3f, -1.0f }, 0.3f, *metal } );
 		//m_scene->AddObject( new Quad{ "Ground", Vec3{ -40.0f, 0.0f, 40.0f }, Vec3{ 0.0f, 1.0f, 0.0 }, 80.0f, 80.0f, *ground } );
-		m_scene->AddObject( new Sphere{ "Glass Sphere", Vec3{ 2.0f, 1.0f, -1.0f }, 0.5f, *glass } );
+		m_scene->AddObject( new Sphere{ "Glass Sphere", Vec3{ 0.0f, 2.2f, 0.5f }, 0.5f, *glass } );
 
 		m_scene->AddObject( new Quad{ "Left Wall", Vec3{ -1.0f, 0.0f, -0.5f }, Vec3{ 1.0f, 0.0f, 0.0 }, 2.0f, 2.5f, *redPlastic } );
 		m_scene->AddObject( new Quad{ "Right Wall", Vec3{ 1.0f, 0.0f, -0.5f }, Vec3{ 1.0f, 0.0f, 0.0 }, 2.0f, 2.5f, *greenPlastic } );
